@@ -38,6 +38,10 @@ dependencies {
 
     // ## JWT 관련 의존성
     implementation("io.jsonwebtoken:jjwt:0.9.1") // JWT 토큰 사용
+    
+    // ## Logging
+    implementation("net.logstash.logback:logstash-logback-encoder:7.4")
+    implementation("org.springframework.boot:spring-boot-starter-logging:3.1.0")
 
     // ## 데이터베이스 및 MySQL 커넥터
     implementation("com.mysql:mysql-connector-j") // MySQL 데이터베이스 커넥터
