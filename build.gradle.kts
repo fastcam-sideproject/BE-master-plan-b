@@ -30,11 +30,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-mail") // 이메일 서비스
 
     // ## Spring Security 관련 의존성
+/*
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client") // OAuth2 클라이언트 지원
     implementation("org.springframework.boot:spring-boot-starter-security") // 보안 관련 기능
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf") // 템플릿 엔진 Thymeleaf
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6") // Thymeleaf와 Spring Security 통합
     testImplementation("org.springframework.security:spring-security-test") // Spring Security 테스트 지원
+*/
 
     // ## JWT 관련 의존성
     implementation("io.jsonwebtoken:jjwt:0.9.1") // JWT 토큰 사용
