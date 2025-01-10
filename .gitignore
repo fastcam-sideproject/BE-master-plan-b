@@ -42,3 +42,5 @@ out/
 .gitattributes
 .kotlin/metadata/kotlinTransformedMetadataLibraries/
 
+src/main/resources/application.properties
+src/main/resources/application-*.properties
