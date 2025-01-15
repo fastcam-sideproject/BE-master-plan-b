@@ -1,12 +1,16 @@
 package masterplanb.masterplanbbe.user.repository
 
-import jakarta.persistence.EntityManager
 import masterplanb.masterplanbbe.domain.User
+import org.jooq.DSLContext
+import org.jooq.generated.tables.JUser.*
 
 class UserRepositoryImpl(
-    em: EntityManager
+    private val dslContext: DSLContext
 ): UserRepositoryCustom {
     override fun findByUserId(userId: String): User? {
-        TODO("Not yet implemented")
+        val query = dslContext.selectFrom(USER)
+            .where(USER.USER_ID.eq(userId))
+
+        return query.fetchOneInto(User::class.java)
     }
 }
