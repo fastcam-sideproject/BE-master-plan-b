@@ -1,0 +1,21 @@
+import dev.monosoul.jooq.RecommendedVersions
+
+plugins {
+    id 'java'
+}
+
+group = 'master-plan-b'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jooq:jooq-codegen:${RecommendedVersions.JOOQ_VERSION}"
+    runtimeOnly 'com.mysql:mysql-connector-j:8.2.0'
+}
+
+test {
+    useJUnitPlatform()
+}
