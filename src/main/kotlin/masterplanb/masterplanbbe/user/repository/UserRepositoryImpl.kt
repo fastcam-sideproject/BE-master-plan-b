@@ -1,16 +1,19 @@
 package masterplanb.masterplanbbe.user.repository
 
-import masterplanb.masterplanbbe.domain.User
 import org.jooq.DSLContext
 import org.jooq.generated.tables.JUser.*
+import org.jooq.generated.tables.pojos.User
 
 class UserRepositoryImpl(
     private val dslContext: DSLContext
 ): UserRepositoryCustom {
     override fun findByUserId(userId: String): User? {
-        val query = dslContext.selectFrom(USER)
+        val query = dslContext.select(*USER.fields())
+            .from(USER)
             .where(USER.USER_ID.eq(userId))
 
-        return query.fetchOneInto(User::class.java)
+        val result = query.fetchOneInto(User::class.java)
+        println(result)
+        return result
     }
 }
