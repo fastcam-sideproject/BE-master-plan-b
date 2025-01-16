@@ -18,12 +18,10 @@ class UserRepositoryTest @Autowired constructor(
         val foundUser = userRepository.findByUserId(user.userId)
 
         assertThat(foundUser!!.id).isNotNull
-/*
         assertThat(foundUser.userId).isEqualTo(user.userId)
         assertThat(foundUser.email).isEqualTo(user.email)
         assertThat(foundUser.name).isEqualTo(user.name)
         assertThat(foundUser.nickname).isEqualTo(user.nickname)
         assertThat(foundUser.password).isEqualTo(user.password)
-*/
     }
 }
