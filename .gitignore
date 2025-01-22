@@ -36,17 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### Kotlin ###
-.kotlin
-
-.gitattributes
-.kotlin/metadata/kotlinTransformedMetadataLibraries/
-
 src/main/resources/application.properties
 src/main/resources/application-*.properties
-
-gradle.properties
-src/generated
-src/main/generated
-
-src/main/resources/db/migration
