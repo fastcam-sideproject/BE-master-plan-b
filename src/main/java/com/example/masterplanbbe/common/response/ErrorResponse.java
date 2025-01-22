@@ -11,7 +11,7 @@ public class ErrorResponse<T> {
     private final String message;
     private final T data = null;
 
-    public ErrorResponse<T> of(ErrorCode errorCode) {
+    public static <T> ErrorResponse<T> of(ErrorCode errorCode) {
         return new ErrorResponse<>(errorCode.getStatus(), errorCode.getMessage());
     }
 }
