@@ -8,10 +8,10 @@
     <conversionRule conversionWord="wEx"
                     converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
 
-    <include resource="logback/console-appender.xml"/>
-    <include resource="logback/file-appender.xml"/>
 
-    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
+
+    <include resource="logback/console-appender.xml"/>
+    <include resource="logback/file-appender.xml"/>    <appender name="ASYNC_CONSOLE" class="ch.qos.logback.classic.AsyncAppender">
         <!-- console-appender -->
         <appender-ref ref="CONSOLE"/>
         <includeCallerData>true</includeCallerData>
