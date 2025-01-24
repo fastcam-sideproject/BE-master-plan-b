@@ -23,7 +23,8 @@ public class StudyLog extends BaseEntity {
     private LocalDate studyDate;
 
 /*
-    @Column
+    @ManyToOne
+    @JoinColumn(name = "exam_id")
     private Exam exam;
 */
 
