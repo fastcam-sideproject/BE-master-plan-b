@@ -8,15 +8,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class PostController {
 
     private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<PostDto.PostResponseDTO> creatPost(@RequestBody PostDto.PostRequestDTO postRequestDTO) {
+    public ResponseEntity<PostDto.PostResponseDTO> createPost(@RequestBody PostDto.PostRequestDTO postRequestDTO) {
         return ResponseEntity.ok()
                 .body(postService.createPost(postRequestDTO));
     }
@@ -43,7 +43,8 @@ public class PostController {
     @DeleteMapping("/posts/{postid}")
     public ResponseEntity<Void> deletePost(@PathVariable Long postid) {
         postService.deletePost(postid);
-        return ResponseEntity.noContent()
+        return ResponseEntity.ok()
                 .build();
     }
 }
+
