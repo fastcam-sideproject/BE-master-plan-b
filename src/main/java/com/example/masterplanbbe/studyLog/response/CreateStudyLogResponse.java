@@ -15,8 +15,8 @@ public record CreateStudyLogResponse(
         String content,
         InputSource inputSource
 ) {
-    public static CreateStudyLogResponse of(StudyLog studyLog) {
-        return new CreateStudyLogResponse (
+    public CreateStudyLogResponse(StudyLog studyLog) {
+        this(
                 studyLog.getId(),
                 studyLog.getStudyDate(),
                 studyLog.getSubject(),
