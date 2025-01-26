@@ -12,6 +12,6 @@ public class StudyLogService {
     private final StudyLogRepository studyLogRepository;
 
     public CreateStudyLogResponse createStudyLog(CreateStudyLogRequest request) {
-        return CreateStudyLogResponse.of(studyLogRepository.save(request.toEntity()));
+        return new CreateStudyLogResponse(studyLogRepository.save(request.toEntity()));
     }
 }
