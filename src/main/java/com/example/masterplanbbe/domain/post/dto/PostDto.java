@@ -24,6 +24,7 @@ public class PostDto {
     }
 
     @Getter
+    @AllArgsConstructor
     public static class PostResponseDTO {
         private String title;
         private String content;
