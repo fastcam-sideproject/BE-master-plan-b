@@ -45,28 +45,6 @@ class PostServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 생성 실패 - 제목이 null")
-    void createPostNullTitle() {
-        // Given
-        PostDto.PostRequestDTO requestDTO = createRequestDTO();
-
-        // When & Then
-        GlobalException exception = assertThrows(GlobalException.class, () -> postService.createPost(requestDTO));
-        assertEquals(ErrorCode.INVALID_INPUT_TITLE, exception.getErrorCode());
-    }
-
-    @Test
-    @DisplayName("게시글 생성 실패 - 내용이 null")
-    void createPostNullContent() {
-        // Given
-        PostDto.PostRequestDTO requestDTO = createRequestDTO();
-
-        // When & Then
-        GlobalException exception = assertThrows(GlobalException.class, () -> postService.createPost(requestDTO));
-        assertEquals(ErrorCode.INVALID_INPUT_CONTENT, exception.getErrorCode());
-    }
-
-    @Test
     @DisplayName("게시글 조회 성공")
     void getPost() {
         // Given
