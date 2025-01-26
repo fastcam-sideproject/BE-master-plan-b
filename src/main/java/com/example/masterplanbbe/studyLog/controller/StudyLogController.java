@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.example.masterplanbbe.studyLog.response.CreateStudyLogResponse.*;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/study-log")
@@ -21,7 +19,7 @@ public class StudyLogController {
     public ResponseEntity<ApiResponse<CreateStudyLogResponse>> createStudyLog(
             @RequestBody CreateStudyLogRequest request
     ) {
-        CreateStudyLogResponse response = of(studyLogService.createStudyLog(request));
-        return ResponseEntity.ok(ApiResponse.ok(response));
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(studyLogService.createStudyLog(request)));
     }
 }
