@@ -38,7 +38,7 @@ out/
 
 src/main/resources/application.properties
 src/main/resources/application-*.properties
-src/main/resources/gradle.properties
+src/main/resources/gradle.*
 
 src/main/resources/db/migration
 src/main/resources/db/
