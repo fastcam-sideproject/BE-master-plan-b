@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.post.dto;
 
 import com.example.masterplanbbe.domain.post.entity.Post;
+import com.example.masterplanbbe.member.entity.Member;
 import lombok.*;
 
 public class PostDto {
@@ -12,13 +13,13 @@ public class PostDto {
     public static class PostRequestDTO {
         private String title;
         private String content;
-        private String nickname;
+        private Long memberId;
 
         public Post toEntity() {
             return Post.builder()
                     .title(title)
                     .content(content)
-                    .nickname("테스트")
+//                    .member()
                     .build();
         }
     }
@@ -28,13 +29,13 @@ public class PostDto {
     public static class PostResponseDTO {
         private String title;
         private String content;
-        private String nickname;
+        private Long memberId;
 
         @Builder
         public PostResponseDTO(Post post) {
             this.title = post.getTitle();
             this.content = post.getContent();
-            this.nickname = post.getNickname();
+//            this.member = new MemberDto(post.getMember());
         }
     }
 }

@@ -29,9 +29,11 @@ public enum ErrorCode {
     // Post
     INVALID_INPUT_TITLE(400,"P001","유효하지 않은 타이틀입니다."),
     INVALID_INPUT_CONTENT(400,"P002","유효하지 않은 내용입니다."),
-    NOT_FIND_POST(400,"P003" ,"게시글을 찾을 수 없습니다." ),
+    NOT_FOUND_POST(400,"P003" ,"게시글을 찾을 수 없습니다." ),
 
-    SOCIAL_NAME_LOAD_FAIL(400, "O002", "소셜 로그인에서 이름을 불러올 수 없습니다.");
+    // Comment
+    NOT_FOUND_COMMENT(400, "C001" ,"댓글을 찾을 수 없습니다." ),
+    NOT_BELONG_COMMENT(400,"C002" ,"속해있는 댓글이 아닙니다." );
 
     private final Integer status;
     private final String code;

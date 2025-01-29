@@ -14,6 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+
     private final PostRepository postRepository;
 
     /**
@@ -36,9 +37,7 @@ public class PostService {
         Post post = postRequestDTO.toEntity();
         postRepository.save(post);
 
-        return PostDto.PostResponseDTO.builder()
-                .post(post)
-                .build();
+        return new PostDto.PostResponseDTO(post);
     }
 
     /**
@@ -48,7 +47,7 @@ public class PostService {
      */
     public PostDto.PostResponseDTO getPost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FIND_POST) {});
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
 
         return  PostDto.PostResponseDTO.builder()
                 .post(post)
@@ -75,9 +74,10 @@ public class PostService {
         String content = postRequestDTO.getContent();
 
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FIND_POST) {});
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
 
         post.updatePost(title, content);
+        postRepository.save(post);
         return PostDto.PostResponseDTO.builder()
                 .post(post)
                 .build();
@@ -89,7 +89,7 @@ public class PostService {
      */
     public void deletePost(Long postId) {
         postRepository.findById(postId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FIND_POST) {});
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
 
         postRepository.deleteById(postId);
     }
