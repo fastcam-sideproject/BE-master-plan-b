@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.post.entity;
 
-import com.example.masterplanbbe.common.domain.BaseEntity;
+import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Post extends BaseEntity {
+public class Post extends FullAuditEntity {
 
     private String title;
 
