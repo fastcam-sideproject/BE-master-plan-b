@@ -2,7 +2,7 @@ package com.example.masterplanbbe.studyLog.entity;
 
 import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.annotation.Nullable;
-import com.example.masterplanbbe.common.domain.BaseEntity;
+import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.studyLog.enums.InputSource;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StudyLog extends BaseEntity {
+public class StudyLog extends FullAuditEntity {
     @NonNull
     @Column
     private LocalDate studyDate;

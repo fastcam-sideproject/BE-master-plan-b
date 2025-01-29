@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.exam.entity;
 
 import com.example.masterplanbbe.common.annotation.NonNull;
-import com.example.masterplanbbe.common.domain.BaseEntity;
+import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Subject extends BaseEntity {
+public class Subject extends FullAuditEntity {
     @NonNull
     @ManyToOne
     @JoinColumn(name = "exam_id")
