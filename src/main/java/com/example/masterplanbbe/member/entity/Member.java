@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.member.entity;
 
-import com.example.masterplanbbe.common.domain.BaseEntity;
+import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member extends BaseEntity {
+public class Member extends FullAuditEntity {
     private String userId;
 }
