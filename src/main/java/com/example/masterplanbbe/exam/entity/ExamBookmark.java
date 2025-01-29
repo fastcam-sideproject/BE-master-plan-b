@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.exam.entity;
 
 import com.example.masterplanbbe.common.annotation.NonNull;
-import com.example.masterplanbbe.common.domain.BaseEntity;
+import com.example.masterplanbbe.common.domain.IdAndCreatedEntity;
 import com.example.masterplanbbe.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +11,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ExamBookmark extends BaseEntity {
+public class ExamBookmark extends IdAndCreatedEntity {
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
