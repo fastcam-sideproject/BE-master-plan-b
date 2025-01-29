@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.exam.entity;
 
 import com.example.masterplanbbe.common.annotation.NonNull;
-import com.example.masterplanbbe.common.domain.BaseEntity;
+import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.exam.enums.SessionType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ExamSession extends BaseEntity {
+public class ExamSession extends FullAuditEntity {
     @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exam_id")
