@@ -12,7 +12,7 @@ import java.time.LocalDate;
 
 
 @Entity
-@Table(name = "exam_session")
+@Table(name = "exam_sessions")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
