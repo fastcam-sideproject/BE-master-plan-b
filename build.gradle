@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.4.1'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'idea'
 }
 
 group = 'com.example'
@@ -49,14 +50,33 @@ tasks.withType(JavaCompile).configureEach {
 	options.generatedSourceOutputDirectory = file("$projectDir/src/main/generated")
 }
 
-//FIXME: src/main/generated 디렉토리를 IDEA 에서 mark as generated sources 로 설정할 것
+//QClass 파일 인식 불가시, src/main/generated 디렉토리를 IDEA 에서, mark as generated source root 로 설정할 것
+def generatedDir = file("$projectDir/src/main/generated")
+
+sourceSets {
+	main {
+		java {
+			srcDir generatedDir
+		}
+	}
+}
+
+tasks.named('clean') {
+	delete -= generatedDir
+}
+
 tasks.register('generateQueryDSL') {
 	doLast {
-		def generatedDir = file("$projectDir/src/main/generated")
 		if (!generatedDir.exists()) {
 			generatedDir.mkdirs()
 		}
 		sourceSets.main.java.srcDirs += generatedDir
+	}
+}
+
+idea {
+	module {
+		generatedSourceDirs += generatedDir
 	}
 }
 
