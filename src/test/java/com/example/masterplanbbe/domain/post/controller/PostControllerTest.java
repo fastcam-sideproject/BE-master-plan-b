@@ -61,9 +61,9 @@ class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Test Title"))
-                .andExpect(jsonPath("$.content").value("Test Content"))
-                .andExpect(jsonPath("$.nickname").value("Test Nickname"));
+                .andExpect(jsonPath("$.data.title").value("Test Title"))
+                .andExpect(jsonPath("$.data.content").value("Test Content"))
+                .andExpect(jsonPath("$.data.nickname").value("Test Nickname"));
     }
 
     @Test
@@ -83,9 +83,9 @@ class PostControllerTest {
         mvc.perform(get("/api/v1/posts/{postid}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Test Title"))
-                .andExpect(jsonPath("$.content").value("Test Content"))
-                .andExpect(jsonPath("$.nickname").value("Test Nickname"));
+                .andExpect(jsonPath("$.data.title").value("Test Title"))
+                .andExpect(jsonPath("$.data.content").value("Test Content"))
+                .andExpect(jsonPath("$.data.nickname").value("Test Nickname"));
 
         verify(postService).getPost(1L);
     }
@@ -107,9 +107,9 @@ class PostControllerTest {
         mvc.perform(get("/api/v1/posts")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].title").value("Test Title"))
-                .andExpect(jsonPath("$[0].content").value("Test Content"))
-                .andExpect(jsonPath("$[0].nickname").value("Test Nickname"));
+                .andExpect(jsonPath("$.data[0].title").value("Test Title"))
+                .andExpect(jsonPath("$.data[0].content").value("Test Content"))
+                .andExpect(jsonPath("$.data[0].nickname").value("Test Nickname"));
     }
 
     @Test
@@ -131,9 +131,9 @@ class PostControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("Updated Title"))
-                .andExpect(jsonPath("$.content").value("Updated Content"))
-                .andExpect(jsonPath("$.nickname").value("Test Nickname"));
+                .andExpect(jsonPath("$.data.title").value("Updated Title"))
+                .andExpect(jsonPath("$.data.content").value("Updated Content"))
+                .andExpect(jsonPath("$.data.nickname").value("Test Nickname"));
     }
 
     @Test
