@@ -46,18 +46,16 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
-tasks.withType(JavaCompile).configureEach {
-	options.generatedSourceOutputDirectory = file("$projectDir/src/main/generated")
-}
-
 //QClass 파일 인식 불가시, src/main/generated 디렉토리를 IDEA 에서, mark as generated source root 로 설정할 것
 def generatedDir = file("$projectDir/src/main/generated")
 
+tasks.withType(JavaCompile).configureEach {
+	options.generatedSourceOutputDirectory = generatedDir
+}
+
 sourceSets {
 	main {
-		java {
-			srcDir generatedDir
-		}
+		java.srcDirs += generatedDir
 	}
 }
 
@@ -65,7 +63,8 @@ tasks.named('clean') {
 	delete -= generatedDir
 }
 
-tasks.register('generateQueryDSL') {
+tasks.register('setupGeneratedDir') {
+	group = 'hidden'
 	doLast {
 		if (!generatedDir.exists()) {
 			generatedDir.mkdirs()
@@ -81,7 +80,7 @@ idea {
 }
 
 tasks.named("compileJava") {
-	dependsOn("generateQueryDSL")
+	dependsOn("setupGeneratedDir")
 }
 
 tasks.named('test') {
