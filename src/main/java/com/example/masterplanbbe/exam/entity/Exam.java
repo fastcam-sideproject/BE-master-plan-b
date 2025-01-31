@@ -11,7 +11,6 @@ import lombok.*;
 @Entity
 @Table(name = "exams")
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Exam extends FullAuditEntity {
     @NonNull

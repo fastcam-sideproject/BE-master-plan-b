@@ -5,6 +5,7 @@ import com.example.masterplanbbe.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.exam.response.ReadAllExamResponse;
 import com.example.masterplanbbe.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.exam.service.ExamService;
+import com.example.masterplanbbe.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,10 +25,10 @@ public class ExamController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
-            Long memberId //TODO: security context로 변경
+            Member member//TODO: security context로 변경
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
+                .body(ApiResponse.ok(examService.getAllExam(pageable, member.getUserId())));
     }
 
     @GetMapping("/{examId}")
