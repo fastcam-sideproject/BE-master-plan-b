@@ -11,10 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,10 +22,10 @@ public class ExamController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
-            Member member//TODO: security context로 변경
+            @RequestParam(name = "memberId") String memberId//TODO: security context로 변경
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getAllExam(pageable, member.getUserId())));
+                .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
     }
 
     @GetMapping("/{examId}")
