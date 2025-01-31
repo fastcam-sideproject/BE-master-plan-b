@@ -25,7 +25,7 @@ public class ExamRepositoryImpl implements ExamRepositoryCustom {
 
     @Override
     public Page<ExamItemCardDto> getExamItemCards(Pageable pageable,
-                                                  Long memberId) {
+                                                  String memberId) {
         List<ExamItemCardDto> queryResult = queryFactory.select(
                         new QExamItemCardDto(
                                 exam,
@@ -33,13 +33,8 @@ public class ExamRepositoryImpl implements ExamRepositoryCustom {
                         )
                 )
                 .from(exam)
-                .leftJoin(examBookmark)
-                .on(
-                        Expressions.allOf(
-                                exam.id.eq(examBookmark.exam.id),
-                                examBookmark.member.id.eq(memberId)
-                        )
-                )
+                .leftJoin(examBookmark).fetchJoin()
+                .on(exam.id.eq(examBookmark.exam.id))
                 .orderBy(exam.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

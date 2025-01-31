@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class ExamService {
     private final ExamRepository examRepository;
 
-    public Page<ExamItemCardDto> getAllExam(Pageable pageable, Long memberId) {
+    public Page<ExamItemCardDto> getAllExam(Pageable pageable, String memberId) {
         return examRepository.getExamItemCards(pageable, memberId);
     }
 
