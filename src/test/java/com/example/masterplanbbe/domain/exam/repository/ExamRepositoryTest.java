@@ -1,6 +1,5 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.exam.entity.Exam;
 import com.example.masterplanbbe.exam.entity.ExamBookmark;
@@ -8,7 +7,6 @@ import com.example.masterplanbbe.exam.repository.ExamBookmarkRepository;
 import com.example.masterplanbbe.exam.repository.ExamRepository;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,12 +20,16 @@ import java.util.List;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 public class ExamRepositoryTest {
-    @Autowired private ExamRepository examRepository;
-    @Autowired private MemberRepository memberRepository;
-    @Autowired private ExamBookmarkRepository examBookmarkRepository;
+    @Autowired
+    private ExamRepository examRepository;
+    @Autowired
+    private MemberRepository memberRepository;
+    @Autowired
+    private ExamBookmarkRepository examBookmarkRepository;
 
     @BeforeEach
     void setUp() {
@@ -48,10 +50,13 @@ public class ExamRepositoryTest {
 
         Page<ExamItemCardDto> result = examRepository.getExamItemCards(pageRequest, member.getUserId());
 
-        assertThat(result.getContent().size()).isEqualTo(2);
-        assertThat(result.getContent().get(0).title()).isEqualTo("exam2");
-        assertThat(result.getContent().get(1).title()).isEqualTo("exam1");
-        assertThat(result.getContent().get(0).isBookmarked()).isFalse();
+        assertThat(result.getContent()).hasSize(2);
+        assertAll("Exam item card details verification",
+                () -> assertThat(result.getContent().get(0).title()).isEqualTo("exam2"),
+                () -> assertThat(result.getContent().get(0).isBookmarked()).isFalse(),
+                () -> assertThat(result.getContent().get(1).title()).isEqualTo("exam1"),
+                () -> assertThat(result.getContent().get(1).isBookmarked()).isTrue()
+        );
     }
 
 }
