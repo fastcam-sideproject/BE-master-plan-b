@@ -6,10 +6,7 @@ import com.example.masterplanbbe.exam.enums.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "exams")
@@ -37,5 +34,13 @@ public class Exam extends FullAuditEntity {
     @Column
     private Integer participantCount;
 
+    @Builder
+    public Exam(String title, Category category, String authority, Double difficulty, Integer participantCount) {
+        this.title = title;
+        this.category = category;
+        this.authority = authority;
+        this.difficulty = difficulty;
+        this.participantCount = participantCount;
+    }
 
 }
