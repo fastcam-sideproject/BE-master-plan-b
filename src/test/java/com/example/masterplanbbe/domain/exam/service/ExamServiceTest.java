@@ -22,7 +22,6 @@ import java.util.List;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
