@@ -18,8 +18,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseEntity {
-
+public abstract class FullAuditEntity {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
@@ -33,4 +32,9 @@ public abstract class BaseEntity {
         @Column(name = "updated_at")
         @Temporal(TemporalType.TIMESTAMP)
         private LocalDateTime modifiedAt;
+
+        @PrePersist
+        public void prePersist() {
+                this.modifiedAt = LocalDateTime.now();
+        }
 }
