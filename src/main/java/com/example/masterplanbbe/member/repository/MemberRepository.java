@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByUserId(String userId);
-
-
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
