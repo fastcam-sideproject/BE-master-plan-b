@@ -34,8 +34,8 @@ public class MemberResponse {
         response.phoneNumber = member.getPhoneNumber();
         response.profileImageUrl = member.getProfileImageUrl();
         response.role = member.getRole();
-        response.createTime = member.getCreateTime();
-        response.modifiedTime = member.getModifiedTime();
+        response.createTime = member.getCreatedAt();
+        response.modifiedTime = member.getModifiedAt();
         return response;
 
 
