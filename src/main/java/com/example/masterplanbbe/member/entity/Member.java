@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDate;
 
 @Entity
@@ -27,7 +27,7 @@ public class Member extends FullAuditEntity {
 
     public static Member create(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl) {
         Member member = new Member();
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        member.password = password;
         member.userId = userId;
         member.email = email;
         member.name = name;
