@@ -29,7 +29,7 @@ public class PostDto {
     public static class PostResponseDTO {
         private String title;
         private String content;
-        private Long memberId;
+        private String nickname;
 
         @Builder
         public PostResponseDTO(Post post) {

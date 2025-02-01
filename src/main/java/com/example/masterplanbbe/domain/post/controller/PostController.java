@@ -22,10 +22,10 @@ public class PostController {
                 .body(ApiResponse.ok(postService.createPost(postRequestDTO)));
     }
 
-    @GetMapping("/posts/{postid}")
-    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> getPost(@PathVariable Long postid) {
+    @GetMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> getPost(@PathVariable Long postId) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.getPost(postid)));
+                .body(ApiResponse.ok(postService.getPost(postId)));
     }
 
     @GetMapping("/posts")
@@ -35,15 +35,15 @@ public class PostController {
                 .body(ApiResponse.ok(postList));
     }
 
-    @PatchMapping("/posts/{postid}")
-    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> updatePost(@RequestBody PostDto.PostRequestDTO postRequestDTO, @PathVariable Long postid) {
+    @PatchMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> updatePost(@RequestBody PostDto.PostRequestDTO postRequestDTO, @PathVariable Long postId) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.updatePost(postRequestDTO, postid)));
+                .body(ApiResponse.ok(postService.updatePost(postRequestDTO, postId)));
     }
 
-    @DeleteMapping("/posts/{postid}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postid) {
-        postService.deletePost(postid);
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
 }

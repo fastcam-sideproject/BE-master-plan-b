@@ -4,9 +4,11 @@ import com.example.masterplanbbe.common.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.domain.comment.dto.CommentDto;
 import com.example.masterplanbbe.domain.comment.entity.Comment;
-import com.example.masterplanbbe.domain.comment.repository.CommentRepository;
+import com.example.masterplanbbe.domain.comment.repository.CommentRepositoryPort;
 import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.domain.post.repository.PostRepository;
+import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
+import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final PostRepository postRepository;
+    private final PostRepositoryPort postRepositoryPort;
 
-    private final CommentRepository commentRepository;
+    private final CommentRepositoryPort commentRepositoryPort;
 
-    // private final UserRepository userRepository;
+    private final MemberRepositoryPort memberRepositoryPort;
     // TODO: 2025/01/29 User 갱신이후 시작 - Nano
 
 
@@ -28,18 +30,22 @@ public class CommentService {
      * 댓글 생성
      * @param commentRequestDto
      * @param postId
+     * @param memberId
      * @return
      */
-    public CommentDto.CommentResponseDto createComment(CommentDto.CommentRequestDto commentRequestDto, Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
+    public CommentDto.CommentResponseDto createComment(Long postId, Long memberId, CommentDto.CommentRequestDto commentRequestDto) {
+
+
+        Post post = postRepositoryPort.findById(postId);
+        Member member = memberRepositoryPort.findById(memberId);
 
         Comment comment = Comment.builder()
                 .content(commentRequestDto.getContent())
+                .member(member)
                 .post(post)
                 .build();
 
-        commentRepository.save(comment);
+        commentRepositoryPort.save(comment);
 
         return new CommentDto.CommentResponseDto(comment);
     }
@@ -50,10 +56,9 @@ public class CommentService {
      * @return
      */
     public List<CommentDto.CommentResponseDto> findAllComment(Long postId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
+        Post post = postRepositoryPort.findById(postId);
 
-        List<Comment> comments = commentRepository.findByPost(post);
+        List<Comment> comments = commentRepositoryPort.findByPost(post);
 
         return comments.stream()
                 .map(CommentDto.CommentResponseDto::new)
@@ -64,14 +69,21 @@ public class CommentService {
      * 댓글 수정
      * @param commentRequestDto
      * @param commentId
+     * @param memberId
      * @return
      */
-    public CommentDto.CommentResponseDto updateComment(CommentDto.CommentRequestDto commentRequestDto, Long commentId) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_COMMENT) {});
+    public CommentDto.CommentResponseDto updateComment( Long commentId, Long memberId, CommentDto.CommentRequestDto commentRequestDto) {
+        Comment comment = commentRepositoryPort.findById(commentId);
+
+        Member member = memberRepositoryPort.findById(memberId);
+
+        if (!comment.getMember().getId().equals(member.getId())) {
+            throw new GlobalException(ErrorCode.NOT_MODIFIED_COMMENT) {};
+        }
 
         comment.updateComment(commentRequestDto.getContent());
-        commentRepository.save(comment);
+        commentRepositoryPort.save(comment);
+
 
         return new CommentDto.CommentResponseDto(comment);
 
@@ -81,18 +93,23 @@ public class CommentService {
      * 댓글 삭제
      * @param postId
      * @param commentId
+     * @param memberId
      */
-    public void deleteComment(Long postId, Long commentId) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
+    public void deleteComment(Long postId, Long commentId, Long memberId) {
+        Post post = postRepositoryPort.findById(postId);
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_COMMENT) {});
+        Comment comment = commentRepositoryPort.findById(commentId);
+
+        Member member = memberRepositoryPort.findById(memberId);
+
+        if (!comment.getMember().getId().equals(member.getId())) {
+            throw new GlobalException(ErrorCode.NOT_MODIFIED_COMMENT) {};
+        }
 
         if (!comment.getPost().equals(post)) {
             throw new GlobalException(ErrorCode.NOT_BELONG_COMMENT) {};
         }
 
-        commentRepository.delete(comment);
+        commentRepositoryPort.delete(comment);
     }
 }

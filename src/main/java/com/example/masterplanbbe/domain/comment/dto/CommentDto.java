@@ -30,10 +30,12 @@ public class CommentDto {
     @AllArgsConstructor
     public static class CommentResponseDto {
         private String content;
+        private String nickname;
         private Long postId;
 
         public CommentResponseDto(Comment comment) {
             this.content = comment.getContent();
+            this.nickname = comment.getMember().getUserId();
             this.postId = comment.getPost().getId();
         }
     }
