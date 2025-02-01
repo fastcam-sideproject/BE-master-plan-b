@@ -13,8 +13,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/api/v1/member/{id}")
-    public MemberResponse read(@PathVariable("id") Long articleId) {
-        return memberService.read(articleId);
+    public MemberResponse find(@PathVariable("id") Long articleId) {
+        return memberService.find(articleId);
     }
 
     @PostMapping("/api/v1/member")

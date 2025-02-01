@@ -1,24 +1,26 @@
 package com.example.masterplanbbe.member.entity;
 
+import com.example.masterplanbbe.common.domain.IdAndCreatedEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
-    @Id
-    private Long id;
+public class Member extends IdAndCreatedEntity {
+
     private String userId;
     private String email;
     private String name;
@@ -28,24 +30,21 @@ public class Member {
     private LocalDate birthday;
     private String profileImageUrl;
     private String role;
-    private LocalDateTime createTime;
-    private LocalDateTime modifiedTime;
 
-    public static Member create(Long id, String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl, String role) {
-      Member member = new Member();
-      member.id = id;
-      member.userId = userId;
-      member.email = email;
-      member.name = name;
-      member.nickname = nickname;
-      member.password = password;
-      member.phoneNumber = phoneNumber;
-      member.birthday = birthday;
-      member.profileImageUrl = profileImageUrl;
-      member.role = role;
-      member.createTime = LocalDateTime.now();
-      member.modifiedTime = LocalDateTime.now();
-      return member;
+    public static Member create(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl, String role) {
+        Member member = new Member();
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        member.userId = userId;
+        member.email = email;
+        member.name = name;
+        member.nickname = nickname;
+        member.password = password;
+        member.phoneNumber = phoneNumber;
+        member.birthday = birthday;
+        member.profileImageUrl = profileImageUrl;
+        member.role = role;
+
+        return member;
     }
 
     public void update(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl, String role) {
@@ -58,7 +57,7 @@ public class Member {
         this.birthday = birthday;
         this.profileImageUrl = profileImageUrl;
         this.role = role;
-        modifiedTime = LocalDateTime.now();
+        setModifiedAt(LocalDateTime.now());
     }
 
 

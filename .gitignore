@@ -45,3 +45,6 @@ src/main/resources/db/migration
 src/main/resources/db/
 !src/main/resources/db/.gitkeep
 !src/main/resources/db/out/.gitkeep
+
+*.properties
+*.yaml
