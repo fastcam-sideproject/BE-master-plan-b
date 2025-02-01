@@ -19,7 +19,6 @@ public class MemberResponse {
     private String phoneNumber;
     private LocalDate birthday;
     private String profileImageUrl;
-    private String role;
     private LocalDateTime createTime;
     private LocalDateTime modifiedTime;
 
@@ -33,7 +32,6 @@ public class MemberResponse {
         response.password = member.getPassword();
         response.phoneNumber = member.getPhoneNumber();
         response.profileImageUrl = member.getProfileImageUrl();
-        response.role = member.getRole();
         response.createTime = member.getCreatedAt();
         response.modifiedTime = member.getModifiedAt();
         return response;
