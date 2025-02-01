@@ -24,6 +24,9 @@ cp "$ORIGINAL_DDL" "$UPDATED_DDL"
 # Update the DDL to add AUTO_INCREMENT and PRIMARY KEY to id fields
 sed -i -e '/CREATE TABLE/,/`id`/ { /`id`/ s/NOT NULL/NOT NULL AUTO_INCREMENT PRIMARY KEY/ }' "$UPDATED_DDL"
 
+# Add DEFAULT CURRENT_TIMESTAMP to modified_at column
+sed -i -e '/CREATE TABLE/,/modified_at/ { /modified_at/ s/NOT NULL/NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP/ }' "$UPDATED_DDL"
+
 # Remove all lines starting from ALTER TABLE
 sed -i '/^ALTER TABLE/,$d' "$UPDATED_DDL"
 

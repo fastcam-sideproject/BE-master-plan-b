@@ -3,10 +3,7 @@ package com.example.masterplanbbe.domain.post.entity;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.comment.entity.Comment;
 import com.example.masterplanbbe.member.entity.Member;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
