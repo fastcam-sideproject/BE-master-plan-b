@@ -25,9 +25,4 @@ public abstract class IdAndCreatedEntity {
     @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime modifiedAt;
 }
