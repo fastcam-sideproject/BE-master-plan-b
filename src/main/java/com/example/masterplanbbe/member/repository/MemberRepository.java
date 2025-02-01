@@ -13,7 +13,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query(
             value = " select id, user_id, email, name, nickname, password, phone_number, birthday,  " +
-                    " profile_image_url, role, create_time, modified_time " +
+                    " profile_image_url, create_time, modified_time " +
                     " from users where = :id",
             nativeQuery = true
     )

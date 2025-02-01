@@ -26,8 +26,7 @@ public class MemberService {
                 Member.create(
                         request.getUserId(),request.getEmail(),request.getName(), request.getNickname(),
                         request.getPassword(),request.getPhoneNumber(),request.getBirthday(),
-                        request.getProfileImageUrl(), request.getRole()
-
+                        request.getProfileImageUrl()
                 )
         );
         return MemberResponse.from(member);
@@ -38,7 +37,7 @@ public class MemberService {
         member.update(
                 request.getUserId(), request.getEmail(), request.getName(), request.getNickname(),
                 request.getPassword(), request.getPhoneNumber(), request.getBirthday(),
-                request.getProfileImageUrl(), request.getRole()
+                request.getProfileImageUrl()
         );
         return MemberResponse.from(member);
     }
