@@ -17,7 +17,7 @@ public class PostRepositoryAdapter implements PostRepositoryPort{
     @Override
     public Post findById(Long id) {
         return postRepository.findById(id)
-                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FOUND_POST) {});
+                .orElseThrow(() -> new GlobalException(ErrorCode.NOT_FIND_POST) {});
     }
 
     @Override
