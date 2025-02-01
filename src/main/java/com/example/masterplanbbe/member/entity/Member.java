@@ -4,6 +4,7 @@ import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,6 +40,7 @@ public class Member extends FullAuditEntity {
         return member;
     }
 
+    @Builder
     public Member(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl) {
         this.userId = userId;
         this.email = email;
