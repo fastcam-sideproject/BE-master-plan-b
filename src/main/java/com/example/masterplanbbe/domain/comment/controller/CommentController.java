@@ -17,26 +17,28 @@ public class CommentController {
     @PostMapping("")
     public ResponseEntity<ApiResponse<CommentDto.CommentResponseDto>> createComment(
             @PathVariable Long postId,
+            @RequestHeader(value = "memberId") Long memberId,
             @RequestBody CommentDto.CommentRequestDto commentRequestDto
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(commentService.createComment(postId, 1L, commentRequestDto)));
+                .body(ApiResponse.ok(commentService.createComment(postId, memberId, commentRequestDto)));
     }
 
     @PostMapping("/{commentId}")
     public ResponseEntity<ApiResponse<CommentDto.CommentResponseDto>> updateComment(
             @PathVariable Long commentId,
+            @RequestHeader(value = "memberId") Long memberId,
             @RequestBody CommentDto.CommentRequestDto commentRequestDto
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(commentService.updateComment(commentId, 1L, commentRequestDto)));
+                .body(ApiResponse.ok(commentService.updateComment(commentId, memberId, commentRequestDto)));
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long postId,
             @PathVariable Long commentId,
-            Long memberId
+            @RequestHeader(value = "memberId") Long memberId
     ) {
         commentService.deleteComment(postId, commentId, memberId);
         return ResponseEntity.ok().body(ApiResponse.ok());

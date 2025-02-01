@@ -22,6 +22,7 @@ public class Comment extends FullAuditEntity {
     private Post post;
 
     @ManyToOne
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public void setPost(Post post) {
