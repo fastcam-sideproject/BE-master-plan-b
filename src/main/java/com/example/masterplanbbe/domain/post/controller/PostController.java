@@ -17,13 +17,17 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> createPost(@RequestBody PostDto.PostRequestDTO postRequestDTO) {
+    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> createPost(
+            @RequestBody PostDto.PostRequestDTO postRequestDTO,
+            @RequestHeader(value = "memberId") Long memberId
+    ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.createPost(postRequestDTO)));
+                .body(ApiResponse.ok(postService.createPost(memberId, postRequestDTO)));
     }
 
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> getPost(@PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> getPost(
+            @PathVariable Long postId) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(postService.getPost(postId)));
     }
@@ -36,14 +40,21 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}")
-    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> updatePost(@RequestBody PostDto.PostRequestDTO postRequestDTO, @PathVariable Long postId) {
+    public ResponseEntity<ApiResponse<PostDto.PostResponseDTO>> updatePost(
+            @RequestBody PostDto.PostRequestDTO postRequestDTO,
+            @PathVariable Long postId,
+            @RequestHeader(value = "memberId") Long memberId
+    ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.updatePost(postRequestDTO, postId)));
+                .body(ApiResponse.ok(postService.updatePost(postId, memberId, postRequestDTO)));
     }
 
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
-        postService.deletePost(postId);
+    public ResponseEntity<ApiResponse<Void>> deletePost(
+            @PathVariable Long postId,
+            @RequestHeader(value = "memberId") Long memberId
+    ) {
+        postService.deletePost(postId, memberId);
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
 }

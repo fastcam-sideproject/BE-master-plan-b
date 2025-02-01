@@ -10,10 +10,12 @@ import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -23,7 +25,6 @@ public class CommentService {
     private final CommentRepositoryPort commentRepositoryPort;
 
     private final MemberRepositoryPort memberRepositoryPort;
-    // TODO: 2025/01/29 User 갱신이후 시작 - Nano
 
 
     /**
@@ -34,7 +35,6 @@ public class CommentService {
      * @return
      */
     public CommentDto.CommentResponseDto createComment(Long postId, Long memberId, CommentDto.CommentRequestDto commentRequestDto) {
-
 
         Post post = postRepositoryPort.findById(postId);
         Member member = memberRepositoryPort.findById(memberId);
@@ -47,7 +47,12 @@ public class CommentService {
 
         commentRepositoryPort.save(comment);
 
-        return new CommentDto.CommentResponseDto(comment);
+        return CommentDto.CommentResponseDto.builder()
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .createAt(comment.getCreatedAt())
+                .modifiedAt(comment.getModifiedAt())
+                .build();
     }
 
     /**
@@ -85,7 +90,12 @@ public class CommentService {
         commentRepositoryPort.save(comment);
 
 
-        return new CommentDto.CommentResponseDto(comment);
+        return CommentDto.CommentResponseDto.builder()
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .createAt(comment.getCreatedAt())
+                .modifiedAt(comment.getModifiedAt())
+                .build();
 
     }
 
