@@ -40,7 +40,7 @@ public class CommentDto {
 
         public CommentResponseDto(Comment comment) {
             this.commentId = comment.getId();
-            this.nickname = comment.getMember().getUserId();
+            this.nickname = comment.getMember().getNickname();
             this.content = comment.getContent();
             this.createAt = comment.getCreatedAt();
             this.modifiedAt = comment.getModifiedAt();

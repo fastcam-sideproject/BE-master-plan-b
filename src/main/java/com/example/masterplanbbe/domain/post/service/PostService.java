@@ -51,7 +51,7 @@ public class PostService {
                 .content(post.getContent())
                 .createAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
-                .nickname(post.getMember().getUserId())
+                .nickname(post.getMember().getNickname())
                 .build();
     }
 
@@ -73,7 +73,7 @@ public class PostService {
                 .createAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
                 .comments(commentList)
-                .nickname(post.getMember().getUserId())
+                .nickname(post.getMember().getNickname())
                 .build();
     }
 
@@ -90,7 +90,7 @@ public class PostService {
                         .title(post.getTitle())
                         .createAt(post.getCreatedAt())
                         .modifiedAt(post.getModifiedAt())
-                        .nickname(post.getMember().getUserId())
+                        .nickname(post.getMember().getNickname())
                         .build())
                 .toList();
     }
@@ -120,8 +120,9 @@ public class PostService {
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
+                .createAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
-                .nickname(post.getMember().getUserId())
+                .nickname(post.getMember().getNickname())
                 .build();
     }
 

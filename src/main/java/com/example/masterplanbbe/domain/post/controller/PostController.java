@@ -41,6 +41,7 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<ApiResponse<List<PostDto.PostResponseDTO>>> getAllPost() {
         List<PostDto.PostResponseDTO> postList = postService.getAllPost();
+
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(postList));
     }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Tag(name = "Comment controller api", description = "댓글 API")
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +18,15 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentService commentService;
+
+    @Operation(summary = "댓글 조회")
+    @GetMapping("")
+    public ResponseEntity<ApiResponse<List<CommentDto.CommentResponseDto>>> getComments(
+            @PathVariable Long postId
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(commentService.findAllComment(postId)));
+    }
 
     @Operation(summary = "댓글 생성")
     @PostMapping("")
