@@ -1,7 +1,7 @@
-package com.example.masterplanbbe.studyLog.response;
+package com.example.masterplanbbe.domain.studyLog.response;
 
-import com.example.masterplanbbe.studyLog.entity.StudyLog;
-import com.example.masterplanbbe.studyLog.enums.InputSource;
+import com.example.masterplanbbe.domain.studyLog.entity.StudyLog;
+import com.example.masterplanbbe.domain.studyLog.enums.InputSource;
 
 import java.time.LocalDate;
 

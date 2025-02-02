@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.studyLog.repository;
+package com.example.masterplanbbe.domain.studyLog.repository;
 
 public class StudyLogRepositoryImpl implements StudyLogRepositoryCustom {
 }

@@ -1,8 +1,8 @@
-package com.example.masterplanbbe.studyLog.service;
+package com.example.masterplanbbe.domain.studyLog.service;
 
-import com.example.masterplanbbe.studyLog.repository.StudyLogRepository;
-import com.example.masterplanbbe.studyLog.request.CreateStudyLogRequest;
-import com.example.masterplanbbe.studyLog.response.CreateStudyLogResponse;
+import com.example.masterplanbbe.domain.studyLog.repository.StudyLogRepository;
+import com.example.masterplanbbe.domain.studyLog.request.CreateStudyLogRequest;
+import com.example.masterplanbbe.domain.studyLog.response.CreateStudyLogResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.studyLog.repository;
+package com.example.masterplanbbe.domain.studyLog.repository;
 
-import com.example.masterplanbbe.studyLog.entity.StudyLog;
+import com.example.masterplanbbe.domain.studyLog.entity.StudyLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface StudyLogRepository extends JpaRepository<StudyLog, Long>, StudyLogRepositoryCustom {

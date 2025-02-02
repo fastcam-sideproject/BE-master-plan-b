@@ -1,9 +1,9 @@
-package com.example.masterplanbbe.studyLog.entity;
+package com.example.masterplanbbe.domain.studyLog.entity;
 
 import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.annotation.Nullable;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.studyLog.enums.InputSource;
+import com.example.masterplanbbe.domain.studyLog.enums.InputSource;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

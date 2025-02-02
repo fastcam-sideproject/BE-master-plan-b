@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.studyLog.enums;
+package com.example.masterplanbbe.domain.studyLog.enums;
 
 public enum InputSource {
     COMPUTER,

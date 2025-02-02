@@ -46,15 +46,14 @@ class PostControllerTest {
     @DisplayName("게시글 작성 성공")
     void createPost() throws Exception {
         // given
-        PostDto.PostRequestDTO requestDTO = new PostDto.PostRequestDTO("Test Title", "Test Content", "Test Nickname");
+        PostDto.PostRequestDTO requestDTO = new PostDto.PostRequestDTO("Test Title", "Test Content");
         PostDto.PostResponseDTO mockResponse = new PostDto.PostResponseDTO(
                 Post.builder()
                         .title("Test Title")
                         .content("Test Content")
-                        .nickname("Test Nickname")
                         .build()
         );
-        when(postService.createPost(any(PostDto.PostRequestDTO.class))).thenReturn(mockResponse);
+        when(postService.createPost(any(Long.class), any(PostDto.PostRequestDTO.class))).thenReturn(mockResponse);
 
         // when & then
         mvc.perform(post("/api/v1/posts")
@@ -74,7 +73,6 @@ class PostControllerTest {
                 Post.builder()
                         .title("Test Title")
                         .content("Test Content")
-                        .nickname("Test Nickname")
                         .build()
         );
         when(postService.getPost(any(Long.class))).thenReturn(mockResponse);
@@ -98,7 +96,6 @@ class PostControllerTest {
                 Post.builder()
                         .title("Test Title")
                         .content("Test Content")
-                        .nickname("Test Nickname")
                         .build()
         );
         when(postService.getAllPost()).thenReturn(List.of(mockResponse));
@@ -116,15 +113,14 @@ class PostControllerTest {
     @DisplayName("게시글 수정")
     void updatePost() throws Exception {
         // given
-        PostDto.PostRequestDTO requestDTO = new PostDto.PostRequestDTO("Updated Title", "Updated Content", "Test Nickname");
+        PostDto.PostRequestDTO requestDTO = new PostDto.PostRequestDTO("Updated Title", "Updated Content");
         PostDto.PostResponseDTO mockResponse = new PostDto.PostResponseDTO(
                 Post.builder()
                         .title("Updated Title")
                         .content("Updated Content")
-                        .nickname("Test Nickname")
                         .build()
         );
-        when(postService.updatePost(any(PostDto.PostRequestDTO.class), any(Long.class))).thenReturn(mockResponse);
+        when(postService.updatePost(any(Long.class), any(Long.class), any(PostDto.PostRequestDTO.class))).thenReturn(mockResponse);
 
         // when & then
         mvc.perform(patch("/api/v1/posts/{postid}", 1L)
@@ -140,12 +136,13 @@ class PostControllerTest {
     @DisplayName("게시글 삭제")
     void deletePost() throws Exception {
         // given
-        Long id = 1L;
+        Long postId = 1L;
+        Long memberId = 1L;
 
         // when & then
-        mvc.perform(delete("/api/v1/posts/{postid}", id))
+        mvc.perform(delete("/api/v1/posts/{postid}", postId))
                 .andExpect(status().isOk());
 
-        verify(postService).deletePost(id);
+        verify(postService).deletePost(postId, memberId);
     }
 }
