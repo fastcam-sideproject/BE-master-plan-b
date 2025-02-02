@@ -1,17 +1,9 @@
 package com.example.masterplanbbe.domain.exam.service;
 
-<<<<<<< HEAD
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
-=======
-import com.example.masterplanbbe.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.exam.entity.Exam;
-import com.example.masterplanbbe.exam.entity.ExamBookmark;
-import com.example.masterplanbbe.exam.repository.ExamRepository;
-import com.example.masterplanbbe.exam.service.ExamService;
->>>>>>> dev
 import com.example.masterplanbbe.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

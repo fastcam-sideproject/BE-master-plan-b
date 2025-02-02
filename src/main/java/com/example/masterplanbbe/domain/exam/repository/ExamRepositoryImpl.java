@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.exam.dto.QExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.QExamItemCardDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.LongSupplier;
 
-import static com.example.masterplanbbe.exam.entity.QExam.exam;
-import static com.example.masterplanbbe.exam.entity.QExamBookmark.examBookmark;
+import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
+import static com.example.masterplanbbe.domain.exam.entity.QExamBookmark.examBookmark;
 
 public class ExamRepositoryImpl implements ExamRepositoryCustom {
     private final JPAQueryFactory queryFactory;
