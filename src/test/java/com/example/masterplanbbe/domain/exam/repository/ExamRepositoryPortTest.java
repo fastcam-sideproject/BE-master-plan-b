@@ -20,15 +20,15 @@ import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMembe
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-public class ExamRepositoryTest {
-    @Autowired private ExamRepository examRepository;
+public class ExamRepositoryPortTest {
+    @Autowired private ExamRepositoryPort examRepositoryPort;
     @Autowired private MemberRepository memberRepository;
     @Autowired private ExamBookmarkRepository examBookmarkRepository;
 
     @BeforeEach
     void setUp() {
         examBookmarkRepository.deleteAll();
-        examRepository.deleteAll();
+        examRepositoryPort.deleteAll();
         memberRepository.deleteAll();
     }
 
@@ -38,11 +38,11 @@ public class ExamRepositoryTest {
         Member member = memberRepository.save(createMember());
         Exam exam1 = createExam("exam1");
         Exam exam2 = createExam("exam2");
-        examRepository.saveAll(List.of(exam1, exam2));
+        examRepositoryPort.saveAll(List.of(exam1, exam2));
         ExamBookmark examBookmark = examBookmarkRepository.save(new ExamBookmark(member, exam1));
         PageRequest pageRequest = PageRequest.of(0, 25);
 
-        Page<ExamItemCardDto> result = examRepository.getExamItemCards(pageRequest, member.getUserId());
+        Page<ExamItemCardDto> result = examRepositoryPort.getExamItemCards(pageRequest, member.getUserId());
 
         assertThat(result.getContent().size()).isEqualTo(2);
         assertThat(result.getContent().get(0).title()).isEqualTo("exam2");

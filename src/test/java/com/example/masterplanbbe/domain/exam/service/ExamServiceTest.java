@@ -3,7 +3,7 @@ package com.example.masterplanbbe.domain.exam.service;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
-import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
+import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +30,7 @@ public class ExamServiceTest {
     @InjectMocks
     ExamService examService;
     @Mock
-    ExamRepository examRepository;
+    ExamRepositoryPort examRepositoryPort;
 
     @Test
     @DisplayName("사용자는 시험을 조회하고 북마크 여부를 확인한다.")
@@ -38,11 +38,11 @@ public class ExamServiceTest {
         Member member = createMember();
         PageRequest pageRequest = PageRequest.of(0, 5);
         Page<ExamItemCardDto> mockedExamItemCardPage = createMockedExamItemCardPage(member);
-        given(examRepository.getExamItemCards(any(Pageable.class), any(String.class))).willReturn(mockedExamItemCardPage);
+        given(examRepositoryPort.getExamItemCards(any(Pageable.class), any(String.class))).willReturn(mockedExamItemCardPage);
 
         examService.getAllExam(pageRequest, "userId");
 
-        verify(examRepository, times(1)).getExamItemCards(any(Pageable.class), any(String.class));
+        verify(examRepositoryPort, times(1)).getExamItemCards(any(Pageable.class), any(String.class));
         assertExamItemCardPage(mockedExamItemCardPage);
     }
 

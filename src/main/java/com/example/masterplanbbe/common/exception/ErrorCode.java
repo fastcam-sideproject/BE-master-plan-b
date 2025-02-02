@@ -26,6 +26,9 @@ public enum ErrorCode {
     SOCIAL_EMAIL_LOAD_FAIL(400, "O001", "소셜 로그인에서 이메일을 불러올 수 없습니다."),
     SOCIAL_NAME_LOAD_FAIL(400, "O002", "소셜 로그인에서 이름을 불러올 수 없습니다."),
 
+    // Exam
+    EXAM_NOT_FOUND(404, "E001", "시험을 찾을 수 없습니다."),
+
     // Post
     INVALID_INPUT_TITLE(400,"P001","유효하지 않은 타이틀입니다."),
     INVALID_INPUT_CONTENT(400,"P002","유효하지 않은 내용입니다."),
