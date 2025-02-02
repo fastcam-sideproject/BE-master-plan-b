@@ -1,8 +1,8 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 
-import static com.example.masterplanbbe.exam.enums.Category.*;
+import static com.example.masterplanbbe.domain.exam.enums.Category.IT_ICT;
 
 public class ExamFixture {
     public static Exam createExam(String title) {
