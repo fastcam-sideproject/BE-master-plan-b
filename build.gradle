@@ -65,9 +65,7 @@ sourceSets {
 	}
 }
 
-tasks.named('clean') {
-	delete -= generatedDir
-}
+clean {	delete file('src/main/generated')}
 
 tasks.register('setupGeneratedDir') {
 	group = 'hidden'
