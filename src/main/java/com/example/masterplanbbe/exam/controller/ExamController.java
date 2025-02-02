@@ -6,6 +6,8 @@ import com.example.masterplanbbe.exam.response.ReadAllExamResponse;
 import com.example.masterplanbbe.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.exam.service.ExamService;
 import com.example.masterplanbbe.member.entity.Member;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,12 +15,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Exam controller api", description = "시험 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/exam")
 public class ExamController {
     private final ExamService examService;
 
+    @Operation(summary = "전체 시험 조회")
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
@@ -28,6 +32,7 @@ public class ExamController {
                 .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
     }
 
+    @Operation(summary = "특정 시험 조회")
     @GetMapping("/{examId}")
     public ResponseEntity<ApiResponse<ReadExamResponse>> getExam(
             @PathVariable Long examId
