@@ -2,11 +2,10 @@ package com.example.masterplanbbe.domain.exam.controller;
 
 import com.example.masterplanbbe.common.jackson.RestPage;
 import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.exam.controller.ExamController;
-import com.example.masterplanbbe.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.exam.entity.Exam;
-import com.example.masterplanbbe.exam.entity.ExamBookmark;
-import com.example.masterplanbbe.exam.service.ExamService;
+import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
+import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.member.entity.Member;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
