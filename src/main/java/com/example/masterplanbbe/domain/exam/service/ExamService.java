@@ -1,9 +1,8 @@
-package com.example.masterplanbbe.exam.service;
+package com.example.masterplanbbe.domain.exam.service;
 
-import com.example.masterplanbbe.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.exam.repository.ExamRepository;
-import com.example.masterplanbbe.exam.response.ReadAllExamResponse;
-import com.example.masterplanbbe.exam.response.ReadExamResponse;
+import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
+import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

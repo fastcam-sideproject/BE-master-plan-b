@@ -1,10 +1,8 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
-import com.example.masterplanbbe.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.exam.entity.Exam;
-import com.example.masterplanbbe.exam.entity.ExamBookmark;
-import com.example.masterplanbbe.exam.repository.ExamBookmarkRepository;
-import com.example.masterplanbbe.exam.repository.ExamRepository;
+import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
