@@ -131,6 +131,7 @@ public class ExamControllerTest {
 
         ResultActions resultActions = mockMvc.perform(post("/api/v1/exam")
                 .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding(UTF_8)
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON));
 
