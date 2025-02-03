@@ -47,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("시험 컨트롤러 테스트")
 @ExtendWith(MockitoExtension.class)
 public class ExamControllerTest {
     private MockMvc mockMvc;
