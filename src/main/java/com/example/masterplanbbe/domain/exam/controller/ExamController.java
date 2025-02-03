@@ -49,4 +49,14 @@ public class ExamController {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(examService.create(request)));
     }
+
+    @Operation(summary = "시험 삭제")
+    @DeleteMapping("/{examId}")
+    public ResponseEntity<ApiResponse<String>> delete(
+            @PathVariable Long examId
+    ) {
+        examService.delete(examId);
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok("시험 삭제 성공"));
+    }
 }
