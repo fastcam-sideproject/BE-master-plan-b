@@ -102,4 +102,15 @@ public class ExamServiceTest {
                 exam -> setField(exam, "id", 1L)
         );
     }
+
+    @Test
+    @DisplayName("관리자는 시험을 삭제한다.")
+    void delete_exam() {
+        Long examId = 1L;
+        willDoNothing().given(examRepositoryPort).deleteById(1L);
+
+        examService.delete(1L);
+
+        verify(examRepositoryPort, times(1)).deleteById(any(Long.class));
+    }
 }
