@@ -2,6 +2,8 @@ package com.example.masterplanbbe.domain.exam.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,22 +22,31 @@ import org.springframework.web.bind.annotation.*;
 public class ExamController {
     private final ExamService examService;
 
-    @Operation(summary = "전체 시험 조회")
+    @Operation(summary = "시험 목록 조회")
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
+    public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAll(
             @PageableDefault Pageable pageable,
             @RequestParam(name = "memberId") String memberId//TODO: security context로 변경
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
+                .body(ApiResponse.ok(examService.getAll(pageable, memberId)));
     }
 
-    @Operation(summary = "특정 시험 조회")
+    @Operation(summary = "시험 상세 조회")
     @GetMapping("/{examId}")
-    public ResponseEntity<ApiResponse<ReadExamResponse>> getExam(
+    public ResponseEntity<ApiResponse<ReadExamResponse>> getOne(
             @PathVariable Long examId
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getExam(examId)));
+                .body(ApiResponse.ok(examService.getOne(examId)));
+    }
+
+    @Operation(summary = "시험 등록")
+    @PostMapping("")
+    public ResponseEntity<ApiResponse<CreateExamResponse>> create(
+            @RequestBody ExamCreateRequest request
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(examService.create(request)));
     }
 }
