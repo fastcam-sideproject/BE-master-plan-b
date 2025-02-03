@@ -53,7 +53,7 @@ public class ExamController {
     @Operation(summary = "시험 삭제")
     @DeleteMapping("/{examId}")
     public ResponseEntity<ApiResponse<String>> delete(
-            @PathVariable Long examId
+            @PathVariable("examId") Long examId
     ) {
         examService.delete(examId);
         return ResponseEntity.ok()

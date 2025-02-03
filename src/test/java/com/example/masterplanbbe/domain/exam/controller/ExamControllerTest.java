@@ -40,9 +40,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.util.ReflectionTestUtils.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -157,4 +157,17 @@ public class ExamControllerTest {
         setField(exam, "id", 1L);
         return exam;
     }
+
+    @Test
+    @DisplayName("사용자는 시험을 삭제한다.")
+    void delete_exam() throws Exception {
+        Long examId = 1L;
+        willDoNothing().given(examService).delete(any(Long.class));
+
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/exam/{examId}", examId));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType("application/json"))
+                .andDo(print());
+    }
+
 }
