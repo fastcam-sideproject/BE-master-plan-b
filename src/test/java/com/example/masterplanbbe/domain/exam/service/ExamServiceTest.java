@@ -89,7 +89,7 @@ public class ExamServiceTest {
         verify(examRepositoryPort, times(1)).save(any(Exam.class));
         assertAll(
                 () -> assertThat(result.examId()).isNotNull(),
-                () -> assertThat(result.title()).isEqualTo("exam1"),
+                () -> assertThat(result.title()).isEqualTo(request.title()),
                 () -> assertThat(result.category()).isEqualTo(request.category()),
                 () -> assertThat(result.authority()).isEqualTo(request.authority()),
                 () -> assertThat(result.subjects()).isEqualTo(request.subjects())
