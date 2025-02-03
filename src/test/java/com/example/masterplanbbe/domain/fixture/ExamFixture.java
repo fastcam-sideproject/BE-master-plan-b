@@ -1,7 +1,6 @@
 package com.example.masterplanbbe.domain.fixture;
 
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 
 import java.util.List;
