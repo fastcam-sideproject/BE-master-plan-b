@@ -9,5 +9,6 @@ public interface ExamRepositoryPort extends ExamRepositoryCustom {
     Exam getById(Long examId);
     Exam save(Exam exam);
     void saveAll(Iterable<Exam> exams);
+    void deleteById(Long examId);
     void deleteAll();
 }
