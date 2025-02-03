@@ -110,7 +110,7 @@ public class ExamServiceTest {
         willDoNothing().given(examRepositoryPort).deleteById(1L);
 
         examService.delete(1L);
-
+        //TODO: 상수 비교 이외의 방법으로 response.message 의 상태 검증을 하면 좋을듯함
         verify(examRepositoryPort, times(1)).deleteById(any(Long.class));
     }
 }
