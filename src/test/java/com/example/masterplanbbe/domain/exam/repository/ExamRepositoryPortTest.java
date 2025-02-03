@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @SpringBootTest
+@DisplayName("시험 레포지토리 테스트")
 public class ExamRepositoryPortTest {
     @Autowired private ExamRepositoryPort examRepositoryPort;
     @Autowired private MemberRepository memberRepository;

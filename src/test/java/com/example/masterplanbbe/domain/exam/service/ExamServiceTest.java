@@ -89,7 +89,7 @@ public class ExamServiceTest {
         verify(examRepositoryPort, times(1)).save(any(Exam.class));
         assertAll(
                 () -> assertThat(result.examId()).isNotNull(),
-                () -> assertThat(result.title()).isEqualTo("exam1"),
+                () -> assertThat(result.title()).isEqualTo(request.title()),
                 () -> assertThat(result.category()).isEqualTo(request.category()),
                 () -> assertThat(result.authority()).isEqualTo(request.authority()),
                 () -> assertThat(result.subjects()).isEqualTo(request.subjects())
@@ -101,5 +101,16 @@ public class ExamServiceTest {
                 () -> invocation.getArgument(0),
                 exam -> setField(exam, "id", 1L)
         );
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 삭제한다.")
+    void delete_exam() {
+        Long examId = 1L;
+        willDoNothing().given(examRepositoryPort).deleteById(1L);
+
+        examService.delete(1L);
+        //TODO: 상수 비교 이외의 방법으로 response.message 의 상태 검증을 하면 좋을듯함
+        verify(examRepositoryPort, times(1)).deleteById(any(Long.class));
     }
 }
