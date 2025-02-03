@@ -36,6 +36,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,7 +76,8 @@ public class ExamControllerTest {
                 .param("memberId", member.getUserId())
                 .accept("application/json"));
 
-        resultActions.andExpectAll(status().isOk(), content().contentType("application/json"));
+        resultActions.andExpectAll(status().isOk(), content().contentType("application/json"))
+                .andDo(print());
         assertExamItemCardResponse(resultActions);
     }
 
