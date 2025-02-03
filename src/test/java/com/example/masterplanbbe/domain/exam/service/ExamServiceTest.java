@@ -40,7 +40,7 @@ public class ExamServiceTest {
         Page<ExamItemCardDto> mockedExamItemCardPage = createMockedExamItemCardPage(member);
         given(examRepositoryPort.getExamItemCards(any(Pageable.class), any(String.class))).willReturn(mockedExamItemCardPage);
 
-        examService.getAll(pageRequest, "userId");
+        examService.getAllExam(pageRequest, "userId");
 
         verify(examRepositoryPort, times(1)).getExamItemCards(any(Pageable.class), any(String.class));
         assertExamItemCardPage(mockedExamItemCardPage);

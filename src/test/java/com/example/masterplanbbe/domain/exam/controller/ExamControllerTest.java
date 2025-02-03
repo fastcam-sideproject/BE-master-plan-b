@@ -62,11 +62,11 @@ public class ExamControllerTest {
     //TODO: mocking 중의 영향으로 Sort 가 반영돼있지 않음
     @Test
     @DisplayName("사용자는 시험 목록을 조회한다.")
-    void getAll() throws Exception {
+    void getAllExam() throws Exception {
         Member member = createMember();
         PageRequest pageRequest = PageRequest.of(0, 5);
         Page<ExamItemCardDto> mockedExamItemCardPage = createMockedExamItemCardPage(member);
-        given(examService.getAll(any(Pageable.class), eq(member.getUserId()))).willReturn(mockedExamItemCardPage);
+        given(examService.getAllExam(any(Pageable.class), eq(member.getUserId()))).willReturn(mockedExamItemCardPage);
 
         ResultActions resultActions = mockMvc.perform(get("/api/v1/exam")
                 .param("page", pageRequest.getPageNumber() + "")

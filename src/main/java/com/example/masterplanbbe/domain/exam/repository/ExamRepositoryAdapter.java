@@ -71,6 +71,10 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
     }
 
     @Override
+    public void deleteById(Long examId) {
+        examRepository.deleteById(examId);
+    }
+    @Override
     public void deleteAll() {
         examRepository.deleteAll();
     }

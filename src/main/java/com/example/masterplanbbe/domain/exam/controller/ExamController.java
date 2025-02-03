@@ -24,21 +24,21 @@ public class ExamController {
 
     @Operation(summary = "시험 목록 조회")
     @GetMapping
-    public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAll(
+    public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
             @RequestParam(name = "memberId") String memberId//TODO: security context로 변경
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getAll(pageable, memberId)));
+                .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
     }
 
     @Operation(summary = "시험 상세 조회")
     @GetMapping("/{examId}")
-    public ResponseEntity<ApiResponse<ReadExamResponse>> getOne(
+    public ResponseEntity<ApiResponse<ReadExamResponse>> getExam(
             @PathVariable Long examId
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getOne(examId)));
+                .body(ApiResponse.ok(examService.getExam(examId)));
     }
 
     @Operation(summary = "시험 등록")

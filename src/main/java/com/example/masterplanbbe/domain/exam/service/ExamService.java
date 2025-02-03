@@ -15,15 +15,20 @@ import org.springframework.stereotype.Service;
 public class ExamService {
     private final ExamRepositoryPort examRepositoryPort;
 
-    public Page<ExamItemCardDto> getAll(Pageable pageable, String memberId) {
+    public Page<ExamItemCardDto> getAllExam(Pageable pageable, String memberId) {
         return examRepositoryPort.getExamItemCards(pageable, memberId);
     }
 
-    public ReadExamResponse getOne(Long memberId) {
-        return new ReadExamResponse(examRepository.getExam(memberId));
+    public ReadExamResponse getExam(Long examId) {
+//        return new ReadExamResponse(examRepositoryPort.getById(examId));
+        return null; //TODO: implement this
     }
 
     public CreateExamResponse create(ExamCreateRequest request) {
         return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
+    }
+
+    public void delete(Long examId) {
+        examRepositoryPort.deleteById(examId);
     }
 }
