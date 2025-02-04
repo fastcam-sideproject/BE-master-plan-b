@@ -3,15 +3,11 @@ package com.example.masterplanbbe.domain.exam.entity;
 import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "subjects")
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subject extends FullAuditEntity {
     @NonNull
@@ -26,4 +22,16 @@ public class Subject extends FullAuditEntity {
     @NonNull
     @Column
     private String description;
+
+    @Builder
+    public Subject(Exam exam, String title, String description) {
+        this.exam = exam;
+        this.title = title;
+        this.description = description;
+    }
+
+    public void update(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 }
