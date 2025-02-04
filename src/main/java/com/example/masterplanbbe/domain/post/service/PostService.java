@@ -3,7 +3,8 @@ package com.example.masterplanbbe.domain.post.service;
 import com.example.masterplanbbe.common.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.domain.comment.dto.CommentDto;
-import com.example.masterplanbbe.domain.post.dto.PostDto;
+import com.example.masterplanbbe.domain.post.dto.PostRequest;
+import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
 import com.example.masterplanbbe.member.entity.Member;
@@ -27,12 +28,12 @@ public class PostService {
      * @param postRequestDTO
      */
     @Transactional
-    public PostDto.PostResponseDTO createPost(Long memberId, PostDto.PostRequestDTO postRequestDTO) {
+    public PostResponse.Summary createPost(Long memberId, PostRequest postRequestDTO) {
 
         Member member = memberRepositoryPort.findById(memberId);
 
-        String title = postRequestDTO.getTitle();
-        String content = postRequestDTO.getContent();
+        String title = postRequestDTO.title();
+        String content = postRequestDTO.content();
 
         if (title == null) {
             throw new GlobalException(ErrorCode.INVALID_INPUT_TITLE) {};
@@ -45,12 +46,11 @@ public class PostService {
         Post post = postRequestDTO.toEntity(member);
         postRepositoryPort.save(post);
 
-        return PostDto.PostResponseDTO.builder()
+        return PostResponse.Summary.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .createAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
+                .createdAt(post.getCreatedAt())
                 .nickname(post.getMember().getNickname())
                 .build();
     }
@@ -60,17 +60,17 @@ public class PostService {
      * @param postId
      * @return
      */
-    public PostDto.PostResponseDTO getPost(Long postId) {
+    public PostResponse.Detail getPost(Long postId) {
         Post post = postRepositoryPort.findById(postId);
         List<CommentDto.CommentResponseDto> commentList = post.getCommentList().stream()
                 .map(CommentDto.CommentResponseDto::new)
                 .toList();
 
-        return PostDto.PostResponseDTO.builder()
+        return PostResponse.Detail.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .createAt(post.getCreatedAt())
+                .createdAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
                 .comments(commentList)
                 .nickname(post.getMember().getNickname())
@@ -81,16 +81,15 @@ public class PostService {
      * 전체 게시글 조회
      * @return
      */
-    public List<PostDto.PostResponseDTO> getAllPost() {
+    public List<PostResponse.Summary> getAllPost() {
         List<Post> posts = postRepositoryPort.findAll();
         return posts.stream()
-                .map(post -> PostDto.PostResponseDTO.builder()
+                .map(post -> PostResponse.Summary.builder()
                         .postId(post.getId())
                         .content(post.getContent())
                         .title(post.getTitle())
-                        .createAt(post.getCreatedAt())
-                        .modifiedAt(post.getModifiedAt())
                         .nickname(post.getMember().getNickname())
+                        .createdAt(post.getCreatedAt())
                         .build())
                 .toList();
     }
@@ -102,9 +101,9 @@ public class PostService {
      * @param postRequestDTO
      * @return
      */
-    public PostDto.PostResponseDTO updatePost(Long postId, Long memberId, PostDto.PostRequestDTO postRequestDTO) {
-        String title = postRequestDTO.getTitle();
-        String content = postRequestDTO.getContent();
+    public PostResponse.Detail updatePost(Long postId, Long memberId, PostRequest postRequestDTO) {
+        String title = postRequestDTO.title();
+        String content = postRequestDTO.content();
 
         Post post = postRepositoryPort.findById(postId);
         Member member = memberRepositoryPort.findById(memberId);
@@ -113,16 +112,21 @@ public class PostService {
             throw new GlobalException(ErrorCode.NOT_MODIFIED_POST) {};
         }
 
+        List<CommentDto.CommentResponseDto> commentList = post.getCommentList().stream()
+                .map(CommentDto.CommentResponseDto::new)
+                .toList();
+
         post.updatePost(title, content);
         postRepositoryPort.save(post);
 
-        return PostDto.PostResponseDTO.builder()
+        return PostResponse.Detail.builder()
                 .postId(post.getId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .createAt(post.getCreatedAt())
+                .createdAt(post.getCreatedAt())
                 .modifiedAt(post.getModifiedAt())
                 .nickname(post.getMember().getNickname())
+                .comments(commentList)
                 .build();
     }
 

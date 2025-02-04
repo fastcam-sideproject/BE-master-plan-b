@@ -23,6 +23,10 @@ public class Post extends FullAuditEntity {
 
     private String content;
 
+    private Boolean isLiked;
+
+    private Integer likeCount;
+
     @ManyToOne
     private Member member;
 
