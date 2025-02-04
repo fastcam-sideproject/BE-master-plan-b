@@ -3,8 +3,10 @@ package com.example.masterplanbbe.domain.exam.controller;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
+import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -48,6 +50,16 @@ public class ExamController {
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(examService.create(request)));
+    }
+
+    @Operation(summary = "시험 수정")
+    @PatchMapping("/{examId}")
+    public ResponseEntity<ApiResponse<UpdateExamResponse>> update(
+            @PathVariable("examId") Long examId,
+            @RequestBody ExamUpdateRequest request
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(examService.update(examId, request)));
     }
 
     @Operation(summary = "시험 삭제")

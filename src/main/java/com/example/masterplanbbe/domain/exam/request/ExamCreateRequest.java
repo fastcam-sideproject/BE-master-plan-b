@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.exam.request;
 
+import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.Subject;
 import com.example.masterplanbbe.domain.exam.enums.Category;
@@ -12,7 +13,7 @@ public record ExamCreateRequest(
         Category category,
         String authority,
         CertificationType certificationType,
-        List<Subject> subjects
+        List<SubjectDto> subjectDtoList
 ) {
     public Exam toEntity() {
         return new Exam(
@@ -22,7 +23,9 @@ public record ExamCreateRequest(
                 0.0,
                 0,
                 certificationType,
-                subjects
+                subjectDtoList != null ?
+                        subjectDtoList.stream().map(SubjectDto::toEntity).toList() :
+                        List.of()
         );
     }
 }
