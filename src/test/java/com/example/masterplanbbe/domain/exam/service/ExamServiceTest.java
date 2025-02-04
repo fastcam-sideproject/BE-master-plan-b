@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.exam.service;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
@@ -117,7 +118,10 @@ public class ExamServiceTest {
                 () -> assertThat(exam.getTitle()).isEqualTo(request.title()),
                 () -> assertThat(exam.getCategory()).isEqualTo(request.category()),
                 () -> assertThat(exam.getAuthority()).isEqualTo(request.authority()),
-                () -> assertThat(exam.getSubjects()).isEqualTo(request.subjects())
+                () -> {
+                    assert exam.getSubjects() != null;
+                    assertThat(exam.getSubjects().stream().map(SubjectDto::new)).isEqualTo(request.subjects());
+                }
         );
     }
 
