@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.post.dto;
 
-import com.example.masterplanbbe.domain.comment.dto.CommentDto;
+import com.example.masterplanbbe.domain.comment.dto.CommentResponse;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -25,6 +25,6 @@ public class PostResponse {
             String nickname,
             LocalDateTime createdAt,
             LocalDateTime modifiedAt,
-            List<CommentDto.CommentResponseDto> comments
+            List<CommentResponse> comments
     ) {}
 }

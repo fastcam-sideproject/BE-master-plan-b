@@ -2,7 +2,7 @@ package com.example.masterplanbbe.domain.post.service;
 
 import com.example.masterplanbbe.common.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
-import com.example.masterplanbbe.domain.comment.dto.CommentDto;
+import com.example.masterplanbbe.domain.comment.dto.CommentResponse;
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
@@ -62,8 +62,8 @@ public class PostService {
      */
     public PostResponse.Detail getPost(Long postId) {
         Post post = postRepositoryPort.findById(postId);
-        List<CommentDto.CommentResponseDto> commentList = post.getCommentList().stream()
-                .map(CommentDto.CommentResponseDto::new)
+        List<CommentResponse> commentList = post.getCommentList().stream()
+                .map(CommentResponse::from)
                 .toList();
 
         return PostResponse.Detail.builder()
@@ -112,8 +112,8 @@ public class PostService {
             throw new GlobalException(ErrorCode.NOT_MODIFIED_POST) {};
         }
 
-        List<CommentDto.CommentResponseDto> commentList = post.getCommentList().stream()
-                .map(CommentDto.CommentResponseDto::new)
+        List<CommentResponse> commentList = post.getCommentList().stream()
+                .map(CommentResponse::from)
                 .toList();
 
         post.updatePost(title, content);
