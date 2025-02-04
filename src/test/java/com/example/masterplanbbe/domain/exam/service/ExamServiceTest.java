@@ -1,10 +1,12 @@
 package com.example.masterplanbbe.domain.exam.service;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
@@ -19,12 +21,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
-import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExamCreateRequest;
+import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,6 +101,34 @@ public class ExamServiceTest {
                 () -> invocation.getArgument(0),
                 exam -> setField(exam, "id", 1L)
         );
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 수정한다.")
+    void update_exam() {
+        Long examId = 1L;
+        Exam exam = getExistingExamById(examId);
+        ExamUpdateRequest request = createExamUpdateRequest("수정된 시험");
+        given(examRepositoryPort.getById(any(Long.class))).willReturn(exam);
+
+        examService.update(examId, request);
+
+        verify(examRepositoryPort, times(1)).getById(any(Long.class));
+        assertAll(
+                () -> assertThat(exam.getTitle()).isEqualTo(request.title()),
+                () -> assertThat(exam.getCategory()).isEqualTo(request.category()),
+                () -> assertThat(exam.getAuthority()).isEqualTo(request.authority()),
+                () -> {
+                    assert exam.getSubjects() != null;
+                    assertThat(exam.getSubjects().stream().map(SubjectDto::new)).isEqualTo(request.subjects());
+                }
+        );
+    }
+
+    private Exam getExistingExamById(Long examId) {
+        Exam exam = createExam("exam1");
+        setField(exam, "id", examId);
+        return exam;
     }
 
     @Test

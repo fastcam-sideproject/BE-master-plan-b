@@ -12,7 +12,7 @@ public record CreateExamResponse(
         String title,
         Category category,
         String authority,
-        List<SubjectDto> subjectDtoList
+        List<SubjectDto> subjects
 ) {
     public CreateExamResponse(Exam exam){
         this(

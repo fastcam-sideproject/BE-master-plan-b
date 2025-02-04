@@ -3,10 +3,13 @@ package com.example.masterplanbbe.domain.exam.controller;
 import com.example.masterplanbbe.common.jackson.RestPage;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
+import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.domain.fixture.ExamFixture;
 import com.example.masterplanbbe.member.entity.Member;
@@ -126,7 +129,7 @@ public class ExamControllerTest {
     @DisplayName("관리자는 시험을 추가한다.")
     void add_exam() throws Exception {
         ExamCreateRequest request = ExamFixture.createExamCreateRequest("exam1");
-        CreateExamResponse mockedResult = new CreateExamResponse(createSavedExamFrom(request));
+        CreateExamResponse mockedResult = new CreateExamResponse(createExistingExamFrom(request));
         given(examService.create(any(ExamCreateRequest.class))).willReturn(mockedResult);
 
         ResultActions resultActions = mockMvc.perform(post("/api/v1/exam")
@@ -152,14 +155,65 @@ public class ExamControllerTest {
                 });
     }
 
-    private Exam createSavedExamFrom(ExamCreateRequest request) {
+    private Exam createExistingExamFrom(ExamCreateRequest request) {
         Exam exam = request.toEntity();
         setField(exam, "id", 1L);
         return exam;
     }
 
     @Test
-    @DisplayName("사용자는 시험을 삭제한다.")
+    @DisplayName("관리자는 시험을 수정한다.")
+    void update_exam() throws Exception {
+        Long examId = 1L;
+        ExamUpdateRequest request = ExamFixture.createExamUpdateRequest("exam1");
+        Exam exam = createExistingExamFrom(request);
+        given(examService.update(any(Long.class), any(ExamUpdateRequest.class))).willReturn(new UpdateExamResponse(exam));
+
+        ResultActions resultActions = mockMvc.perform(patch("/api/v1/exam/{examId}", examId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .content(objectMapper.writeValueAsString(request))
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType("application/json"))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<UpdateExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    UpdateExamResponse data = response.getData();
+                    assertAll(
+                            () -> assertThat(data.examId()).isNotNull(),
+                            () -> assertThat(data.title()).isEqualTo(request.title()),
+                            () -> assertThat(data.category()).isEqualTo(request.category()),
+                            () -> assertThat(data.authority()).isEqualTo(request.authority()),
+                            () -> assertThat(data.difficulty()).isEqualTo(request.difficulty()),
+                            () -> assertThat(data.participantCount()).isEqualTo(request.participantCount()),
+                            () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
+                            () -> assertThat(data.subjects()).isEqualTo(request.subjects())
+                    );
+                });
+    }
+
+    private Exam createExistingExamFrom(ExamUpdateRequest request) {
+        Exam exam = Exam.builder()
+                .title(request.title())
+                .category(request.category())
+                .authority(request.authority())
+                .difficulty(request.difficulty())
+                .participantCount(request.participantCount())
+                .certificationType(request.certificationType())
+                .subjects(request.subjects().stream().map(SubjectDto::toEntity).toList())
+                .build();
+        setField(exam, "id", 1L);
+        return exam;
+    }
+
+    private void assertUpdateExamResponse(ResultActions resultActions) throws Exception {
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 삭제한다.")
     void delete_exam() throws Exception {
         Long examId = 1L;
         willDoNothing().given(examService).delete(any(Long.class));

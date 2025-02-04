@@ -2,16 +2,16 @@ package com.example.masterplanbbe.domain.exam.response;
 
 import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.Subject;
 import com.example.masterplanbbe.domain.exam.enums.Category;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public record UpdateExamResponse(
         Long examId,
         String title,
+        CertificationType certificationType,
         Category category,
         String authority,
         Double difficulty,
@@ -22,6 +22,7 @@ public record UpdateExamResponse(
         this(
                 exam.getId(),
                 exam.getTitle(),
+                exam.getCertificationType(),
                 exam.getCategory(),
                 exam.getAuthority(),
                 exam.getDifficulty(),
