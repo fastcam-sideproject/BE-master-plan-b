@@ -159,7 +159,7 @@ public class ExamControllerTest {
     }
 
     @Test
-    @DisplayName("사용자는 시험을 삭제한다.")
+    @DisplayName("관리자는 시험을 삭제한다.")
     void delete_exam() throws Exception {
         Long examId = 1L;
         willDoNothing().given(examService).delete(any(Long.class));
