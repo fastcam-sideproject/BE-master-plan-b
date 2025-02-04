@@ -82,6 +82,9 @@ public class Exam extends FullAuditEntity {
         Map<Long, Subject> subjectMap = this.subjects != null ?
                 this.subjects.stream().collect(Collectors.toMap(Subject::getId, Function.identity())) :
                 Map.of();
+        if (subjectDtos == null) {
+            return List.of();
+        }
 
         return subjectDtos.stream()
                 .map(subjectDto -> {
