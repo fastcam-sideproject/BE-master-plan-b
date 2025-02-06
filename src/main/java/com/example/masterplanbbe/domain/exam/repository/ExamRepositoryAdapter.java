@@ -1,7 +1,9 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.dto.QExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.QExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -45,14 +47,25 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
 
         LongSupplier countQuery = () -> Optional.ofNullable(
                 queryFactory.select(
-                        exam.count()
-                )
-                .from(exam)
-                .offset(pageable.getOffset())
-                .fetchOne()
+                                exam.count()
+                        )
+                        .from(exam)
+                        .offset(pageable.getOffset())
+                        .fetchOne()
         ).orElse(0L);
 
         return PageableExecutionUtils.getPage(queryResult, pageable, countQuery);
+    }
+
+    @Override
+    public ExamWithDetailsDto getExamWithDetails(Long examId) {
+        return Optional.ofNullable(
+                queryFactory.select(new QExamWithDetailsDto(exam))
+                        .from(exam)
+                        .leftJoin(exam.examDetail).fetchJoin()
+                        .where(exam.id.eq(examId))
+                        .fetchOne()
+        ).orElseThrow(() -> new NotFoundException(EXAM_NOT_FOUND));
     }
 
     @Override
@@ -74,6 +87,7 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
     public void deleteById(Long examId) {
         examRepository.deleteById(examId);
     }
+
     @Override
     public void deleteAll() {
         examRepository.deleteAll();

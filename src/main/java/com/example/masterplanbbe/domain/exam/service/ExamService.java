@@ -25,8 +25,7 @@ public class ExamService {
     }
 
     public ReadExamResponse getExam(Long examId) {
-//        return new ReadExamResponse(examRepositoryPort.getById(examId));
-        return null;
+        return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId));
     }
 
     public CreateExamResponse create(ExamCreateRequest request) {

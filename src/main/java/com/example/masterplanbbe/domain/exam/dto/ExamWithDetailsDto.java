@@ -1,23 +1,33 @@
 package com.example.masterplanbbe.domain.exam.dto;
 
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.querydsl.core.annotations.QueryProjection;
 
-public record ExamDetailDto(
+public record ExamWithDetailsDto(
+        String title,
+        String category,
+        String authority,
+        Double difficulty,
+        Integer participantCount,
+        String certificationType,
         String preparation,
         String eligibility,
         String examStructure,
         String passingCriteria
 ) {
-    public ExamDetailDto(ExamDetail examDetail) {
-        this(examDetail.getPreparation(), examDetail.getEligibility(), examDetail.getExamStructure(), examDetail.getPassingCriteria());
-    }
-
-    public ExamDetail toEntity() {
-        return ExamDetail.builder()
-                .preparation(preparation)
-                .eligibility(eligibility)
-                .examStructure(examStructure)
-                .passingCriteria(passingCriteria)
-                .build();
+    @QueryProjection
+    public ExamWithDetailsDto(Exam exam) {
+        this(
+                exam.getTitle(),
+                exam.getCategory().name(),
+                exam.getAuthority(),
+                exam.getDifficulty(),
+                exam.getParticipantCount(),
+                exam.getCertificationType().name(),
+                exam.getExamDetail().getPreparation(),
+                exam.getExamDetail().getEligibility(),
+                exam.getExamDetail().getExamStructure(),
+                exam.getExamDetail().getPassingCriteria()
+        );
     }
 }

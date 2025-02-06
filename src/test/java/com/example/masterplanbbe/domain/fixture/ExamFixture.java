@@ -5,24 +5,38 @@ import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
+import com.example.masterplanbbe.utils.TestUtils;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.example.masterplanbbe.domain.exam.enums.Category.IT_ICT;
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 
 public class ExamFixture {
     public static Exam createExam(String title) {
-        return Exam.builder()
+        Supplier<Exam> examBuilder = () -> Exam.builder()
                 .title(title)
                 .category(IT_ICT)
                 .authority("테스트")
                 .participantCount(100)
+                .certificationType(NATIONAL_CERTIFIED)
                 .difficulty(3.0)
                 .subjects(new ArrayList<>())
-                .examDetail(ExamDetail.builder().build())
                 .build();
+
+        return TestUtils.withSetup(examBuilder, instance -> {
+                    ReflectionTestUtils.setField(instance, "examDetail", ExamDetail.builder()
+                            .exam(instance)
+                            .preparation("준비물")
+                            .eligibility("자격요건")
+                            .examStructure("시험구조")
+                            .passingCriteria("합격기준")
+                            .build());
+                }
+        );
     }
 
     public static ExamCreateRequest createExamCreateRequest(String title) {
