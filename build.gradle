@@ -65,10 +65,6 @@ sourceSets {
 	}
 }
 
-tasks.named('clean') {
-	delete -= generatedDir
-}
-
 tasks.register('setupGeneratedDir') {
 	group = 'hidden'
 	doLast {
@@ -87,6 +83,18 @@ idea {
 
 tasks.named("compileJava") {
 	dependsOn("setupGeneratedDir")
+}
+
+tasks.named("clean") {
+	delete(file("src/main/generated"))
+}
+
+tasks.register("cleanCompileJava") {
+	group = "queryDSL"
+	description = "Runs clean and then compiles Java sources"
+
+	dependsOn("clean")
+	finalizedBy("compileJava")
 }
 
 tasks.named('test') {
