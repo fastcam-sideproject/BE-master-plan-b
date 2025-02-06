@@ -6,6 +6,7 @@ import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
+import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
@@ -150,7 +151,11 @@ public class ExamControllerTest {
                             () -> assertThat(data.title()).isEqualTo(request.title()),
                             () -> assertThat(data.category()).isEqualTo(request.category()),
                             () -> assertThat(data.authority()).isEqualTo(request.authority()),
-                            () -> assertThat(data.subjects()).isEqualTo(request.subjects())
+                            () -> assertThat(data.subjects()).isEqualTo(request.subjects()),
+                            () -> assertThat(data.preparation()).isEqualTo(request.preparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(request.eligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(request.examStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(request.passingCriteria())
                     );
                 });
     }
@@ -158,6 +163,10 @@ public class ExamControllerTest {
     private Exam createExistingExamFrom(ExamCreateRequest request) {
         Exam exam = request.toEntity();
         setField(exam, "id", 1L);
+        for (int i = 0; i < exam.getSubjects().size(); i++) {
+            setField(exam.getSubjects().get(i), "id", i + 1L);
+        }
+        setField(exam.getExamDetail(), "id", 1L);
         return exam;
     }
 
@@ -190,7 +199,11 @@ public class ExamControllerTest {
                             () -> assertThat(data.difficulty()).isEqualTo(request.difficulty()),
                             () -> assertThat(data.participantCount()).isEqualTo(request.participantCount()),
                             () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
-                            () -> assertThat(data.subjects()).isEqualTo(request.subjects())
+                            () -> assertThat(data.subjects()).isEqualTo(request.subjects()),
+                            () -> assertThat(data.preparation()).isEqualTo(request.preparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(request.eligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(request.examStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(request.passingCriteria())
                     );
                 });
     }
@@ -204,12 +217,19 @@ public class ExamControllerTest {
                 .participantCount(request.participantCount())
                 .certificationType(request.certificationType())
                 .subjects(request.subjects().stream().map(SubjectDto::toEntity).toList())
+                .examDetail(ExamDetail.builder()
+                        .preparation(request.preparation())
+                        .eligibility(request.eligibility())
+                        .examStructure(request.examStructure())
+                        .passingCriteria(request.passingCriteria())
+                        .build())
                 .build();
         setField(exam, "id", 1L);
+        for (int i = 0; i < exam.getSubjects().size(); i++) {
+            setField(exam.getSubjects().get(i), "id", i + 1L);
+        }
+        setField(exam.getExamDetail(), "id", 1L);
         return exam;
-    }
-
-    private void assertUpdateExamResponse(ResultActions resultActions) throws Exception {
     }
 
     @Test

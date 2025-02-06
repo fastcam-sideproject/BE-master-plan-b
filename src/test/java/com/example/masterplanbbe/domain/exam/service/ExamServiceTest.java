@@ -92,7 +92,11 @@ public class ExamServiceTest {
                 () -> assertThat(result.title()).isEqualTo(request.title()),
                 () -> assertThat(result.category()).isEqualTo(request.category()),
                 () -> assertThat(result.authority()).isEqualTo(request.authority()),
-                () -> assertThat(result.subjects()).isEqualTo(request.subjects())
+                () -> assertThat(result.subjects()).isEqualTo(request.subjects()),
+                () -> assertThat(result.preparation()).isEqualTo(request.preparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(request.eligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(request.examStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(request.passingCriteria())
         );
     }
 
@@ -118,10 +122,11 @@ public class ExamServiceTest {
                 () -> assertThat(exam.getTitle()).isEqualTo(request.title()),
                 () -> assertThat(exam.getCategory()).isEqualTo(request.category()),
                 () -> assertThat(exam.getAuthority()).isEqualTo(request.authority()),
-                () -> {
-                    assert exam.getSubjects() != null;
-                    assertThat(exam.getSubjects().stream().map(SubjectDto::new)).isEqualTo(request.subjects());
-                }
+                () -> assertThat(exam.getSubjects().stream().map(SubjectDto::new)).isEqualTo(request.subjects()),
+                () -> assertThat(exam.getExamDetail().getPreparation()).isEqualTo(request.preparation()),
+                () -> assertThat(exam.getExamDetail().getEligibility()).isEqualTo(request.eligibility()),
+                () -> assertThat(exam.getExamDetail().getExamStructure()).isEqualTo(request.examStructure()),
+                () -> assertThat(exam.getExamDetail().getPassingCriteria()).isEqualTo(request.passingCriteria())
         );
     }
 

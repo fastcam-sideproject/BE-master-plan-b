@@ -16,7 +16,11 @@ public record UpdateExamResponse(
         String authority,
         Double difficulty,
         Integer participantCount,
-        List<SubjectDto> subjects
+        List<SubjectDto> subjects,
+        String preparation,
+        String eligibility,
+        String examStructure,
+        String passingCriteria
 ) {
     public UpdateExamResponse(Exam exam) {
         this(
@@ -30,7 +34,11 @@ public record UpdateExamResponse(
                 Objects.requireNonNull(exam.getSubjects())
                         .stream()
                         .map(SubjectDto::new)
-                        .toList()
+                        .toList(),
+                exam.getExamDetail().getPreparation(),
+                exam.getExamDetail().getEligibility(),
+                exam.getExamDetail().getExamStructure(),
+                exam.getExamDetail().getPassingCriteria()
         );
     }
 }
