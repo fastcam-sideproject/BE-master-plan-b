@@ -1,14 +1,16 @@
 package com.example.masterplanbbe.domain.exam.response;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
+import com.example.masterplanbbe.domain.exam.enums.Category;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 
 public record ReadExamResponse(
         String title,
-        String category,
+        Category category,
+        CertificationType certificationType,
         String authority,
         Double difficulty,
         Integer participantCount,
-        String certificationType,
         String preparation,
         String eligibility,
         String examStructure,
@@ -18,10 +20,10 @@ public record ReadExamResponse(
         this(
                 dto.title(),
                 dto.category(),
+                dto.certificationType(),
                 dto.authority(),
                 dto.difficulty(),
                 dto.participantCount(),
-                dto.certificationType(),
                 dto.preparation(),
                 dto.eligibility(),
                 dto.examStructure(),

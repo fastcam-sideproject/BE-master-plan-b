@@ -1,15 +1,17 @@
 package com.example.masterplanbbe.domain.exam.dto;
 
 import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.enums.Category;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.querydsl.core.annotations.QueryProjection;
 
 public record ExamWithDetailsDto(
         String title,
-        String category,
+        Category category,
         String authority,
         Double difficulty,
         Integer participantCount,
-        String certificationType,
+        CertificationType certificationType,
         String preparation,
         String eligibility,
         String examStructure,
@@ -19,11 +21,11 @@ public record ExamWithDetailsDto(
     public ExamWithDetailsDto(Exam exam) {
         this(
                 exam.getTitle(),
-                exam.getCategory().name(),
+                exam.getCategory(),
                 exam.getAuthority(),
                 exam.getDifficulty(),
                 exam.getParticipantCount(),
-                exam.getCertificationType().name(),
+                exam.getCertificationType(),
                 exam.getExamDetail().getPreparation(),
                 exam.getExamDetail().getEligibility(),
                 exam.getExamDetail().getExamStructure(),

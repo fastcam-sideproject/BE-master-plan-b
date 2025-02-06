@@ -70,11 +70,11 @@ public class ExamRepositoryPortTest {
         assertThat(result).isNotNull();
         assertAll(
                 () -> assertThat(result.title()).isEqualTo(exam.getTitle()),
-                () -> assertThat(result.category()).isEqualTo(exam.getCategory().name()),
+                () -> assertThat(result.category()).isEqualTo(exam.getCategory()),
+                () -> assertThat(result.certificationType()).isEqualTo(exam.getCertificationType()),
                 () -> assertThat(result.authority()).isEqualTo(exam.getAuthority()),
                 () -> assertThat(result.difficulty()).isEqualTo(exam.getDifficulty()),
                 () -> assertThat(result.participantCount()).isEqualTo(exam.getParticipantCount()),
-                () -> assertThat(result.certificationType()).isEqualTo(exam.getCertificationType().name()),
                 () -> assertThat(result.preparation()).isEqualTo(exam.getExamDetail().getPreparation()),
                 () -> assertThat(result.eligibility()).isEqualTo(exam.getExamDetail().getEligibility()),
                 () -> assertThat(result.examStructure()).isEqualTo(exam.getExamDetail().getExamStructure()),

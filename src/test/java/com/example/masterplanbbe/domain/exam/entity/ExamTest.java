@@ -24,10 +24,10 @@ public class ExamTest {
         assertAll(
                 () -> assertThat(exam.getTitle()).isEqualTo(request.title()),
                 () -> assertThat(exam.getCategory()).isEqualTo(request.category()),
+                () -> assertThat(exam.getCertificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(exam.getAuthority()).isEqualTo(request.authority()),
                 () -> assertThat(exam.getDifficulty()).isEqualTo(request.difficulty()),
                 () -> assertThat(exam.getParticipantCount()).isEqualTo(request.participantCount()),
-                () -> assertThat(exam.getCertificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(exam.getExamDetail().getPreparation()).isEqualTo(request.preparation()),
                 () -> assertThat(exam.getExamDetail().getEligibility()).isEqualTo(request.eligibility()),
                 () -> assertThat(exam.getExamDetail().getExamStructure()).isEqualTo(request.examStructure()),
