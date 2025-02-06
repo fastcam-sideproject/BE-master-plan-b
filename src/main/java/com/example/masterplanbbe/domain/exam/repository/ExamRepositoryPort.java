@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
+import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.exam.service;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
@@ -8,6 +9,7 @@ import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
+import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
@@ -79,6 +81,31 @@ public class ExamServiceTest {
     }
 
     @Test
+    @DisplayName("사용자는 시험 상세 정보를 조회한다.")
+    void get_exam() {
+        Long examId = 1L;
+        Exam exam = getExistingExamById(examId);
+        ExamWithDetailsDto mocked = new ExamWithDetailsDto(exam);
+        given(examRepositoryPort.getExamWithDetails(any(Long.class))).willReturn(mocked);
+
+        ReadExamResponse result = examService.getExam(examId);
+
+        verify(examRepositoryPort, times(1)).getExamWithDetails(any(Long.class));
+        assertAll(
+                () -> assertThat(result.title()).isEqualTo(exam.getTitle()),
+                () -> assertThat(result.category()).isEqualTo(exam.getCategory()),
+                () -> assertThat(result.certificationType()).isEqualTo(exam.getCertificationType()),
+                () -> assertThat(result.authority()).isEqualTo(exam.getAuthority()),
+                () -> assertThat(result.difficulty()).isEqualTo(exam.getDifficulty()),
+                () -> assertThat(result.participantCount()).isEqualTo(exam.getParticipantCount()),
+                () -> assertThat(result.preparation()).isEqualTo(exam.getExamDetail().getPreparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(exam.getExamDetail().getEligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(exam.getExamDetail().getExamStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(exam.getExamDetail().getPassingCriteria())
+        );
+    }
+
+    @Test
     @DisplayName("관리자는 시험을 추가한다.")
     void add_exam() {
         ExamCreateRequest request = createExamCreateRequest("exam1");
@@ -91,8 +118,13 @@ public class ExamServiceTest {
                 () -> assertThat(result.examId()).isNotNull(),
                 () -> assertThat(result.title()).isEqualTo(request.title()),
                 () -> assertThat(result.category()).isEqualTo(request.category()),
+                () -> assertThat(result.certificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(result.authority()).isEqualTo(request.authority()),
-                () -> assertThat(result.subjects()).isEqualTo(request.subjects())
+                () -> assertThat(result.subjects()).isEqualTo(request.subjects()),
+                () -> assertThat(result.preparation()).isEqualTo(request.preparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(request.eligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(request.examStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(request.passingCriteria())
         );
     }
 
@@ -117,19 +149,16 @@ public class ExamServiceTest {
         assertAll(
                 () -> assertThat(exam.getTitle()).isEqualTo(request.title()),
                 () -> assertThat(exam.getCategory()).isEqualTo(request.category()),
+                () -> assertThat(exam.getCertificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(exam.getAuthority()).isEqualTo(request.authority()),
-                () -> {
-                    assert exam.getSubjects() != null;
-                    assertThat(exam.getSubjects().stream().map(SubjectDto::new)).isEqualTo(request.subjects());
-                }
+                () -> assertThat(exam.getSubjects().stream().map(SubjectDto::new)).isEqualTo(request.subjects()),
+                () -> assertThat(exam.getExamDetail().getPreparation()).isEqualTo(request.preparation()),
+                () -> assertThat(exam.getExamDetail().getEligibility()).isEqualTo(request.eligibility()),
+                () -> assertThat(exam.getExamDetail().getExamStructure()).isEqualTo(request.examStructure()),
+                () -> assertThat(exam.getExamDetail().getPassingCriteria()).isEqualTo(request.passingCriteria())
         );
     }
 
-    private Exam getExistingExamById(Long examId) {
-        Exam exam = createExam("exam1");
-        setField(exam, "id", examId);
-        return exam;
-    }
 
     @Test
     @DisplayName("관리자는 시험을 삭제한다.")
@@ -140,5 +169,11 @@ public class ExamServiceTest {
         examService.delete(1L);
         //TODO: 상수 비교 이외의 방법으로 response.message 의 상태 검증을 하면 좋을듯함
         verify(examRepositoryPort, times(1)).deleteById(any(Long.class));
+    }
+
+    private Exam getExistingExamById(Long examId) {
+        Exam exam = createExam("exam1");
+        setField(exam, "id", examId);
+        return exam;
     }
 }

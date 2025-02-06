@@ -7,10 +7,7 @@ import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
@@ -47,18 +44,23 @@ public class Exam extends FullAuditEntity {
     @Column
     private CertificationType certificationType;
 
-    @Nullable
-    @OneToMany(mappedBy = "exam")
+    @NonNull
+    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects = List.of();
 
+    @NonNull
+    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+    private ExamDetail examDetail;
+
     @Builder
-    public Exam(String title,
-                Category category,
-                String authority,
-                Double difficulty,
-                Integer participantCount,
-                CertificationType certificationType,
-                List<Subject> subjects) {
+    public Exam(@NonNull String title,
+                @NonNull Category category,
+                @NonNull String authority,
+                @NonNull Double difficulty,
+                @NonNull Integer participantCount,
+                @NonNull CertificationType certificationType,
+                List<Subject> subjects,
+                @NonNull ExamDetail examDetail) {
         this.title = title;
         this.category = category;
         this.authority = authority;
@@ -66,6 +68,7 @@ public class Exam extends FullAuditEntity {
         this.participantCount = participantCount;
         this.certificationType = certificationType;
         this.subjects = subjects != null ? subjects : List.of();
+        this.examDetail = examDetail;
     }
 
     public void update(ExamUpdateRequest request) {
@@ -76,17 +79,16 @@ public class Exam extends FullAuditEntity {
         this.participantCount = request.participantCount();
         this.certificationType = request.certificationType();
         this.subjects = getUpdatedSubjects(request.subjects());
+        examDetail.update(request);
     }
 
-    private List<Subject> getUpdatedSubjects(List<SubjectDto> subjectDtos) {
-        Map<Long, Subject> subjectMap = this.subjects != null ?
-                this.subjects.stream().collect(Collectors.toMap(Subject::getId, Function.identity())) :
-                Map.of();
-        if (subjectDtos == null) {
+    private List<Subject> getUpdatedSubjects(List<SubjectDto> subjectDtoList) {
+        Map<Long, Subject> subjectMap = this.subjects.stream().collect(Collectors.toMap(Subject::getId, Function.identity()));
+        if (subjectDtoList == null) {
             return List.of();
         }
 
-        return subjectDtos.stream()
+        return subjectDtoList.stream()
                 .map(subjectDto -> {
                     Subject subject = subjectMap.get(subjectDto.id());
                     if (subject == null) {

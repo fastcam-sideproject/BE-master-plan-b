@@ -3,12 +3,15 @@ package com.example.masterplanbbe.domain.exam.controller;
 import com.example.masterplanbbe.common.jackson.RestPage;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
+import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
+import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.domain.fixture.ExamFixture;
@@ -126,6 +129,36 @@ public class ExamControllerTest {
     }
 
     @Test
+    @DisplayName("사용자는 시험 상세 정보를 조회한다.")
+    void get_exam() throws Exception {
+        Long examId = 1L;
+        Exam exam = createExam("exam1");
+        given(examService.getExam(examId)).willReturn(new ReadExamResponse(new ExamWithDetailsDto(exam)));
+
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/exam/{examId}", examId)
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType("application/json"))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<ReadExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    ReadExamResponse data = response.getData();
+                    assertAll(
+                            () -> assertThat(data.title()).isEqualTo(exam.getTitle()),
+                            () -> assertThat(data.category()).isEqualTo(exam.getCategory()),
+                            () -> assertThat(data.certificationType()).isEqualTo(exam.getCertificationType()),
+                            () -> assertThat(data.authority()).isEqualTo(exam.getAuthority()),
+                            () -> assertThat(data.preparation()).isEqualTo(exam.getExamDetail().getPreparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(exam.getExamDetail().getEligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(exam.getExamDetail().getExamStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(exam.getExamDetail().getPassingCriteria())
+                    );
+                });
+    }
+
+    @Test
     @DisplayName("관리자는 시험을 추가한다.")
     void add_exam() throws Exception {
         ExamCreateRequest request = ExamFixture.createExamCreateRequest("exam1");
@@ -149,8 +182,13 @@ public class ExamControllerTest {
                             () -> assertThat(data.examId()).isNotNull(),
                             () -> assertThat(data.title()).isEqualTo(request.title()),
                             () -> assertThat(data.category()).isEqualTo(request.category()),
+                            () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
                             () -> assertThat(data.authority()).isEqualTo(request.authority()),
-                            () -> assertThat(data.subjects()).isEqualTo(request.subjects())
+                            () -> assertThat(data.subjects()).isEqualTo(request.subjects()),
+                            () -> assertThat(data.preparation()).isEqualTo(request.preparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(request.eligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(request.examStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(request.passingCriteria())
                     );
                 });
     }
@@ -158,6 +196,10 @@ public class ExamControllerTest {
     private Exam createExistingExamFrom(ExamCreateRequest request) {
         Exam exam = request.toEntity();
         setField(exam, "id", 1L);
+        for (int i = 0; i < exam.getSubjects().size(); i++) {
+            setField(exam.getSubjects().get(i), "id", i + 1L);
+        }
+        setField(exam.getExamDetail(), "id", 1L);
         return exam;
     }
 
@@ -186,11 +228,15 @@ public class ExamControllerTest {
                             () -> assertThat(data.examId()).isNotNull(),
                             () -> assertThat(data.title()).isEqualTo(request.title()),
                             () -> assertThat(data.category()).isEqualTo(request.category()),
+                            () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
                             () -> assertThat(data.authority()).isEqualTo(request.authority()),
                             () -> assertThat(data.difficulty()).isEqualTo(request.difficulty()),
                             () -> assertThat(data.participantCount()).isEqualTo(request.participantCount()),
-                            () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
-                            () -> assertThat(data.subjects()).isEqualTo(request.subjects())
+                            () -> assertThat(data.subjects()).isEqualTo(request.subjects()),
+                            () -> assertThat(data.preparation()).isEqualTo(request.preparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(request.eligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(request.examStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(request.passingCriteria())
                     );
                 });
     }
@@ -204,12 +250,19 @@ public class ExamControllerTest {
                 .participantCount(request.participantCount())
                 .certificationType(request.certificationType())
                 .subjects(request.subjects().stream().map(SubjectDto::toEntity).toList())
+                .examDetail(ExamDetail.builder()
+                        .preparation(request.preparation())
+                        .eligibility(request.eligibility())
+                        .examStructure(request.examStructure())
+                        .passingCriteria(request.passingCriteria())
+                        .build())
                 .build();
         setField(exam, "id", 1L);
+        for (int i = 0; i < exam.getSubjects().size(); i++) {
+            setField(exam.getSubjects().get(i), "id", i + 1L);
+        }
+        setField(exam.getExamDetail(), "id", 1L);
         return exam;
-    }
-
-    private void assertUpdateExamResponse(ResultActions resultActions) throws Exception {
     }
 
     @Test

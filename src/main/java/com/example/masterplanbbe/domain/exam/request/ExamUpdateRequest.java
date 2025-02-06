@@ -13,6 +13,10 @@ public record ExamUpdateRequest(
         Double difficulty,
         Integer participantCount,
         CertificationType certificationType,
-        List<SubjectDto> subjects
+        List<SubjectDto> subjects,
+        String preparation,
+        String eligibility,
+        String examStructure,
+        String passingCriteria
 ) {
 }

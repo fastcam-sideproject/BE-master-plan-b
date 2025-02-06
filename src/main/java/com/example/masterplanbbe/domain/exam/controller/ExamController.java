@@ -37,7 +37,7 @@ public class ExamController {
     @Operation(summary = "시험 상세 조회")
     @GetMapping("/{examId}")
     public ResponseEntity<ApiResponse<ReadExamResponse>> getExam(
-            @PathVariable Long examId
+            @PathVariable("examId") Long examId
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(examService.getExam(examId)));

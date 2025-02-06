@@ -1,40 +1,31 @@
-package com.example.masterplanbbe.domain.exam.response;
+package com.example.masterplanbbe.domain.exam.dto;
 
-import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
+import com.querydsl.core.annotations.QueryProjection;
 
-import java.util.List;
-import java.util.Objects;
-
-public record UpdateExamResponse(
-        Long examId,
+public record ExamWithDetailsDto(
         String title,
-        CertificationType certificationType,
         Category category,
         String authority,
         Double difficulty,
         Integer participantCount,
-        List<SubjectDto> subjects,
+        CertificationType certificationType,
         String preparation,
         String eligibility,
         String examStructure,
         String passingCriteria
 ) {
-    public UpdateExamResponse(Exam exam) {
+    @QueryProjection
+    public ExamWithDetailsDto(Exam exam) {
         this(
-                exam.getId(),
                 exam.getTitle(),
-                exam.getCertificationType(),
                 exam.getCategory(),
                 exam.getAuthority(),
                 exam.getDifficulty(),
                 exam.getParticipantCount(),
-                Objects.requireNonNull(exam.getSubjects())
-                        .stream()
-                        .map(SubjectDto::new)
-                        .toList(),
+                exam.getCertificationType(),
                 exam.getExamDetail().getPreparation(),
                 exam.getExamDetail().getEligibility(),
                 exam.getExamDetail().getExamStructure(),
