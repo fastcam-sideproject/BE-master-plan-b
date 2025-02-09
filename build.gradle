@@ -59,12 +59,6 @@ tasks.withType(JavaCompile).configureEach {
 	options.generatedSourceOutputDirectory = generatedDir
 }
 
-sourceSets {
-	main {
-		java.srcDirs += generatedDir
-	}
-}
-
 tasks.register('setupGeneratedDir') {
 	group = 'hidden'
 	doLast {
@@ -75,28 +69,37 @@ tasks.register('setupGeneratedDir') {
 	}
 }
 
+tasks.register("compileQuerydsl", JavaCompile) {
+	group = "queryDSL"
+	description = "Runs clean and then compiles Java sources"
+	dependsOn("clean")
+	dependsOn("setupGeneratedDir")
+	classpath = sourceSets.main.compileClasspath
+	options.annotationProcessorPath = configurations.annotationProcessor
+	options.compilerArgs += [
+			"-proc:only", // QueryDSL Annotation Processor 실행
+			"-processor", "com.querydsl.apt.jpa.JPAAnnotationProcessor"
+	]
+
+	finalizedBy("compileJava")
+}
+
 idea {
 	module {
 		generatedSourceDirs += generatedDir
 	}
 }
 
-tasks.named("compileJava") {
-	dependsOn("setupGeneratedDir")
-}
-
 tasks.named("clean") {
 	delete(file("src/main/generated"))
 }
 
-tasks.register("cleanCompileJava") {
-	group = "queryDSL"
-	description = "Runs clean and then compiles Java sources"
-
-	dependsOn("clean")
-	finalizedBy("compileJava")
-}
-
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	main {
+		java.srcDirs += generatedDir
+	}
 }

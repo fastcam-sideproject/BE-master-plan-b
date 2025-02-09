@@ -6,7 +6,7 @@ import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamBookmark;
+import com.example.masterplanbbe.domain.examBookmark.entity.ExamBookmark;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
