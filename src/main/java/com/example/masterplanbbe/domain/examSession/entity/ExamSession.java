@@ -1,7 +1,8 @@
-package com.example.masterplanbbe.domain.exam.entity;
+package com.example.masterplanbbe.domain.examSession.entity;
 
 import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.enums.SessionType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

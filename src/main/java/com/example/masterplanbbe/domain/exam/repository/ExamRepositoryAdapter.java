@@ -19,8 +19,7 @@ import java.util.function.LongSupplier;
 import static com.example.masterplanbbe.common.GlobalException.*;
 import static com.example.masterplanbbe.common.exception.ErrorCode.*;
 import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
-import static com.example.masterplanbbe.domain.exam.entity.QExamBookmark.examBookmark;
-
+import static com.example.masterplanbbe.domain.examBookmark.entity.QExamBookmark.examBookmark;
 
 @Repository
 @RequiredArgsConstructor
