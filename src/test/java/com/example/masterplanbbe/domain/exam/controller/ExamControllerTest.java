@@ -271,10 +271,17 @@ public class ExamControllerTest {
         Long examId = 1L;
         willDoNothing().given(examService).delete(any(Long.class));
 
-        ResultActions resultActions = mockMvc.perform(delete("/api/v1/exam/{examId}", examId));
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/exam/{examId}", examId)
+                .characterEncoding(UTF_8));
 
         resultActions.andExpectAll(status().isOk(), content().contentType("application/json"))
-                .andDo(print());
+                .andDo(print())
+                .andDo( result -> {
+                    String responseContent = result.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<String> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    assertThat(response.getData()).isEqualTo("시험 삭제 성공");
+                });
     }
 
 }
