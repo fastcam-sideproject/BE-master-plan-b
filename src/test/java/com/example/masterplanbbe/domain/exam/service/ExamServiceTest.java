@@ -164,9 +164,9 @@ public class ExamServiceTest {
     @DisplayName("관리자는 시험을 삭제한다.")
     void delete_exam() {
         Long examId = 1L;
-        willDoNothing().given(examRepositoryPort).deleteById(1L);
+        willDoNothing().given(examRepositoryPort).deleteById(examId);
 
-        examService.delete(1L);
+        examService.delete(examId);
         //TODO: 상수 비교 이외의 방법으로 response.message 의 상태 검증을 하면 좋을듯함
         verify(examRepositoryPort, times(1)).deleteById(any(Long.class));
     }
