@@ -18,7 +18,7 @@ public class ExamBookmarkController {
     @PostMapping("/{examId}/bookmark")
     public ResponseEntity<ApiResponse<CreateExamBookmarkResponse>> createExamBookmark(
             @PathVariable("examId") Long examId,
-            Long memberId
+            @RequestParam("memberId") Long memberId
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(examBookmarkService.createExamBookmark(examId, memberId)));
