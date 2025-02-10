@@ -17,7 +17,7 @@ public class ExamBookmarkService {
     private final ExamRepositoryPort examRepositoryPort;
     private final ExamBookmarkRepository examBookmarkRepository;
 
-    public CreateExamBookmarkResponse createExamBookmark(Long examId, Long memberId) {
+    public CreateExamBookmarkResponse createExamBookmark(Long memberId, Long examId) {
         Member member = memberRepositoryPort.findById(memberId);
         Exam exam = examRepositoryPort.getById(examId);
         return new CreateExamBookmarkResponse(examBookmarkRepository.save(new ExamBookmark(member, exam)));
