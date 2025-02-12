@@ -2,7 +2,8 @@ package com.example.masterplanbbe.domain.comment.service;
 
 import com.example.masterplanbbe.common.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
-import com.example.masterplanbbe.domain.comment.dto.CommentDto;
+import com.example.masterplanbbe.domain.comment.dto.CommentRequest;
+import com.example.masterplanbbe.domain.comment.dto.CommentResponse;
 import com.example.masterplanbbe.domain.comment.entity.Comment;
 import com.example.masterplanbbe.domain.comment.repository.CommentRepositoryPort;
 import com.example.masterplanbbe.domain.post.entity.Post;
@@ -34,23 +35,24 @@ public class CommentService {
      * @param memberId
      * @return
      */
-    public CommentDto.CommentResponseDto createComment(Long postId, Long memberId, CommentDto.CommentRequestDto commentRequestDto) {
+    public CommentResponse createComment(Long postId, Long memberId, CommentRequest commentRequestDto) {
 
         Post post = postRepositoryPort.findById(postId);
         Member member = memberRepositoryPort.findById(memberId);
 
         Comment comment = Comment.builder()
-                .content(commentRequestDto.getContent())
+                .content(commentRequestDto.content())
                 .member(member)
                 .post(post)
                 .build();
 
         commentRepositoryPort.save(comment);
 
-        return CommentDto.CommentResponseDto.builder()
+        return CommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .createAt(comment.getCreatedAt())
+                .createdAt(comment.getCreatedAt())
+                .nickname(comment.getMember().getNickname())
                 .modifiedAt(comment.getModifiedAt())
                 .build();
     }
@@ -60,13 +62,13 @@ public class CommentService {
      * @param postId
      * @return
      */
-    public List<CommentDto.CommentResponseDto> findAllComment(Long postId) {
+    public List<CommentResponse> findAllComment(Long postId) {
         Post post = postRepositoryPort.findById(postId);
 
         List<Comment> comments = commentRepositoryPort.findByPost(post);
 
         return comments.stream()
-                .map(CommentDto.CommentResponseDto::new)
+                .map(CommentResponse::from)
                 .toList();
     }
 
@@ -77,7 +79,7 @@ public class CommentService {
      * @param memberId
      * @return
      */
-    public CommentDto.CommentResponseDto updateComment( Long commentId, Long memberId, CommentDto.CommentRequestDto commentRequestDto) {
+    public CommentResponse updateComment( Long commentId, Long memberId, CommentRequest commentRequestDto) {
         Comment comment = commentRepositoryPort.findById(commentId);
 
         Member member = memberRepositoryPort.findById(memberId);
@@ -86,14 +88,15 @@ public class CommentService {
             throw new GlobalException(ErrorCode.NOT_MODIFIED_COMMENT) {};
         }
 
-        comment.updateComment(commentRequestDto.getContent());
+        comment.updateComment(commentRequestDto.content());
         commentRepositoryPort.save(comment);
 
 
-        return CommentDto.CommentResponseDto.builder()
+        return CommentResponse.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .createAt(comment.getCreatedAt())
+                .nickname(comment.getMember().getNickname())
+                .createdAt(comment.getCreatedAt())
                 .modifiedAt(comment.getModifiedAt())
                 .build();
 
