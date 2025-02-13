@@ -2,6 +2,8 @@ package com.example.masterplanbbe.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,6 +26,9 @@ public class Member extends FullAuditEntity {
     private String phoneNumber;
     private LocalDate birthday;
     private String profileImageUrl;
+
+    @Enumerated(EnumType.STRING)
+    private MemberRoleEnum role;
 
     public static Member create(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl) {
         Member member = new Member();
