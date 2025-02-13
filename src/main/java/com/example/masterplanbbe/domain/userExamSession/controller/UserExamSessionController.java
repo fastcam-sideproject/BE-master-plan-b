@@ -1,15 +1,13 @@
 package com.example.masterplanbbe.domain.userExamSession.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionCreateRequest;
+import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionRequest;
 import com.example.masterplanbbe.domain.userExamSession.service.UserExamSessionService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,14 +17,26 @@ public class UserExamSessionController {
 
     private final UserExamSessionService userExamSessionService;
 
+    @Operation(summary = "회원 시험 일정 등록")
     @PostMapping(path = "")
     public ResponseEntity<ApiResponse<?>> create(
-            @RequestBody UserExamSessionCreateRequest request,
+            @RequestBody UserExamSessionRequest request,
             // TODO : security 적용 예정
             Long memberId
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(userExamSessionService.create(request, memberId)));
+    }
+
+    @Operation(summary = "회원 시험 일정 수정")
+    @PatchMapping(path = "/{exam-sessions-id}")
+    public ResponseEntity<ApiResponse<?>> update(
+            @RequestBody UserExamSessionRequest request,
+            @PathVariable(name = "exam-sessions-id") Long updateId
+            // TODO : security 적용 예정
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(userExamSessionService.update(request, updateId)));
     }
 
 }
