@@ -1,7 +1,6 @@
 package com.example.masterplanbbe.security.jwt;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -36,21 +35,35 @@ public class TokenUtils {
                         .compact();
     }
 
+    // 유효 엑세스 토큰에서의 userId, role 검증
     public String getUserIdFromAccessToken(String token) throws JwtException {
         token = token.substring(BEARER_PREFIX.length());
+        return getClaimsFromToken(token).getSubject();
+    }
 
+    public String getRoleFromAccessToken(String token) throws JwtException {
+        token = token.substring(BEARER_PREFIX.length());
+        return getClaimsFromToken(token).get(AUTHORIZATION_KEY, String.class);
+    }
+
+    private Claims getClaimsFromToken(String token) throws JwtException {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+                .getPayload();
     }
 
+    // 기간 만료 엑세스 토큰에서의 userId, role 검출
     public String getUserIdFromExpiredAccessToken(ExpiredJwtException e) {
         return e.getClaims().getSubject();
     }
 
+    public String getRoleFromExpiredAccessToken(ExpiredJwtException e) {
+        return e.getClaims().get(AUTHORIZATION_KEY, String.class);
+    }
+
+    // 리프레시 토큰 유효성 검증
     public boolean parseRefreshToken(String token) {
         token = token.substring(BEARER_PREFIX.length());
 
