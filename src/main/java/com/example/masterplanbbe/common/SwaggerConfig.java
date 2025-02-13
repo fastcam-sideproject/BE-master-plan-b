@@ -1,8 +1,9 @@
 package com.example.masterplanbbe.common;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.media.StringSchema;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +13,8 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .components(new Components())
+                .components(new Components()
+                        .addSchemas("LocalTime", new StringSchema().example("14:30:30")))
                 .info(apiInfo());
     }
 
@@ -22,6 +24,7 @@ public class SwaggerConfig {
                 .description("Specification")
                 .version("1.0.0");
     }
+
 }
 
 
