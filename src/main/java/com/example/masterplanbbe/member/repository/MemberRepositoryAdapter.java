@@ -17,4 +17,10 @@ public class MemberRepositoryAdapter implements MemberRepositoryPort{
         return memberRepository.findById(id)
                 .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND) {});
     }
+
+    @Override
+    public Member findByUserId(String userId) {
+        return memberRepository.findByUserId(userId)
+                .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND) {});
+    }
 }
