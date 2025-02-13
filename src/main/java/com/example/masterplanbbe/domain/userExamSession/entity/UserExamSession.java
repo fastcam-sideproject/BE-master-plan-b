@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.userExamSession.entity;
 import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionRequest;
 import com.example.masterplanbbe.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -41,6 +42,13 @@ public class UserExamSession extends FullAuditEntity {
     @NonNull
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    public void updateUserExamSession(UserExamSessionRequest request, Exam exam) {
+        this.exam = exam;
+        this.date = request.date();
+        this.startTime = request.startTime();
+        this.endTime = request.endTime();
+    }
 
     public static UserExamSession of(Exam exam, Member member, LocalDate date, LocalTime startTime, LocalTime endTime) {
         return new UserExamSession(exam, member, date, startTime, endTime);
