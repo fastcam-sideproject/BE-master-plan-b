@@ -36,20 +36,19 @@ public class TokenUtils {
                         .compact();
     }
 
-    public Claims parseAccessToken(String token) {
+    public String getUserIdFromAccessToken(String token) throws JwtException {
         token = token.substring(BEARER_PREFIX.length());
 
-        try {
-            return Jwts.parser()
-                    .verifyWith(secretKey)
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
-        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
-            throw new JwtException("유효하지 않은 토큰입니다.");
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+        return Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getSubject();
+    }
+
+    public String getUserIdFromExpiredAccessToken(ExpiredJwtException e) {
+        return e.getClaims().getSubject();
     }
 
     public boolean parseRefreshToken(String token) {
