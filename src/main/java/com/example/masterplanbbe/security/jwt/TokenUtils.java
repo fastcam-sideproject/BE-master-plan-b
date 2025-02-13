@@ -36,7 +36,7 @@ public class TokenUtils {
                         .compact();
     }
 
-    public Claims parseToken(String token) {
+    public Claims parseAccessToken(String token) {
         token = token.substring(BEARER_PREFIX.length());
 
         try {
@@ -49,6 +49,17 @@ public class TokenUtils {
             throw new JwtException("유효하지 않은 토큰입니다.");
         } catch (ExpiredJwtException e) {
             return e.getClaims();
+        }
+    }
+
+    public boolean parseRefreshToken(String token) {
+        token = token.substring(BEARER_PREFIX.length());
+
+        try {
+            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
         }
     }
 }
