@@ -32,7 +32,7 @@ public class TokenUtils {
                         .expiration(tokenPayload.getExpiresAt()) // 만료 시간
                         .issuedAt(tokenPayload.getIat()) // 발급일
                         .id(tokenPayload.getJti()) // 토큰 ID
-                        .signWith(secretKey) // 암호화 키
+                        .signWith(secretKey, Jwts.SIG.HS256) // 암호화 키
                         .compact();
     }
 
