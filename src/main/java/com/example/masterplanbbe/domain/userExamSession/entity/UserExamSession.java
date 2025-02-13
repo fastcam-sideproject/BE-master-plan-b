@@ -41,4 +41,8 @@ public class UserExamSession extends FullAuditEntity {
     @NonNull
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
+
+    public static UserExamSession of(Exam exam, Member member, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        return new UserExamSession(exam, member, date, startTime, endTime);
+    }
 }
