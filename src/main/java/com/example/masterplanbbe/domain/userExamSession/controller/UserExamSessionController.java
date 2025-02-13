@@ -1,7 +1,8 @@
 package com.example.masterplanbbe.domain.userExamSession.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionRequest;
+import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionCreateRequest;
+import com.example.masterplanbbe.domain.userExamSession.service.UserExamSessionService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "User Exam Session controller api", description = "회원 시험 일정 API")
 public class UserExamSessionController {
 
+    private final UserExamSessionService userExamSessionService;
+
     @PostMapping(path = "")
     public ResponseEntity<ApiResponse<?>> create(
-            @RequestBody UserExamSessionRequest request,
+            @RequestBody UserExamSessionCreateRequest request,
             // TODO : security 적용 예정
-            String memberId
+            Long memberId
     ) {
         return ResponseEntity.ok()
-                .body(null);
+                .body(ApiResponse.ok(userExamSessionService.create(request, memberId)));
     }
 
 }
