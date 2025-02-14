@@ -77,6 +77,12 @@ public class JwtService {
         return new MemberPayload(member, BEARER_PREFIX + accessToken);
     }
 
+    // 인가 필터에서의 활용을 위한 별도 메소드
+    public MemberRoleEnum getRoleFromAccessToken(String tokenValue) {
+        String roleString = tokenUtils.getRoleFromAccessToken(tokenValue);
+        return getRoleFromRoleString(roleString);
+    }
+
     private MemberRoleEnum getRoleFromRoleString(String roleString) {
         if (roleString.equals("ROLE_USER")) {
             return MemberRoleEnum.USER;
