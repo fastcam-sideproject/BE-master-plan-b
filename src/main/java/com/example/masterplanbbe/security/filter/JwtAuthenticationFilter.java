@@ -2,6 +2,7 @@ package com.example.masterplanbbe.security.filter;
 
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.security.jwt.JwtService;
+import com.example.masterplanbbe.security.uri.PassableUris;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -62,5 +63,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        log.info("통과 URI : {}", request.getRequestURI());
+        String requestURI = request.getRequestURI();
+        return PassableUris.PASSABLE_URI.contains(requestURI);
     }
 }

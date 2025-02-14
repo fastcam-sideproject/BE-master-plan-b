@@ -76,27 +76,24 @@ public class SecurityConfig {
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         );
 
-        // exception
         http.exceptionHandling(e -> e
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .accessDeniedHandler(jwtAccessDenyHandler));
 
-        // login & logout
         http.formLogin(AbstractHttpConfigurer::disable);
         http.logout(l -> l
                 .logoutUrl("/api/v1/member/logout")
                 .addLogoutHandler(customLogoutHandler));
 
-        // authorize
         http.authorizeHttpRequests(a -> a
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
                 .anyRequest().authenticated()
         );
 
-        // Security Filter
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), JwtAuthorizationFilter.class);
         http.addFilterBefore(new JwtAuthorizationFilter(jwtService), CustomLoginFilter.class);
+        http.addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), CustomLoginFilter.class);
         http.addFilterBefore(customLoginFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

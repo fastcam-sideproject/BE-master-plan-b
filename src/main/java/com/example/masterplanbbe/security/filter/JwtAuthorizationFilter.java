@@ -2,6 +2,7 @@ package com.example.masterplanbbe.security.filter;
 
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.security.jwt.JwtService;
+import com.example.masterplanbbe.security.uri.PassableUris;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,5 +39,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("요청 권한: {}", role.getRole());
 
         filterChain.doFilter(request, response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        log.info("통과 URI : {}", request.getRequestURI());
+        String requestURI = request.getRequestURI();
+        return PassableUris.PASSABLE_URI.contains(requestURI);
     }
 }

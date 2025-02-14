@@ -26,13 +26,14 @@ public class MemberService {
             throw new IllegalArgumentException("User already exists");
         }
 
-        MemberRoleEnum role = null;
+//        MemberRoleEnum role = null;
+        MemberRoleEnum role = MemberRoleEnum.USER;
 
-        if (request.getRole().equals("USER")) {
-            role = MemberRoleEnum.USER;
-        } else if (request.getRole().equals("ADMIN")) {
-            role = MemberRoleEnum.ADMIN;
-        }
+//        if (request.getRole().equals("USER")) {
+//            role = MemberRoleEnum.USER;
+//        } else if (request.getRole().equals("ADMIN")) {
+//            role = MemberRoleEnum.ADMIN;
+//        }
 
         String password = passwordEncoder.encode(request.getPassword());
         Member member = Member.create(request, password, role);

@@ -38,9 +38,11 @@ public class Member extends FullAuditEntity {
         member.name = request.getName();
         member.nickname = request.getUserId();
         member.password = password;
-        member.phoneNumber = request.getPhoneNumber();
-        member.birthday = request.getBirthday();
-        member.profileImageUrl = request.getProfileImageUrl();
+
+        // 수정 필요
+        member.phoneNumber = "010-0000-0000";
+        member.birthday = LocalDate.of(1995, 3, 23);
+        member.profileImageUrl = "IMG_URL";
         member.role = role;
 
         return member;
