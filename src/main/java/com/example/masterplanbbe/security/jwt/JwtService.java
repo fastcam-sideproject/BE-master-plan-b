@@ -110,7 +110,7 @@ public class JwtService {
         TokenPayload refreshTokenPayload = new TokenPayload(
                 userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + REFRESH_TOKEN_EAT), role);
 
-        String refreshToken = tokenUtils.createToken(refreshTokenPayload);
+        String refreshToken = tokenUtils.createToken(refreshTokenPayload).substring(BEARER_PREFIX.length());
         authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken);
 
         return BEARER_PREFIX + tokenUtils.createToken(accessTokenPayload);
