@@ -39,4 +39,17 @@ public class UserExamSessionController {
                 .body(ApiResponse.ok(userExamSessionService.update(request, updateId)));
     }
 
+    @Operation(summary = "회원 시험 일정 삭제")
+    @DeleteMapping(path = "/{exam-sessions-id}")
+    public ResponseEntity<ApiResponse<?>> delete(
+            @PathVariable(name = "exam-sessions-id") Long deleteId,
+            // TODO : security 적용 예정
+            Long memberId
+    ) {
+        userExamSessionService.delete(deleteId, memberId);
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok("나의 시험 일정 삭제 성공"));
+    }
+
 }
