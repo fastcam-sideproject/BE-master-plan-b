@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtService {
 
+    private static final String REDIS_AUTH_KEY = "AUTH_";
+
     private final TokenUtils tokenUtils;
     private final RedisTemplate<String, String> authTemplate;
 

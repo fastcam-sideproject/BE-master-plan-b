@@ -37,12 +37,12 @@ public class TokenUtils {
 
     // 유효 엑세스 토큰에서의 userId, role 검증
     public String getUserIdFromAccessToken(String token) throws JwtException {
-        token = token.substring(BEARER_PREFIX.length());
+        token = getSubstringToken(token);
         return getClaimsFromToken(token).getSubject();
     }
 
     public String getRoleFromAccessToken(String token) throws JwtException {
-        token = token.substring(BEARER_PREFIX.length());
+        token = getSubstringToken(token);
         return getClaimsFromToken(token).get(AUTHORIZATION_KEY, String.class);
     }
 
@@ -65,7 +65,7 @@ public class TokenUtils {
 
     // 리프레시 토큰 유효성 검증
     public boolean parseRefreshToken(String token) {
-        token = token.substring(BEARER_PREFIX.length());
+        token = getSubstringToken(token);
 
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
@@ -73,5 +73,10 @@ public class TokenUtils {
         } catch (JwtException e) {
             return false;
         }
+    }
+
+    // 토큰 접두어 제거
+    private static String getSubstringToken(String token) {
+        return token.startsWith(BEARER_PREFIX) ? token.substring(BEARER_PREFIX.length()) : token;
     }
 }
