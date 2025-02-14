@@ -74,7 +74,7 @@ public class JwtService {
         }
 
         Member member = memberRepository.findByUserId(userId);
-        return new MemberPayload(member, accessToken);
+        return new MemberPayload(member, BEARER_PREFIX + accessToken);
     }
 
     private MemberRoleEnum getRoleFromRoleString(String roleString) {
@@ -84,6 +84,7 @@ public class JwtService {
             return MemberRoleEnum.ADMIN;
         }
 
+        // 여기서의 커스텀 예외: 적합한 역할 없음 + 예외 반환
         throw new JwtException("Invalid Role String");
     }
 
