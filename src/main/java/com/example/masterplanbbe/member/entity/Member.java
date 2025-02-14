@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.member.service.request.MemberCreateRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,17 +31,18 @@ public class Member extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private MemberRoleEnum role;
 
-    public static Member create(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl) {
+    public static Member create(MemberCreateRequest request, String password, MemberRoleEnum role) {
         Member member = new Member();
-//        member.password = password;
-        member.userId = userId;
-        member.email = email;
-        member.name = name;
-        member.nickname = nickname;
+
+        member.userId = request.getUserId();
+        member.email = request.getEmail();
+        member.name = request.getName();
+        member.nickname = request.getUserId();
         member.password = password;
-        member.phoneNumber = phoneNumber;
-        member.birthday = birthday;
-        member.profileImageUrl = profileImageUrl;
+        member.phoneNumber = request.getPhoneNumber();
+        member.birthday = request.getBirthday();
+        member.profileImageUrl = request.getProfileImageUrl();
+        member.role = role;
 
         return member;
     }

@@ -15,29 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    @Operation(summary = "특정 멤버 조회")
-    @GetMapping("/api/v1/member/{id}")
-    public MemberResponse find(@PathVariable("id") Long articleId) {
-        return memberService.find(articleId);
-    }
-
     @Operation(summary = "멤버 생성")
     @PostMapping("/api/v1/member/create")
     public MemberResponse create(@RequestBody MemberCreateRequest request) {
-        return memberService.create(request);
+        return memberService.createMember(request);
     }
-
-    @Operation(summary = "멤버 수정")
-    @PutMapping("/api/v1/member/{id}")
-    public MemberResponse update(@PathVariable Long id, @RequestBody MemberUpdateRequest request) {
-        return memberService.update(id, request);
-    }
-
-    @Operation(summary = "멤버 삭제")
-    @DeleteMapping("/api/v1/member/{id}")
-    public void delete(@PathVariable Long id) {
-        memberService.delete(id);
-    }
-
 
 }

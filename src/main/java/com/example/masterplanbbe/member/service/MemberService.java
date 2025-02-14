@@ -2,48 +2,43 @@ package com.example.masterplanbbe.member.service;
 
 
 import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.member.repository.MemberRepository;
 import com.example.masterplanbbe.member.service.request.MemberCreateRequest;
 import com.example.masterplanbbe.member.service.request.MemberUpdateRequest;
 import com.example.masterplanbbe.member.service.response.MemberResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Transactional
-    public MemberResponse find(Long id) {
-        return MemberResponse.from(memberRepository.findById(id).orElseThrow());
-    }
+    // 회원가입
+    public MemberResponse createMember(MemberCreateRequest request) {
+        if (memberRepository.findByUserId(request.getUserId()).isPresent() || memberRepository.findByEmail(request.getEmail()).isPresent()) {
+            // 커스텀 예외: 이미 가입되어 있는 사용자
+            throw new IllegalArgumentException("User already exists");
+        }
 
-    public MemberResponse create(MemberCreateRequest request) {
-        Member member = memberRepository.save(
-                Member.create(
-                        request.getUserId(),request.getEmail(),request.getName(), request.getNickname(),
-                        request.getPassword(),request.getPhoneNumber(),request.getBirthday(),
-                        request.getProfileImageUrl()
-                )
-        );
+        MemberRoleEnum role = null;
+
+        if (request.getRole().equals("USER")) {
+            role = MemberRoleEnum.USER;
+        } else if (request.getRole().equals("ADMIN")) {
+            role = MemberRoleEnum.ADMIN;
+        }
+
+        String password = passwordEncoder.encode(request.getPassword());
+        Member member = Member.create(request, password, role);
+        memberRepository.save(member);
+
         return MemberResponse.from(member);
-    }
-
-    public MemberResponse update(Long id, MemberUpdateRequest request) {
-        Member member = memberRepository.findById(id).orElseThrow();
-        member.update(
-                request.getUserId(), request.getEmail(), request.getName(), request.getNickname(),
-                request.getPassword(), request.getPhoneNumber(), request.getBirthday(),
-                request.getProfileImageUrl()
-        );
-        return MemberResponse.from(member);
-    }
-
-    public void delete(Long id) {
-        Member member = memberRepository.findById(id).orElseThrow();
-        memberRepository.delete(member);
     }
 }
