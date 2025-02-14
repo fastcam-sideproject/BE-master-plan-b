@@ -22,7 +22,7 @@ public class MemberController {
     }
 
     @Operation(summary = "멤버 생성")
-    @PostMapping("/api/v1/member")
+    @PostMapping("/api/v1/member/create")
     public MemberResponse create(@RequestBody MemberCreateRequest request) {
         return memberService.create(request);
     }
