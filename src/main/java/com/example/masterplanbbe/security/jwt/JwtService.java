@@ -115,4 +115,11 @@ public class JwtService {
 
         return BEARER_PREFIX + tokenUtils.createToken(accessTokenPayload);
     }
+
+    /**
+     * 로그아웃 - 리프레시 토큰 삭제
+     */
+    public void removeRefreshToken(String userId) {
+        authTemplate.delete(REDIS_AUTH_KEY + userId);
+    }
 }

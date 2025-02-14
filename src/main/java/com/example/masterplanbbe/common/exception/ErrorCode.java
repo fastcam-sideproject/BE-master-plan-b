@@ -25,6 +25,7 @@ public enum ErrorCode {
     DUPLICATED_PHONE_NUMBER(409, "A001", "이미 등록된 전화번호입니다."),
     UNAUTHORIZED_ACCESS(HttpServletResponse.SC_UNAUTHORIZED, "A002", "로그인 후 접속해주세요."),
     FORBIDDEN_ACCESS(HttpServletResponse.SC_FORBIDDEN, "A003", "접근 권한이 부족합니다"),
+    LOGOUT_EXCEPTION(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "A004", "비정상적인 로그아웃! 관리자에게 문의하세요"),
 
     // Oauth
     SOCIAL_EMAIL_LOAD_FAIL(400, "O001", "소셜 로그인에서 이메일을 불러올 수 없습니다."),
