@@ -41,4 +41,10 @@ public class UserExamSessionService {
 
         return UserExamSessionResponse.from(userExamSession);
     }
+
+    @Transactional
+    public void delete(Long deleteId, Long memberId) {
+        UserExamSession userExamSession = userExamSessionRepositoryPort.findByIdAndMemberId(deleteId, memberId);
+        userExamSessionRepositoryPort.delete(userExamSession);
+    }
 }
