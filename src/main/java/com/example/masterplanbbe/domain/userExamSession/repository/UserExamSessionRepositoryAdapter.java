@@ -23,4 +23,17 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
     public UserExamSession getById(Long id) {
         return userExamSessionRepository.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION));
     }
+
+    @Override
+    public void delete(UserExamSession userExamSession) {
+        userExamSessionRepository.delete(userExamSession);
+    }
+
+    @Override
+    public UserExamSession findByIdAndMemberId(Long id, Long memberId) {
+        return userExamSessionRepository.findByIdAndMemberId(id, memberId).orElseThrow(
+                () -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION)
+        );
+
+    }
 }
