@@ -2,10 +2,7 @@ package com.example.masterplanbbe.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.member.dto.MemberCreateRequest;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +16,9 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends FullAuditEntity {
 
+    @Column(unique = true, nullable = false)
     private String userId;
+    @Column(unique = true, nullable = false)
     private String email;
     private String name;
     private String nickname;

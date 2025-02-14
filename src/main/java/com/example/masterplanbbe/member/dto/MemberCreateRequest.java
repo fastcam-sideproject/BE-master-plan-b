@@ -8,7 +8,6 @@ import java.time.LocalDate;
 @Getter
 @ToString
 public class MemberCreateRequest {
-    private String id;
     private String userId;
     private String email;
     private String name;
