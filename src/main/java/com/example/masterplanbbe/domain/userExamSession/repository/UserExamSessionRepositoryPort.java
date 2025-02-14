@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.userExamSession.repository;
 
+import com.example.masterplanbbe.domain.userExamSession.dto.response.UserExamSessionDetailResponse;
 import com.example.masterplanbbe.domain.userExamSession.entity.UserExamSession;
 
 public interface UserExamSessionRepositoryPort {
@@ -10,4 +11,6 @@ public interface UserExamSessionRepositoryPort {
     void delete(UserExamSession userExamSession);
 
     UserExamSession findByIdAndMemberId(Long id, Long memberId);
+
+    UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, Long memberId);
 }
