@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.member.service.request;
+package com.example.masterplanbbe.member.dto;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -18,6 +18,4 @@ public class MemberCreateRequest {
     private LocalDate birthday;
     private String profileImageUrl;
     private String role;
-
-
 }

@@ -4,9 +4,8 @@ package com.example.masterplanbbe.member.service;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.member.repository.MemberRepository;
-import com.example.masterplanbbe.member.service.request.MemberCreateRequest;
-import com.example.masterplanbbe.member.service.request.MemberUpdateRequest;
-import com.example.masterplanbbe.member.service.response.MemberResponse;
+import com.example.masterplanbbe.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.member.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +38,6 @@ public class MemberService {
         Member member = Member.create(request, password, role);
         memberRepository.save(member);
 
-        return MemberResponse.from(member);
+        return new MemberResponse(member);
     }
 }

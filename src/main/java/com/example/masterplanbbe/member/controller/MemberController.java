@@ -1,9 +1,9 @@
 package com.example.masterplanbbe.member.controller;
 
+import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.member.service.MemberService;
-import com.example.masterplanbbe.member.service.request.MemberCreateRequest;
-import com.example.masterplanbbe.member.service.request.MemberUpdateRequest;
-import com.example.masterplanbbe.member.service.response.MemberResponse;
+import com.example.masterplanbbe.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.member.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ public class MemberController {
 
     @Operation(summary = "멤버 생성")
     @PostMapping("/api/v1/member/create")
-    public MemberResponse create(@RequestBody MemberCreateRequest request) {
-        return memberService.createMember(request);
+    public ApiResponse<MemberResponse> create(@RequestBody MemberCreateRequest request) {
+        return ApiResponse.ok(memberService.createMember(request));
     }
 
 }

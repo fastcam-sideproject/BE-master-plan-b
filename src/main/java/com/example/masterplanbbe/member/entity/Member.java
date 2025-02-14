@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.member.service.request.MemberCreateRequest;
+import com.example.masterplanbbe.member.dto.MemberCreateRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
