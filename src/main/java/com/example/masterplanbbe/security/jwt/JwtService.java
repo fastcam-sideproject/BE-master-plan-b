@@ -94,4 +94,19 @@ public class JwtService {
         private Member member;
         private String accessToken;
     }
+
+    /**
+     * 토큰 생성
+     */
+    public String createToken(String userId, MemberRoleEnum role, Date date) {
+        TokenPayload accessTokenPayload = new TokenPayload(
+                userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role);
+        TokenPayload refreshTokenPayload = new TokenPayload(
+                userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + REFRESH_TOKEN_EAT), role);
+
+        String refreshToken = tokenUtils.createToken(refreshTokenPayload);
+        authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken);
+
+        return BEARER_PREFIX + tokenUtils.createToken(accessTokenPayload);
+    }
 }

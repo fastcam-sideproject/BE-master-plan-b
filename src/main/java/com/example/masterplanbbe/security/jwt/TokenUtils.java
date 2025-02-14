@@ -65,8 +65,6 @@ public class TokenUtils {
 
     // 리프레시 토큰 유효성 검증
     public boolean parseRefreshToken(String token) {
-        token = getSubstringToken(token);
-
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
             return true;

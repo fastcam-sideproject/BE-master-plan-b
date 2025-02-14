@@ -15,6 +15,7 @@ public enum ErrorCode {
     MESSAGE_SEND_FAIL(400, "C006", "메시지 전송 실패"),
 
     // User
+    LOGIN_FAIL(401, "U004", "아이디 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요."),
     USER_NOT_FOUND(404, "U001", "사용자를 찾을 수 없습니다."),
     SOME_USERS_NOT_FOUND(404, "U002", "일부 사용자를 찾을 수 없습니다."),
     USER_ID_NOT_INITIALIZED(400, "U003", "사용자 ID가 초기화되지 않았습니다."),
