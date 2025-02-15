@@ -1,8 +1,6 @@
 package com.example.masterplanbbe.security.jwt;
 
-import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
-import com.example.masterplanbbe.member.repository.MemberRepositoryAdapter;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
@@ -24,15 +22,12 @@ public class JwtService {
 
     private final TokenUtils tokenUtils;
     private final RedisTemplate<String, String> authTemplate;
-    private final MemberRepositoryAdapter memberRepository;
 
     public JwtService(
             TokenUtils tokenUtils,
-            @Qualifier("authTemplate") RedisTemplate<String, String> authTemplate,
-            MemberRepositoryAdapter memberRepository) {
+            @Qualifier("authTemplate") RedisTemplate<String, String> authTemplate) {
         this.tokenUtils = tokenUtils;
         this.authTemplate = authTemplate;
-        this.memberRepository = memberRepository;
     }
 
     /**
@@ -73,8 +68,7 @@ public class JwtService {
             throw new JwtException("Invalid JWT Access Token");
         }
 
-        Member member = memberRepository.findByUserId(userId);
-        return new MemberPayload(member, accessToken);
+        return new MemberPayload(userId, accessToken);
     }
 
     // 인가 필터에서의 활용을 위한 별도 메소드
@@ -105,7 +99,7 @@ public class JwtService {
     @Getter
     @AllArgsConstructor
     public static class MemberPayload {
-        private Member member;
+        private String userId;
         private String accessToken;
     }
 

@@ -44,7 +44,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String decodedToken = URLDecoder.decode(tokenValue, StandardCharsets.UTF_8);
         JwtService.MemberPayload memberPayload = jwtService.validateAccessToken(decodedToken);
 
-        Member member = memberPayload.getMember();
         String accessToken = memberPayload.getAccessToken();
         accessToken = URLEncoder.encode(accessToken, StandardCharsets.UTF_8).replaceAll("\\+", "%20");
 
@@ -53,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // 인증 객체 세팅
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(createAuthentication(member.getUserId()));
+        context.setAuthentication(createAuthentication(memberPayload.getUserId()));
         SecurityContextHolder.setContext(context);
 
         // 다음 필터 넘기기
