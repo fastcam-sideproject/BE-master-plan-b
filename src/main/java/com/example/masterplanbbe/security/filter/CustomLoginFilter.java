@@ -75,7 +75,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         Member member = ((UserDetailsImpl) authResult.getPrincipal()).getMember();
         MemberInfoDTO dto = new MemberInfoDTO(member);
-        ApiResponse<MemberInfoDTO> apiResponse = ApiResponse.ok(dto);
+        ApiResponse<MemberInfoDTO> apiResponse = ApiResponse.ok("로그인에 성공하였습니다.", dto);
 
         sendResponseMsg(response, HttpStatus.OK.value(), apiResponse);
     }
