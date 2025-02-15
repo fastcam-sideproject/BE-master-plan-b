@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.member.service.request;
+package com.example.masterplanbbe.member.dto;
 
 import lombok.Getter;
 import lombok.ToString;

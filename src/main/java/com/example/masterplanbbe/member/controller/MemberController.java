@@ -1,9 +1,9 @@
 package com.example.masterplanbbe.member.controller;
 
+import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.member.service.MemberService;
-import com.example.masterplanbbe.member.service.request.MemberCreateRequest;
-import com.example.masterplanbbe.member.service.request.MemberUpdateRequest;
-import com.example.masterplanbbe.member.service.response.MemberResponse;
+import com.example.masterplanbbe.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.member.dto.MemberResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -12,32 +12,23 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Member controller api", description = "멤버 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/member")
 public class MemberController {
     private final MemberService memberService;
 
-    @Operation(summary = "특정 멤버 조회")
-    @GetMapping("/api/v1/member/{id}")
-    public MemberResponse find(@PathVariable("id") Long articleId) {
-        return memberService.find(articleId);
-    }
-
     @Operation(summary = "멤버 생성")
-    @PostMapping("/api/v1/member")
-    public MemberResponse create(@RequestBody MemberCreateRequest request) {
-        return memberService.create(request);
+    @PostMapping("/create")
+    public ApiResponse<MemberResponse> create(@RequestBody MemberCreateRequest request) {
+        return ApiResponse.ok("회원가입이 완료됐습니다.", memberService.createMember(request));
     }
 
-    @Operation(summary = "멤버 수정")
-    @PutMapping("/api/v1/member/{id}")
-    public MemberResponse update(@PathVariable Long id, @RequestBody MemberUpdateRequest request) {
-        return memberService.update(id, request);
+    @GetMapping("/test")
+    public String test() {
+        return "스프링 시큐리티 테스트";
     }
 
-    @Operation(summary = "멤버 삭제")
-    @DeleteMapping("/api/v1/member/{id}")
-    public void delete(@PathVariable Long id) {
-        memberService.delete(id);
+    @GetMapping("/security")
+    public String security() {
+        return "인증되어야만 볼 수 있음 ㅋ";
     }
-
-
 }

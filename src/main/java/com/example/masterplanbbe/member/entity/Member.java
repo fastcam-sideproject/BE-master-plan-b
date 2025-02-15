@@ -1,8 +1,8 @@
 package com.example.masterplanbbe.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import com.example.masterplanbbe.member.dto.MemberCreateRequest;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +16,9 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends FullAuditEntity {
 
+    @Column(unique = true, nullable = false)
     private String userId;
+    @Column(unique = true, nullable = false)
     private String email;
     private String name;
     private String nickname;
@@ -25,17 +27,23 @@ public class Member extends FullAuditEntity {
     private LocalDate birthday;
     private String profileImageUrl;
 
-    public static Member create(String userId, String email, String name, String nickname, String password, String phoneNumber, LocalDate birthday, String profileImageUrl) {
+    @Enumerated(EnumType.STRING)
+    private MemberRoleEnum role;
+
+    public static Member create(MemberCreateRequest request, String password, MemberRoleEnum role) {
         Member member = new Member();
-//        member.password = password;
-        member.userId = userId;
-        member.email = email;
-        member.name = name;
-        member.nickname = nickname;
+
+        member.userId = request.getUserId();
+        member.email = request.getEmail();
+        member.name = request.getName();
+        member.nickname = request.getUserId();
         member.password = password;
-        member.phoneNumber = phoneNumber;
-        member.birthday = birthday;
-        member.profileImageUrl = profileImageUrl;
+
+        // 수정 필요
+        member.phoneNumber = "010-0000-0000";
+        member.birthday = LocalDate.of(1995, 3, 23);
+        member.profileImageUrl = "IMG_URL";
+        member.role = role;
 
         return member;
     }

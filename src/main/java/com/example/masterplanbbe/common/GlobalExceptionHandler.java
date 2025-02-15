@@ -1,7 +1,10 @@
 package com.example.masterplanbbe.common;
 
 import com.example.masterplanbbe.common.response.ErrorResponse;
+import com.example.masterplanbbe.member.exception.DuplicateUserException;
 import jakarta.annotation.Priority;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -26,5 +29,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GlobalException.BadRequestException.class)
     public ErrorResponse<?> handleBadRequestException(GlobalException.BadRequestException e) {
         return ErrorResponse.of(e.getErrorCode());
+    }
+
+    @ExceptionHandler(DuplicateUserException.class)
+    public ResponseEntity<ErrorResponse<?>> handleDuplicateUserException(DuplicateUserException e) {
+        return ResponseEntity.status(e.getErrorCode().getStatus()).body(ErrorResponse.of(e.getErrorCode()));
     }
 }
