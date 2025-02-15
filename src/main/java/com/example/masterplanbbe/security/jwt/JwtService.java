@@ -19,7 +19,7 @@ public class JwtService {
 
     private static final String REDIS_AUTH_KEY = "AUTH_";
     private static final String BEARER_PREFIX = "Bearer ";
-    private final long ACCESS_TOKEN_EAT = 60 * 60 * 1000L; // 1H
+    private final long ACCESS_TOKEN_EAT = 60 * 60 * 1000L; // 1H(테스트 2분)
     private final long REFRESH_TOKEN_EAT = 7 * 24 * 60 * 60 * 1000L; // 7D
 
     private final TokenUtils tokenUtils;
@@ -53,7 +53,7 @@ public class JwtService {
         try {
             userId = tokenUtils.getUserIdFromAccessToken(tokenValue);
             role = getRoleFromRoleString(tokenUtils.getRoleFromAccessToken(tokenValue));
-            accessToken = tokenValue.substring(BEARER_PREFIX.length());
+            accessToken = tokenValue;
         } catch (ExpiredJwtException e) {
             userId = tokenUtils.getUserIdFromExpiredAccessToken(e);
             role = getRoleFromRoleString(tokenUtils.getRoleFromExpiredAccessToken(e));
@@ -74,13 +74,21 @@ public class JwtService {
         }
 
         Member member = memberRepository.findByUserId(userId);
-        return new MemberPayload(member, BEARER_PREFIX + accessToken);
+        return new MemberPayload(member, accessToken);
     }
 
     // 인가 필터에서의 활용을 위한 별도 메소드
     public MemberRoleEnum getRoleFromAccessToken(String tokenValue) {
-        String roleString = tokenUtils.getRoleFromAccessToken(tokenValue);
-        return getRoleFromRoleString(roleString);
+        try {
+            String roleString = tokenUtils.getRoleFromAccessToken(tokenValue);
+            return getRoleFromRoleString(roleString);
+        } catch (ExpiredJwtException e) {
+            String roleString = tokenUtils.getRoleFromExpiredAccessToken(e);
+            return getRoleFromRoleString(roleString);
+        } catch (JwtException e) {
+            // 여기서의 커스텀 예외: 리프레시 토큰 제거 + 강제 로그아웃 + 예외 반환
+            throw new JwtException("Invalid JWT Refresh Token");
+        }
     }
 
     private MemberRoleEnum getRoleFromRoleString(String roleString) {
@@ -113,7 +121,7 @@ public class JwtService {
         String refreshToken = tokenUtils.createToken(refreshTokenPayload).substring(BEARER_PREFIX.length());
         authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken);
 
-        return BEARER_PREFIX + tokenUtils.createToken(accessTokenPayload);
+        return tokenUtils.createToken(accessTokenPayload);
     }
 
     /**

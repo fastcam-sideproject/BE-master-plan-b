@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.security.jwt;
 
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,6 +9,7 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 
+@Slf4j
 @Component
 public class TokenUtils {
 
@@ -65,10 +67,14 @@ public class TokenUtils {
 
     // 리프레시 토큰 유효성 검증
     public boolean parseRefreshToken(String token) {
+        log.info("리프레시 토큰 검증 진입");
+
         try {
             Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+            log.info("유효한 리프레시 토큰");
             return true;
         } catch (JwtException e) {
+            log.error("리프레시 토큰 검증 예외: {}", e.getMessage());
             return false;
         }
     }
