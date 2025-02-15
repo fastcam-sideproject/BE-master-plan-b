@@ -17,7 +17,7 @@ public class JwtService {
 
     private static final String REDIS_AUTH_KEY = "AUTH_";
     private static final String BEARER_PREFIX = "Bearer ";
-    private final long ACCESS_TOKEN_EAT = 60 * 60 * 1000L; // 1H(테스트 2분)
+    private final long ACCESS_TOKEN_EAT = 60 * 1000L; // 1H(테스트 2분)
     private final long REFRESH_TOKEN_EAT = 7 * 24 * 60 * 60 * 1000L; // 7D
 
     private final TokenUtils tokenUtils;
@@ -57,7 +57,13 @@ public class JwtService {
             String refreshToken = authTemplate.opsForValue().get(REDIS_AUTH_KEY + userId);
 
             // 여기서의 커스텀 예외: 강제 로그아웃 + 헤더 엑세스 토큰 제거 + 레디스 리프레시 토큰 제거 + 예외 반환
+            /**
+             * 요기
+             */
             if (refreshToken == null) throw new JwtException("No Refresh Token");
+            /**
+             * 요기
+             */
             if (!tokenUtils.parseRefreshToken(refreshToken)) throw new JwtException("Invalid Refresh Token");
 
             Date date = new Date();
@@ -65,6 +71,9 @@ public class JwtService {
                     new TokenPayload(userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role));
         } catch (JwtException e) {
             // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
+            /**
+             * 요기
+             */
             throw new JwtException("Invalid JWT Access Token");
         }
 
@@ -81,7 +90,10 @@ public class JwtService {
             return getRoleFromRoleString(roleString);
         } catch (JwtException e) {
             // 여기서의 커스텀 예외: 리프레시 토큰 제거 + 강제 로그아웃 + 예외 반환
-            throw new JwtException("Invalid JWT Refresh Token");
+            /**
+             * 요기
+             */
+            throw new JwtException("Invalid JWT Access Token");
         }
     }
 
