@@ -35,14 +35,7 @@ public class Post extends FullAuditEntity {
         this.title = title;
         this.content = content;
         this.member = member;
-        this.likeCount = 0; // ✅ 기본값 설정
-    }
-
-    public void addComment(Comment comment) {
-        this.commentList.add(comment);
-        if (comment.getPost() != this) {
-            comment.setPost(this);
-        }
+        this.likeCount = 0; //
     }
 
     public void updatePost(String title, String content) {
