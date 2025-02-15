@@ -1,6 +1,8 @@
 package com.example.masterplanbbe.security.jwt;
 
+import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
@@ -17,7 +19,7 @@ public class JwtService {
 
     private static final String REDIS_AUTH_KEY = "AUTH_";
     private static final String BEARER_PREFIX = "Bearer ";
-    private final long ACCESS_TOKEN_EAT = 60 * 1000L; // 1H(테스트 2분)
+    private final long ACCESS_TOKEN_EAT = 60 * 60 * 1000L; // 1H(테스트 2분)
     private final long REFRESH_TOKEN_EAT = 7 * 24 * 60 * 60 * 1000L; // 7D
 
     private final TokenUtils tokenUtils;
@@ -57,24 +59,19 @@ public class JwtService {
             String refreshToken = authTemplate.opsForValue().get(REDIS_AUTH_KEY + userId);
 
             // 여기서의 커스텀 예외: 강제 로그아웃 + 헤더 엑세스 토큰 제거 + 레디스 리프레시 토큰 제거 + 예외 반환
-            /**
-             * 요기
-             */
-            if (refreshToken == null) throw new JwtException("No Refresh Token");
-            /**
-             * 요기
-             */
-            if (!tokenUtils.parseRefreshToken(refreshToken)) throw new JwtException("Invalid Refresh Token");
+            if (refreshToken == null)
+                throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "리프레시 토큰 없음. 헤더 엑세스 토큰 제거 필요.");
+            if (!tokenUtils.parseRefreshToken(refreshToken)) {
+                authTemplate.delete(REDIS_AUTH_KEY + userId);
+                throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "유효하지 않은 리프레시 토큰. 헤더 엑세스 토큰 제거 필요.");
+            }
 
             Date date = new Date();
             accessToken = tokenUtils.createToken(
                     new TokenPayload(userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role));
         } catch (JwtException e) {
             // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
-            /**
-             * 요기
-             */
-            throw new JwtException("Invalid JWT Access Token");
+            throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "비정상적인 헤더 엑세스 토큰. 헤더 엑세스 토큰 제거 필요.");
         }
 
         return new MemberPayload(userId, accessToken);
@@ -90,10 +87,7 @@ public class JwtService {
             return getRoleFromRoleString(roleString);
         } catch (JwtException e) {
             // 여기서의 커스텀 예외: 리프레시 토큰 제거 + 강제 로그아웃 + 예외 반환
-            /**
-             * 요기
-             */
-            throw new JwtException("Invalid JWT Access Token");
+            throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "비정상적인 헤더 엑세스 토큰. 헤더 엑세스 토큰 제거 필요.");
         }
     }
 

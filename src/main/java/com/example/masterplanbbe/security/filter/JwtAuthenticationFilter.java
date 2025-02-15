@@ -1,6 +1,8 @@
 package com.example.masterplanbbe.security.filter;
 
+import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.security.jwt.JwtService;
 import com.example.masterplanbbe.security.uri.PassableUris;
 import io.jsonwebtoken.JwtException;
@@ -38,7 +40,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String tokenValue = request.getHeader(AUTHORIZATION_HEADER);
         // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
-        if (tokenValue == null || tokenValue.isEmpty()) throw new JwtException("엑세스 토큰 없음");
+        if (tokenValue == null || tokenValue.isEmpty())
+            throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "헤더 엑세스 토큰 없음");
 
         // 헤더 엑세스 토큰 추출 및 검증
         String decodedToken = URLDecoder.decode(tokenValue, StandardCharsets.UTF_8);

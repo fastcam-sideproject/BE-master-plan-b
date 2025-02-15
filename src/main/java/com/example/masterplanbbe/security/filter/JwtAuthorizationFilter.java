@@ -1,6 +1,8 @@
 package com.example.masterplanbbe.security.filter;
 
+import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.security.jwt.JwtService;
 import com.example.masterplanbbe.security.uri.PassableUris;
 import io.jsonwebtoken.JwtException;
@@ -30,7 +32,11 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         // 권한 별로 어떻게 할 건지 향후 고민
         String tokenValue = request.getHeader(AUTHORIZATION_HEADER);
         // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
-        if (tokenValue == null || tokenValue.isEmpty()) throw new JwtException("엑세스 토큰 없음");
+        /**
+         * 여기도 마찬가지
+         */
+        if (tokenValue == null || tokenValue.isEmpty())
+            throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "헤더 엑세스 토큰 없음");
 
         String decodedToken = URLDecoder.decode(tokenValue, StandardCharsets.UTF_8);
         MemberRoleEnum role = jwtService.getRoleFromAccessToken(decodedToken);
