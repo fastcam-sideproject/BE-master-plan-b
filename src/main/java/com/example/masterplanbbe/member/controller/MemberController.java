@@ -19,7 +19,7 @@ public class MemberController {
     @Operation(summary = "멤버 생성")
     @PostMapping("/create")
     public ApiResponse<MemberResponse> create(@RequestBody MemberCreateRequest request) {
-        return ApiResponse.ok(memberService.createMember(request));
+        return ApiResponse.ok("회원가입이 완료됐습니다.", memberService.createMember(request));
     }
 
     @GetMapping("/test")
