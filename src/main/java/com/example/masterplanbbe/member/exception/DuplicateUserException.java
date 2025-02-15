@@ -1,10 +1,15 @@
 package com.example.masterplanbbe.member.exception;
 
-import com.example.masterplanbbe.common.exception.BaseException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
+import lombok.Getter;
 
-public class DuplicateUserException extends BaseException {
-    protected DuplicateUserException(ErrorCode errorCode) {
-        super(errorCode);
+@Getter
+public class DuplicateUserException extends RuntimeException {
+
+    private final ErrorCode errorCode;
+
+    public DuplicateUserException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 }

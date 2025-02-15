@@ -27,8 +27,8 @@ public class MemberController {
         return "스프링 시큐리티 테스트";
     }
 
-    @GetMapping("/fail")
-    public String fail() {
-        return "넌 당연히 테스트 통과 x";
+    @GetMapping("/security")
+    public String security() {
+        return "인증되어야만 볼 수 있음 ㅋ";
     }
 }

@@ -1,8 +1,10 @@
 package com.example.masterplanbbe.member.service;
 
 
+import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.member.exception.DuplicateUserException;
 import com.example.masterplanbbe.member.repository.MemberRepository;
 import com.example.masterplanbbe.member.dto.MemberCreateRequest;
 import com.example.masterplanbbe.member.dto.MemberResponse;
@@ -21,9 +23,13 @@ public class MemberService {
 
     // 회원가입
     public MemberResponse createMember(MemberCreateRequest request) {
-        if (memberRepository.findByUserId(request.getUserId()).isPresent() || memberRepository.findByEmail(request.getEmail()).isPresent()) {
-            // 커스텀 예외: 이미 가입되어 있는 사용자
-            throw new IllegalArgumentException("User already exists");
+
+        if (memberRepository.findByUserId(request.getUserId()).isPresent()) {
+            throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_ID);
+        }
+
+        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
 
 //        MemberRoleEnum role = null;
