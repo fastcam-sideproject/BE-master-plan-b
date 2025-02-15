@@ -5,7 +5,7 @@ import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LikeRepository extends JpaRepository<PostLike, Long> {
+public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
     boolean existsByMemberAndPost(Member member, Post post);
 

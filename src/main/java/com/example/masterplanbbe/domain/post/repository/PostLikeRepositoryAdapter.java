@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @AllArgsConstructor
-public class PostPostLikeRepositoryAdapter implements PostLikeRepositoryPort {
+public class PostLikeRepositoryAdapter implements PostLikeRepositoryPort {
 
     private final PostLikeRepository postLikeRepository;
 

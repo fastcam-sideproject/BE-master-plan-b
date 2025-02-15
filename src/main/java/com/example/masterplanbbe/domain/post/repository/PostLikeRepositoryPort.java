@@ -4,7 +4,7 @@ import com.example.masterplanbbe.domain.post.entity.PostLike;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.member.entity.Member;
 
-public interface LikeRepositoryPort {
+public interface PostLikeRepositoryPort {
     boolean existsByMemberAndPost(Member member, Post post);
 
     void deleteByMemberAndPost(Member member, Post post);

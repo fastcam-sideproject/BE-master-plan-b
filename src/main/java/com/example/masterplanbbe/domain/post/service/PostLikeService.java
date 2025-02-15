@@ -3,7 +3,7 @@ package com.example.masterplanbbe.domain.post.service;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.PostLike;
 import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.domain.post.repository.LikeRepositoryPort;
+import com.example.masterplanbbe.domain.post.repository.PostLikeRepositoryPort;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
@@ -13,24 +13,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class LikeService {
+public class PostLikeService {
 
     private final MemberRepositoryPort memberRepositoryPort;
     private final PostRepositoryPort postRepositoryPort;
-    private final LikeRepositoryPort likeRepositoryPort;
+    private final PostLikeRepositoryPort postLikeRepositoryPort;
 
     @Transactional
     public PostResponse.Detail addLike(Long postId, Long memberId) {
         Member member = memberRepositoryPort.findById(memberId);
         Post post = postRepositoryPort.findById(postId);
-        if (!likeRepositoryPort.existsByMemberAndPost(member, post)) {
+        if (!postLikeRepositoryPort.existsByMemberAndPost(member, post)) {
             PostLike postLike = PostLike.builder()
                     .member(member)
                     .post(post)
                     .build();
-            likeRepositoryPort.save(postLike);
             post.addLike();
-            postRepositoryPort.save(post);
+            postLikeRepositoryPort.save(postLike);
+        }
+        else {
+            postLikeRepositoryPort.deleteByMemberAndPost(member,post);
+            post.deleteLike();
         }
 
         return PostResponse.Detail.builder()

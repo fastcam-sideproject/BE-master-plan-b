@@ -5,14 +5,14 @@ import com.example.masterplanbbe.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "likes")
+@Entity
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "post_like",
+@Table(name = "post_likes",
         uniqueConstraints = {@UniqueConstraint(name = "unique_post_like", columnNames = {"post_id", "member_id"})})
-public class Like extends FullAuditEntity {
+public class PostLike extends FullAuditEntity {
 
     @ManyToOne
     @JoinColumn(name = "post_id",nullable = false)
