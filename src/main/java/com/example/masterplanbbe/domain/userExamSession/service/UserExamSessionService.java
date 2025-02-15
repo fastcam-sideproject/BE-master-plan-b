@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.userExamSession.service;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionRequest;
+import com.example.masterplanbbe.domain.userExamSession.dto.response.UserExamSessionDetailResponse;
 import com.example.masterplanbbe.domain.userExamSession.dto.response.UserExamSessionResponse;
 import com.example.masterplanbbe.domain.userExamSession.entity.UserExamSession;
 import com.example.masterplanbbe.domain.userExamSession.repository.UserExamSessionRepositoryPort;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserExamSessionService {
 
     private final ExamRepositoryPort examRepositoryPort;
@@ -46,5 +48,9 @@ public class UserExamSessionService {
     public void delete(Long deleteId, Long memberId) {
         UserExamSession userExamSession = userExamSessionRepositoryPort.findByIdAndMemberId(deleteId, memberId);
         userExamSessionRepositoryPort.delete(userExamSession);
+    }
+
+    public UserExamSessionDetailResponse findOne(Long id, Long memberId) {
+        return userExamSessionRepositoryPort.findDetailByIdAndMemberId(id, memberId);
     }
 }

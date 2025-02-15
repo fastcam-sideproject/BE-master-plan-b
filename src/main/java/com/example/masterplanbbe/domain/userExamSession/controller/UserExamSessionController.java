@@ -52,4 +52,15 @@ public class UserExamSessionController {
                 .body(ApiResponse.ok("나의 시험 일정 삭제 성공"));
     }
 
+    @Operation(summary = "회원 시험 일정 상세 조회")
+    @GetMapping(path = "/{exam-sessions-id}")
+    public ResponseEntity<ApiResponse<?>> findOne(
+            @PathVariable(name = "exam-sessions-id") Long id,
+            // TODO : security 적용 예정
+            Long memberId
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(userExamSessionService.findOne(id, memberId)));
+    }
+
 }
