@@ -141,8 +141,6 @@ class PostServiceTest {
                 .title("Test Title")
                 .content("Test Content")
                 .member(member)
-                .likeCount(0)
-                .isLiked(false)
                 .commentList(new ArrayList<>())
                 .build();
         ReflectionTestUtils.setField(post, "id", 1L);

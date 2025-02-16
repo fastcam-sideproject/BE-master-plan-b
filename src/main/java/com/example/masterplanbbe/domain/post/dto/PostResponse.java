@@ -23,6 +23,7 @@ public class PostResponse {
             String title,
             String content,
             String nickname,
+            Integer likeCount,
             LocalDateTime createdAt,
             LocalDateTime modifiedAt,
             List<CommentResponse> comments
