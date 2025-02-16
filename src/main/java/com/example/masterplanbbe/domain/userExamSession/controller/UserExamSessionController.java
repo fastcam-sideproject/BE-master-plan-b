@@ -6,6 +6,8 @@ import com.example.masterplanbbe.domain.userExamSession.service.UserExamSessionS
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,6 +63,19 @@ public class UserExamSessionController {
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(userExamSessionService.findOne(id, memberId)));
+    }
+
+    @Operation(summary = "회원 시험 일정 조회")
+    @GetMapping(path = "")
+    public ResponseEntity<ApiResponse<?>> findAll(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @PageableDefault Pageable pageable,
+            // TODO : security 적용 예정
+            Long memberId
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(userExamSessionService.findAll(year, month, memberId, pageable)));
     }
 
 }

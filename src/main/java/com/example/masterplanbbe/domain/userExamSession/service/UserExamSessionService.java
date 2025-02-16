@@ -10,6 +10,8 @@ import com.example.masterplanbbe.domain.userExamSession.repository.UserExamSessi
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +54,9 @@ public class UserExamSessionService {
 
     public UserExamSessionDetailResponse findOne(Long id, Long memberId) {
         return userExamSessionRepositoryPort.findDetailByIdAndMemberId(id, memberId);
+    }
+
+    public Page<UserExamSessionDetailResponse> findAll(Integer year, Integer month, Long memberId, Pageable pageable) {
+        return userExamSessionRepositoryPort.findDetailsByYearAndMonthAndMemberId(year, month, memberId, pageable);
     }
 }
