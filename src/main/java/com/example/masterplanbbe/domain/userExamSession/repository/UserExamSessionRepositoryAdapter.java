@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.userExamSession.repository;
 
-import com.example.masterplanbbe.common.GlobalException.NotFoundException;
+import com.example.masterplanbbe.common.exception.GlobalException.NotFoundException;
 import com.example.masterplanbbe.domain.userExamSession.dto.response.UserExamSessionDetailResponse;
 import com.example.masterplanbbe.domain.userExamSession.entity.UserExamSession;
 import com.querydsl.core.BooleanBuilder;
