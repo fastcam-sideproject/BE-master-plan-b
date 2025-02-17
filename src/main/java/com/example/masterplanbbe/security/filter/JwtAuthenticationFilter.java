@@ -38,6 +38,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("요청 URI : {}", request.getRequestURI());
 
+        if (request.getRequestURI().startsWith("/swagger") ||
+                request.getRequestURI().startsWith("/v3/api-docs")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String tokenValue = request.getHeader(AUTHORIZATION_HEADER);
         // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
         if (tokenValue == null || tokenValue.isEmpty())

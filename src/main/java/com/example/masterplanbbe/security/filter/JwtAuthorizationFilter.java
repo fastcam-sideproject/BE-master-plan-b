@@ -29,6 +29,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        if (request.getRequestURI().startsWith("/swagger") ||
+                request.getRequestURI().startsWith("/v3/api-docs")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // 권한 별로 어떻게 할 건지 향후 고민
         String tokenValue = request.getHeader(AUTHORIZATION_HEADER);
         // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
