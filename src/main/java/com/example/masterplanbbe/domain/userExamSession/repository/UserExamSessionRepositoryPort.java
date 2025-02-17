@@ -12,9 +12,9 @@ public interface UserExamSessionRepositoryPort {
 
     void delete(UserExamSession userExamSession);
 
-    UserExamSession findByIdAndMemberId(Long id, Long memberId);
+    UserExamSession findByIdAndMemberUserId(Long id, String memberId);
 
-    UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, Long memberId);
+    UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, String memberId);
 
-    Page<UserExamSessionDetailResponse> findDetailsByYearAndMonthAndMemberId(Integer year, Integer month, Long memberId, Pageable pageable);
+    Page<UserExamSessionDetailResponse> findDetailsByYearAndMonthAndMemberId(Integer year, Integer month, String memberId, Pageable pageable);
 }
