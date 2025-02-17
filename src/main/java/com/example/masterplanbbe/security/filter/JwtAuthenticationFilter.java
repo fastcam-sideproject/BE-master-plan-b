@@ -3,7 +3,6 @@ package com.example.masterplanbbe.security.filter;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.security.jwt.JwtService;
-import com.example.masterplanbbe.security.uri.PassableUris;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +15,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -25,7 +23,7 @@ import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 @Slf4j(topic = "JwtAuthenticationFilter")
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends CustomOncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
@@ -63,17 +61,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private Authentication createAuthentication(String username) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        log.info("통과 URI : {}", request.getRequestURI());
-        String requestURI = request.getRequestURI();
-
-        if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs")) {
-            return true;
-        }
-
-        return PassableUris.PASSABLE_URI.contains(requestURI);
     }
 }

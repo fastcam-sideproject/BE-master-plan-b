@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.comment.service;
 
-import com.example.masterplanbbe.common.GlobalException;
+import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.domain.comment.dto.CommentRequest;
 import com.example.masterplanbbe.domain.comment.dto.CommentResponse;

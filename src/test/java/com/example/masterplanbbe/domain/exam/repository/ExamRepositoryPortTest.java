@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
-import com.example.masterplanbbe.common.GlobalException;
+import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;

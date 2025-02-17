@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.member.repository;
 
-import com.example.masterplanbbe.common.GlobalException;
+import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.member.entity.Member;
 import lombok.RequiredArgsConstructor;
