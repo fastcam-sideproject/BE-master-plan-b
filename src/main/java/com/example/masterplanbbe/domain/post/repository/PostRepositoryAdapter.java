@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.post.repository;
 
-import com.example.masterplanbbe.common.GlobalException;
+import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
