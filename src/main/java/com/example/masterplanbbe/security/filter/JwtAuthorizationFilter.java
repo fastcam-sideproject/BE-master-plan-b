@@ -4,15 +4,12 @@ import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.security.jwt.JwtService;
-import com.example.masterplanbbe.security.uri.PassableUris;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -20,7 +17,7 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j(topic = "JwtAuthorizationFilter")
 @RequiredArgsConstructor
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
+public class JwtAuthorizationFilter extends CustomOncePerRequestFilter {
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
 
@@ -29,12 +26,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        if (request.getRequestURI().startsWith("/swagger") ||
-                request.getRequestURI().startsWith("/v3/api-docs")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         // 권한 별로 어떻게 할 건지 향후 고민
         String tokenValue = request.getHeader(AUTHORIZATION_HEADER);
         // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
@@ -51,12 +42,5 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         log.info("요청 권한: {}", role.getRole());
 
         filterChain.doFilter(request, response);
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        log.info("통과 URI : {}", request.getRequestURI());
-        String requestURI = request.getRequestURI();
-        return PassableUris.PASSABLE_URI.contains(requestURI);
     }
 }
