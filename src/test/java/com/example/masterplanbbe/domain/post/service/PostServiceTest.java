@@ -141,7 +141,7 @@ class PostServiceTest {
                 .title("Test Title")
                 .content("Test Content")
                 .member(member)
-                .commentList(new ArrayList<>())
+//                .commentList(new ArrayList<>())
                 .build();
         ReflectionTestUtils.setField(post, "id", 1L);
         return post;

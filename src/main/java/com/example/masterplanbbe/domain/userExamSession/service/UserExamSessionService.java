@@ -25,10 +25,10 @@ public class UserExamSessionService {
     private final UserExamSessionRepositoryPort userExamSessionRepositoryPort;
 
     @Transactional
-    public UserExamSessionResponse create(UserExamSessionRequest request, Long memberId) {
+    public UserExamSessionResponse create(UserExamSessionRequest request, String memberId) {
         Exam exam = examRepositoryPort.getById(request.examId());
 
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByUserId(memberId);
 
         UserExamSession userExamSession = userExamSessionRepositoryPort.save(UserExamSession.of(exam, member, request.date(), request.startTime(), request.endTime()));
 
@@ -47,16 +47,16 @@ public class UserExamSessionService {
     }
 
     @Transactional
-    public void delete(Long deleteId, Long memberId) {
-        UserExamSession userExamSession = userExamSessionRepositoryPort.findByIdAndMemberId(deleteId, memberId);
+    public void delete(Long deleteId, String memberId) {
+        UserExamSession userExamSession = userExamSessionRepositoryPort.findByIdAndMemberUserId(deleteId, memberId);
         userExamSessionRepositoryPort.delete(userExamSession);
     }
 
-    public UserExamSessionDetailResponse findOne(Long id, Long memberId) {
+    public UserExamSessionDetailResponse findOne(Long id, String memberId) {
         return userExamSessionRepositoryPort.findDetailByIdAndMemberId(id, memberId);
     }
 
-    public Page<UserExamSessionDetailResponse> findAll(Integer year, Integer month, Long memberId, Pageable pageable) {
+    public Page<UserExamSessionDetailResponse> findAll(Integer year, Integer month, String memberId, Pageable pageable) {
         return userExamSessionRepositoryPort.findDetailsByYearAndMonthAndMemberId(year, month, memberId, pageable);
     }
 }
