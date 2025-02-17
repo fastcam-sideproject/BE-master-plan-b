@@ -43,20 +43,20 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
     }
 
     @Override
-    public UserExamSession findByIdAndMemberId(Long id, Long memberId) {
-        return userExamSessionRepository.findByIdAndMemberId(id, memberId).orElseThrow(
+    public UserExamSession findByIdAndMemberUserId(Long id, String memberId) {
+        return userExamSessionRepository.findByIdAndMemberUserId(id, memberId).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION)
         );
 
     }
 
     @Override
-    public UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, Long memberId) {
+    public UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, String memberId) {
         return Optional.ofNullable(
                 jpaQueryFactory
                         .select(Projections.constructor(UserExamSessionDetailResponse.class,
                                 userExamSession.id,
-                                userExamSession.member.id,
+                                userExamSession.member.userId,
                                 userExamSession.exam.certificationType,
                                 userExamSession.exam.title,
                                 userExamSession.date,
@@ -64,13 +64,13 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
                         ))
                         .from(userExamSession)
                         .where(userExamSession.id.eq(id)
-                                .and(userExamSession.member.id.eq(memberId)))
+                                .and(userExamSession.member.userId.eq(memberId)))
                         .fetchOne()
         ).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION));
     }
 
     @Override
-    public Page<UserExamSessionDetailResponse> findDetailsByYearAndMonthAndMemberId(Integer year, Integer month, Long memberId, Pageable pageable) {
+    public Page<UserExamSessionDetailResponse> findDetailsByYearAndMonthAndMemberId(Integer year, Integer month, String memberId, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (year != null) {
@@ -81,12 +81,12 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
             builder.and(userExamSession.date.month().eq(month));
         }
 
-        builder.and(userExamSession.member.id.eq(memberId));
+        builder.and(userExamSession.member.userId.eq(memberId));
 
         List<UserExamSessionDetailResponse> results = jpaQueryFactory
                 .select(Projections.constructor(UserExamSessionDetailResponse.class,
                         userExamSession.id,
-                        userExamSession.member.id,
+                        userExamSession.member.userId,
                         userExamSession.exam.certificationType,
                         userExamSession.exam.title,
                         userExamSession.date,
