@@ -1,11 +1,9 @@
 package com.example.masterplanbbe.security.filter;
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
-import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.security.jwt.JwtService;
 import com.example.masterplanbbe.security.uri.PassableUris;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -71,6 +69,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         log.info("통과 URI : {}", request.getRequestURI());
         String requestURI = request.getRequestURI();
+
+        if (requestURI.startsWith("/swagger-ui") || requestURI.startsWith("/v3/api-docs")) {
+            return true;
+        }
+
         return PassableUris.PASSABLE_URI.contains(requestURI);
     }
 }

@@ -87,7 +87,9 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(a -> a
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
                 .anyRequest().authenticated()
         );
