@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtService {
@@ -119,7 +120,7 @@ public class JwtService {
                 userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + REFRESH_TOKEN_EAT), role);
 
         String refreshToken = tokenUtils.createToken(refreshTokenPayload).substring(BEARER_PREFIX.length());
-        authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken);
+        authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken, 7, TimeUnit.DAYS);
 
         return tokenUtils.createToken(accessTokenPayload);
     }
