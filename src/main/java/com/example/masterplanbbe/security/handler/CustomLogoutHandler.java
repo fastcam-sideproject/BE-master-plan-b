@@ -41,6 +41,7 @@ public class CustomLogoutHandler implements LogoutHandler {
         // ** 프론트 측에서 헤더에 엑세스토큰을 보내준 후, 자체적으로 삭제 작업 필요 **
 
         try {
+            jwtService.addBlacklistAccessToken(decodedToken);
             jwtService.removeRefreshToken(memberPayload.getUserId());
             ApiResponse<String> apiResponse = ApiResponse.ok("로그아웃에 성공하였습니다.");
             sendResponseMsg(response, 200, apiResponse);

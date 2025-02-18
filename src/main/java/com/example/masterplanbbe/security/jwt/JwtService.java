@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -20,17 +21,29 @@ public class JwtService {
 
     private static final String REDIS_AUTH_KEY = "AUTH_";
     private static final String BEARER_PREFIX = "Bearer ";
-    private final long ACCESS_TOKEN_EAT = 60 * 60 * 1000L; // 1H(테스트 2분)
-    private final long REFRESH_TOKEN_EAT = 7 * 24 * 60 * 60 * 1000L; // 7D
+    private static final String BLACKLIST_ACCESS_TOKEN = "BLACKLIST_ACCESS_TOKEN:";
+    private static final String BLACKLIST_REFRESH_TOKEN = "BLACKLIST_REFRESH_TOKEN:";
+    private static final long ACCESS_TOKEN_EAT = 60 * 60 * 1000L; // 1H(테스트 2분)
+    private static final long REFRESH_TOKEN_EAT = 7 * 24 * 60 * 60 * 1000L; // 7D
 
     private final TokenUtils tokenUtils;
     private final RedisTemplate<String, String> authTemplate;
+    private final RedisTemplate<String, String> blacklistTokenTemplate;
 
     public JwtService(
             TokenUtils tokenUtils,
-            @Qualifier("authTemplate") RedisTemplate<String, String> authTemplate) {
+            @Qualifier("authTemplate") RedisTemplate<String, String> authTemplate,
+            @Qualifier("blacklistTokenTemplate") RedisTemplate<String, String>
+                    blacklistTokenTemplate) {
         this.tokenUtils = tokenUtils;
         this.authTemplate = authTemplate;
+        this.blacklistTokenTemplate = blacklistTokenTemplate;
+
+        // 블랙리스트 TTL 지정
+        this.blacklistTokenTemplate
+                .expire(BLACKLIST_ACCESS_TOKEN, ACCESS_TOKEN_EAT, TimeUnit.SECONDS);
+        this.blacklistTokenTemplate
+                .expire(BLACKLIST_REFRESH_TOKEN, REFRESH_TOKEN_EAT, TimeUnit.SECONDS);
     }
 
     /**
@@ -53,6 +66,14 @@ public class JwtService {
             role = getRoleFromRoleString(tokenUtils.getRoleFromAccessToken(tokenValue));
             accessToken = tokenValue;
         } catch (ExpiredJwtException e) {
+            // 무효가 된 엑세스 토큰 블랙리스트 추가
+            blacklistTokenTemplate.opsForValue()
+                    .set(
+                            BLACKLIST_ACCESS_TOKEN + tokenValue.substring(BEARER_PREFIX.length()),
+                            tokenValue.substring(BEARER_PREFIX.length()),
+                            ACCESS_TOKEN_EAT,
+                            TimeUnit.MILLISECONDS);
+
             userId = tokenUtils.getUserIdFromExpiredAccessToken(e);
             role = getRoleFromRoleString(tokenUtils.getRoleFromExpiredAccessToken(e));
 
@@ -63,13 +84,29 @@ public class JwtService {
             if (refreshToken == null)
                 throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "리프레시 토큰 없음. 헤더 엑세스 토큰 제거 필요.");
             if (!tokenUtils.parseRefreshToken(refreshToken)) {
+                blacklistTokenTemplate.opsForValue()
+                        .set(
+                                BLACKLIST_REFRESH_TOKEN + refreshToken,
+                                refreshToken, REFRESH_TOKEN_EAT, TimeUnit.MILLISECONDS);
                 authTemplate.delete(REDIS_AUTH_KEY + userId);
                 throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "유효하지 않은 리프레시 토큰. 헤더 엑세스 토큰 제거 필요.");
             }
 
             Date date = new Date();
-            accessToken = tokenUtils.createToken(
-                    new TokenPayload(userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role));
+            TokenPayload accessTokenPayload = new TokenPayload(
+                    userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role);
+            accessToken = tokenUtils.createToken(accessTokenPayload);
+
+            // 5번 시도 후 유효한 토큰을 찾을 때까지 반복
+            for (int i = 0; i < 5; i++) {
+                // 블랙리스트에 포함된 토큰이 아니면 종료
+                if (Objects.equals(blacklistTokenTemplate
+                                .opsForValue()
+                                .get(BLACKLIST_ACCESS_TOKEN + accessToken.substring(BEARER_PREFIX.length())),
+                                accessToken.substring(BEARER_PREFIX.length()))) break;
+
+                accessToken = tokenUtils.createToken(accessTokenPayload);
+            }
         } catch (JwtException e) {
             // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
             throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "비정상적인 헤더 엑세스 토큰. 헤더 엑세스 토큰 제거 필요.");
@@ -120,15 +157,57 @@ public class JwtService {
                 userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + REFRESH_TOKEN_EAT), role);
 
         String refreshToken = tokenUtils.createToken(refreshTokenPayload).substring(BEARER_PREFIX.length());
+
+        // 5번 시도 후, 유효한 토큰을 찾을 때까지 반복
+        for (int i = 0; i < 5; i++) {
+            // 블랙리스트에 포함된 토큰이 아니면 종료
+            if (Objects.equals(blacklistTokenTemplate
+                    .opsForValue().get(BLACKLIST_REFRESH_TOKEN + refreshToken), refreshToken)) break;
+
+            refreshToken = tokenUtils.createToken(refreshTokenPayload).substring(BEARER_PREFIX.length());
+        }
+
         authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken, 7, TimeUnit.DAYS);
 
-        return tokenUtils.createToken(accessTokenPayload);
+        String newAccessToken = tokenUtils.createToken(accessTokenPayload);
+
+        // 5번 시도 후 유효한 토큰을 찾을 때까지 반복
+        for (int i = 0; i < 5; i++) {
+            // 블랙리스트에 포함된 토큰이 아니면 종료
+            if (Objects.equals(blacklistTokenTemplate
+                            .opsForValue()
+                            .get(BLACKLIST_ACCESS_TOKEN + newAccessToken.substring(BEARER_PREFIX.length())),
+                    newAccessToken.substring(BEARER_PREFIX.length()))) break;
+
+            newAccessToken = tokenUtils.createToken(accessTokenPayload);
+        }
+
+        return newAccessToken;
     }
 
     /**
-     * 로그아웃 - 리프레시 토큰 삭제
+     * 로그아웃 - 리프레시 토큰 삭제 + 블랙리스트 추가
      */
     public void removeRefreshToken(String userId) {
+        String refreshToken = authTemplate.opsForValue().get(REDIS_AUTH_KEY + userId);
+
+        if (refreshToken == null) {
+            throw new CustomAuthenticationException(ErrorCode.INTERNAL_SERVER_ERROR, "리프레시 토큰 탈취 가능성!");
+        }
+
+        blacklistTokenTemplate.opsForValue()
+                .set(
+                        BLACKLIST_REFRESH_TOKEN + refreshToken,
+                        refreshToken, REFRESH_TOKEN_EAT, TimeUnit.MILLISECONDS);
         authTemplate.delete(REDIS_AUTH_KEY + userId);
+    }
+
+    public void addBlacklistAccessToken(String tokenValue) {
+        blacklistTokenTemplate.opsForValue()
+                .set(
+                        BLACKLIST_ACCESS_TOKEN + tokenValue.substring(BEARER_PREFIX.length()),
+                        tokenValue.substring(BEARER_PREFIX.length()),
+                        ACCESS_TOKEN_EAT,
+                        TimeUnit.MILLISECONDS);
     }
 }
