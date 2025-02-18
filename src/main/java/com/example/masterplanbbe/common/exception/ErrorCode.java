@@ -29,6 +29,7 @@ public enum ErrorCode {
     FORBIDDEN_ACCESS(HttpServletResponse.SC_FORBIDDEN, "A004", "접근 권한이 부족합니다."),
     LOGOUT_EXCEPTION(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "A005", "비정상적인 로그아웃! 관리자에게 문의하세요."),
     WRONG_TOKEN_ISSUE(HttpServletResponse.SC_UNAUTHORIZED, "A006", "비정상적인 인증! 잠시 후에 다시 시도해주세요."),
+    TOKEN_HIJACKING_ISSUE(HttpServletResponse.SC_UNAUTHORIZED, "A007", "블랙리스트 토큰 감지! 토큰 탈취 가능성 존재!"),
 
     // Oauth
     SOCIAL_EMAIL_LOAD_FAIL(400, "O001", "소셜 로그인에서 이메일을 불러올 수 없습니다."),
