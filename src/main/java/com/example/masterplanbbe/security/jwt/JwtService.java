@@ -7,6 +7,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
 public class JwtService {
 
@@ -38,12 +40,6 @@ public class JwtService {
         this.tokenUtils = tokenUtils;
         this.authTemplate = authTemplate;
         this.blacklistTokenTemplate = blacklistTokenTemplate;
-
-        // 블랙리스트 TTL 지정
-        this.blacklistTokenTemplate
-                .expire(BLACKLIST_ACCESS_TOKEN, ACCESS_TOKEN_EAT, TimeUnit.SECONDS);
-        this.blacklistTokenTemplate
-                .expire(BLACKLIST_REFRESH_TOKEN, REFRESH_TOKEN_EAT, TimeUnit.SECONDS);
     }
 
     /**
@@ -60,6 +56,13 @@ public class JwtService {
     public MemberPayload validateAccessToken(String tokenValue) {
         String userId, accessToken;
         MemberRoleEnum role;
+
+        // 외부 공격자 검증
+        if (Boolean.TRUE.equals(blacklistTokenTemplate.hasKey(
+                BLACKLIST_ACCESS_TOKEN + tokenValue.substring(BEARER_PREFIX.length())))) {
+            log.error("토큰 하이재킹 이슈 발생! 블랙리스트 토큰 기반 인증 시도 감지!");
+            throw new CustomAuthenticationException(ErrorCode.TOKEN_HIJACKING_ISSUE, ErrorCode.TOKEN_HIJACKING_ISSUE.getMessage());
+        }
 
         try {
             userId = tokenUtils.getUserIdFromAccessToken(tokenValue);
