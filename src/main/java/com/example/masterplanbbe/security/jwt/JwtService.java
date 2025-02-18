@@ -111,6 +111,14 @@ public class JwtService {
                 accessToken = tokenUtils.createToken(accessTokenPayload);
             }
         } catch (JwtException e) {
+            // 무효가 된 엑세스 토큰 블랙리스트 추가
+            blacklistTokenTemplate.opsForValue()
+                    .set(
+                            BLACKLIST_ACCESS_TOKEN + tokenValue.substring(BEARER_PREFIX.length()),
+                            tokenValue.substring(BEARER_PREFIX.length()),
+                            ACCESS_TOKEN_EAT,
+                            TimeUnit.MILLISECONDS);
+
             // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
             throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "비정상적인 헤더 엑세스 토큰. 헤더 엑세스 토큰 제거 필요.");
         }
