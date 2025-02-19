@@ -17,4 +17,17 @@ public class MemberFixture {
                 .profileImageUrl("profileImageUrl")
                 .build();
     }
+
+    public static Member createMember(String userId) {
+        return Member.builder()
+                .userId(userId)
+                .email("test@test.com")
+                .name("name")
+                .nickname("nickname")
+                .password("password")
+                .phoneNumber("010-1234-5678")
+                .birthday(LocalDate.parse("1999-01-01"))
+                .profileImageUrl("profileImageUrl")
+                .build();
+    }
 }

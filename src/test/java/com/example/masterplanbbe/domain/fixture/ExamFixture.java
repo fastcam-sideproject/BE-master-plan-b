@@ -14,8 +14,24 @@ import java.util.function.Supplier;
 
 import static com.example.masterplanbbe.domain.exam.enums.Category.IT_ICT;
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
+import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 public class ExamFixture {
+    public static Exam createExam(Long id) {
+        Exam exam = Exam.builder()
+                .title("title")
+                .category(IT_ICT)
+                .authority("테스트")
+                .participantCount(100)
+                .certificationType(NATIONAL_CERTIFIED)
+                .difficulty(3.0)
+                .subjects(new ArrayList<>())
+                .build();
+        setField(exam, "id", id);
+
+        return exam;
+    }
+
     public static Exam createExam(String title) {
         Supplier<Exam> examBuilder = () -> Exam.builder()
                 .title(title)
@@ -28,7 +44,7 @@ public class ExamFixture {
                 .build();
 
         return TestUtils.withSetup(examBuilder, instance -> {
-                    ReflectionTestUtils.setField(instance, "examDetail", ExamDetail.builder()
+                    setField(instance, "examDetail", ExamDetail.builder()
                             .exam(instance)
                             .preparation("준비물")
                             .eligibility("자격요건")
