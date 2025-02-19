@@ -23,6 +23,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -49,6 +50,7 @@ public class SecurityConfig {
     private final CustomLogoutHandler customLogoutHandler;
     private final JwtAccessDenyHandler jwtAccessDenyHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final DefaultOAuth2UserService oAuth2UserService;
 
     // Crypt Configuration
     @Bean
@@ -91,7 +93,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                 .permitAll()
-                .requestMatchers("/oauth2/**").permitAll()
+                .requestMatchers("/oauth2/**", "/favicon.ico").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
@@ -100,6 +102,7 @@ public class SecurityConfig {
 
         http.oauth2Login(o -> o
                 .redirectionEndpoint(e -> e.baseUri("/oauth2/callback/*"))
+                .userInfoEndpoint(e -> e.userService(oAuth2UserService))
         );
 
         http.addFilterBefore(new JwtAuthorizationFilter(jwtService), CustomLoginFilter.class);
