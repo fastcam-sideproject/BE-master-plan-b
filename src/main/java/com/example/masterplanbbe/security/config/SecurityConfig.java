@@ -8,6 +8,7 @@ import com.example.masterplanbbe.security.filter.JwtAuthorizationFilter;
 import com.example.masterplanbbe.security.handler.CustomLogoutHandler;
 import com.example.masterplanbbe.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     // client url
+    @Value("${client.url}")
     private String clientUrl;
 
     // Dependency Injection
@@ -89,10 +91,15 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                 .permitAll()
+                .requestMatchers("/oauth2/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
                 .anyRequest().authenticated()
+        );
+
+        http.oauth2Login(o -> o
+                .redirectionEndpoint(e -> e.baseUri("/oauth2/callback/*"))
         );
 
         http.addFilterBefore(new JwtAuthorizationFilter(jwtService), CustomLoginFilter.class);
