@@ -1,6 +1,9 @@
 package com.example.masterplanbbe.security.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.masterplanbbe.security.response.GoogleResponse;
+import com.example.masterplanbbe.security.response.KakaoResponse;
+import com.example.masterplanbbe.security.response.NaverResponse;
+import com.example.masterplanbbe.security.response.OAuth2Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,11 +24,21 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         System.out.println("클라이언트 이름 : " + oauthClientName);
 
-        try {
-            System.out.println(new ObjectMapper().writeValueAsString(oauth2User.getAuthorities()));
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        OAuth2Response response;
+
+        if (oauthClientName.equalsIgnoreCase("google"))
+            response = new GoogleResponse(oauth2User.getAttributes());
+        else if (oauthClientName.equalsIgnoreCase("kakao"))
+            response = new KakaoResponse(oauth2User.getAttributes());
+        else if (oauthClientName.equalsIgnoreCase("naver"))
+            response = new NaverResponse(oauth2User.getAttributes());
+        else throw new OAuth2AuthenticationException("Invalid client registration");
+
+        System.out.println("제공자: " + response.getProvider());
+        System.out.println("제공자 ID: " + response.getProviderId());
+        System.out.println("사용자 이메일: " + response.getEmail());
+        System.out.println("사용자 닉네임: " + response.getNickname());
+        System.out.println("사용자 프로필 이미지: " + response.getProfileImage());
 
         return oauth2User;
     }
