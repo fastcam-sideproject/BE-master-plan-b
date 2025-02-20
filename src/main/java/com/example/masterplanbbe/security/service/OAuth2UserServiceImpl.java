@@ -1,9 +1,11 @@
 package com.example.masterplanbbe.security.service;
 
+import com.example.masterplanbbe.security.dto.OAuth2UserDTO;
 import com.example.masterplanbbe.security.response.GoogleResponse;
 import com.example.masterplanbbe.security.response.KakaoResponse;
 import com.example.masterplanbbe.security.response.NaverResponse;
 import com.example.masterplanbbe.security.response.OAuth2Response;
+import com.example.masterplanbbe.security.user.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -40,6 +42,11 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         System.out.println("사용자 닉네임: " + response.getNickname());
         System.out.println("사용자 프로필 이미지: " + response.getProfileImage());
 
-        return oauth2User;
+        String id = response.getProvider() + response.getProviderId() + response.getEmail();
+        OAuth2UserDTO dto = new OAuth2UserDTO(
+                id, response.getEmail(), response.getNickname(), response.getProfileImage(), "ROLE_USER"
+        );
+
+        return new CustomOAuth2User(dto);
     }
 }
