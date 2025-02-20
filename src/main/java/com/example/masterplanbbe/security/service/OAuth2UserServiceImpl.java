@@ -58,6 +58,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
         UserDetailsImpl userDetails;
 
         if (memberOptional.isPresent()) {
+            // 로그인 처리
             Member member = memberOptional.get();
 
             // OAuth 2.0 로그인과 커스텀 로그인 중복 방지
@@ -65,6 +66,7 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
             userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());
         } else {
+            // 회원가입 처리
             Member member = Member.create(dto);
             memberRepository.save(member);
 
