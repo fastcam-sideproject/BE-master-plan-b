@@ -7,7 +7,6 @@ import com.example.masterplanbbe.security.dto.MemberInfoDTO;
 import com.example.masterplanbbe.security.jwt.JwtService;
 import com.example.masterplanbbe.security.user.UserDetailsImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -23,9 +21,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 
 @Slf4j
 @Component
@@ -46,6 +42,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String userId = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
         MemberRoleEnum role = ((UserDetailsImpl) authentication.getPrincipal()).getMember().getRole();
         Date date = new Date();
+
+        log.info("OAuth 2.0 로그인 ID: {}", userId);
+        log.info("OAuth 2.0 로그인 권한: {}", role.getRole());
 
         String accessToken = jwtService.createToken(userId, role, date);
         response.addHeader(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
