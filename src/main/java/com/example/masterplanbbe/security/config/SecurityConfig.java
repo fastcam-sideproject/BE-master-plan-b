@@ -92,12 +92,13 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
+                .requestMatchers("/**").permitAll() // WebSocket 엔드포인트 인증 없이 허용
                 .anyRequest().authenticated()
         );
 
-        http.addFilterBefore(new JwtAuthorizationFilter(jwtService), CustomLoginFilter.class);
-        http.addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), CustomLoginFilter.class);
-        http.addFilterBefore(customLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+//        http.addFilterBefore(new JwtAuthorizationFilter(jwtService), CustomLoginFilter.class);
+//        http.addFilterBefore(new JwtAuthenticationFilter(jwtService, userDetailsService), CustomLoginFilter.class);
+//        http.addFilterBefore(customLoginFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -106,7 +107,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList(clientUrl));
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*")); // allowedOrigins 대신 allowedOriginPatterns 사용
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
