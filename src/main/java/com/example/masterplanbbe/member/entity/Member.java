@@ -2,6 +2,7 @@ package com.example.masterplanbbe.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.security.dto.OAuth2UserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Table(name = "members")
@@ -26,6 +28,7 @@ public class Member extends FullAuditEntity {
     private String phoneNumber;
     private LocalDate birthday;
     private String profileImageUrl;
+    private Boolean isOAuth2;
 
     @Enumerated(EnumType.STRING)
     private MemberRoleEnum role;
@@ -38,12 +41,32 @@ public class Member extends FullAuditEntity {
         member.name = request.getName();
         member.nickname = request.getUserId();
         member.password = password;
+        member.isOAuth2 = false;
 
         // 수정 필요
         member.phoneNumber = "010-0000-0000";
         member.birthday = LocalDate.of(1995, 3, 23);
         member.profileImageUrl = "IMG_URL";
         member.role = role;
+
+        return member;
+    }
+
+    public static Member create(OAuth2UserDTO dto) {
+        Member member = new Member();
+
+        member.userId = dto.userId();
+        member.email = dto.email();
+        member.name = dto.nickname(); // OAuth 2.0으로는 사용자명까지 받아오기가 힘든 것 같은데..?
+        member.nickname = dto.nickname();
+        member.profileImageUrl = dto.profileImage();
+        member.role = dto.role();
+        member.isOAuth2 = true;
+        member.password = String.valueOf(UUID.randomUUID());
+
+        // 수정 필요
+        member.phoneNumber = "010-0000-0000";
+        member.birthday = LocalDate.of(1995, 3, 23);
 
         return member;
     }

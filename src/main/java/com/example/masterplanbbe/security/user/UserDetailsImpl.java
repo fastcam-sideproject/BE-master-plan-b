@@ -6,15 +6,32 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 @Getter
-@RequiredArgsConstructor
-public class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl implements UserDetails, OAuth2User {
 
     private final Member member;
+    private final Map<String, Object> attributes;
+
+    public UserDetailsImpl(Member member) {
+        this.member = member;
+        this.attributes = null;
+    }
+
+    public UserDetailsImpl(Member member, Map<String, Object> attributes) {
+        this.member = member;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -52,5 +69,18 @@ public class UserDetailsImpl implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return member.getNickname();
+    }
+
+    public String getProfileImage() {
+        return member.getProfileImageUrl();
+    }
+
+    public String getEmail() {
+        return member.getEmail();
     }
 }

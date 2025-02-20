@@ -1,11 +1,14 @@
 package com.example.masterplanbbe.security.service;
 
+import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.member.repository.MemberRepository;
 import com.example.masterplanbbe.security.dto.OAuth2UserDTO;
 import com.example.masterplanbbe.security.response.GoogleResponse;
 import com.example.masterplanbbe.security.response.KakaoResponse;
 import com.example.masterplanbbe.security.response.NaverResponse;
 import com.example.masterplanbbe.security.response.OAuth2Response;
-import com.example.masterplanbbe.security.user.CustomOAuth2User;
+import com.example.masterplanbbe.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -14,10 +17,14 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
+
+    private final MemberRepository memberRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -44,9 +51,26 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
         String id = response.getProvider() + response.getProviderId() + response.getEmail();
         OAuth2UserDTO dto = new OAuth2UserDTO(
-                id, response.getEmail(), response.getNickname(), response.getProfileImage(), "ROLE_USER"
+                id, response.getEmail(), response.getNickname(), response.getProfileImage(), MemberRoleEnum.USER
         );
 
-        return new CustomOAuth2User(dto);
+        Optional<Member> memberOptional = memberRepository.findByEmail(response.getEmail());
+        UserDetailsImpl userDetails;
+
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+
+            // OAuth 2.0 로그인과 커스텀 로그인 중복 방지
+            if (!member.getIsOAuth2()) throw new IllegalArgumentException("이미 커스텀 가입되어 있는 계정");
+
+            userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());
+        } else {
+            Member member = Member.create(dto);
+            memberRepository.save(member);
+
+            userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());
+        }
+
+        return userDetails;
     }
 }
