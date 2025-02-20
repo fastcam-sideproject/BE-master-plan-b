@@ -29,6 +29,8 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
             HttpServletRequest request,
             HttpServletResponse response,
             AuthenticationException exception) throws IOException, ServletException {
+        log.error("OAuth 2.0 로그인 실패: {}", exception.getMessage());
+
         String errorMessage;
         if (exception instanceof BadCredentialsException) {
             errorMessage = "아이디와 비밀번호를 확인해주세요.";

@@ -40,22 +40,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     public void onAuthenticationSuccess(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain chain,
             Authentication authentication) throws IOException, ServletException {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        log.info("OAuth 2.0 로그인 성공");
 
-        String userId = userDetails.getUsername();
-        MemberRoleEnum role;
-        Date date =new Date();
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
-        GrantedAuthority auth = iterator.next();
-        String roleString = auth.getAuthority();
-
-        if (roleString.equals(MemberRoleEnum.ADMIN.getRole())) role = MemberRoleEnum.ADMIN;
-        else if (roleString.equals(MemberRoleEnum.USER.getRole())) role = MemberRoleEnum.USER;
-        else throw new IllegalArgumentException("지정된 권한 외의 값 오류");
+        String userId = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+        MemberRoleEnum role = ((UserDetailsImpl) authentication.getPrincipal()).getMember().getRole();
+        Date date = new Date();
 
         String accessToken = jwtService.createToken(userId, role, date);
         response.addHeader(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
@@ -63,7 +53,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         Member member = ((UserDetailsImpl) authentication.getPrincipal()).getMember();
         MemberInfoDTO dto = new MemberInfoDTO(member);
-        ApiResponse<MemberInfoDTO> apiResponse = ApiResponse.ok("로그인에 성공하였습니다.", dto);
+        ApiResponse<MemberInfoDTO> apiResponse = ApiResponse.ok("OAuth 2.0 로그인에 성공하였습니다.", dto);
 
         sendResponseMsg(response, HttpStatus.OK.value(), apiResponse);
     }

@@ -19,11 +19,13 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
             "/v3/api-docs",
 
             // OAuth 2.0
-            "/oauth2"
+            "/oauth2",
 
 //            // temp about OAuth 2.0
 //            "/login",
-//            "/favicon.ico"
+            "/favicon.ico",
+            "/",
+            "/error"
     );
 
     @Override

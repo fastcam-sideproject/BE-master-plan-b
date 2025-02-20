@@ -8,9 +8,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "members")
@@ -62,7 +60,7 @@ public class Member extends FullAuditEntity {
         member.profileImageUrl = dto.profileImage();
         member.role = dto.role();
         member.isOAuth2 = true;
-        member.password = String.valueOf(UUID.randomUUID());
+        member.password = null;
 
         // 수정 필요
         member.phoneNumber = "010-0000-0000";
