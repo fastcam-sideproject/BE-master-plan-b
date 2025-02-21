@@ -5,6 +5,7 @@ import com.example.masterplanbbe.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.security.exception.CustomAuthenticationException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -136,6 +137,7 @@ public class JwtService {
             return getRoleFromRoleString(roleString);
         } catch (JwtException e) {
             // 여기서의 커스텀 예외: 리프레시 토큰 제거 + 강제 로그아웃 + 예외 반환
+            log.error(e.getMessage());
             throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "비정상적인 헤더 엑세스 토큰. 헤더 엑세스 토큰 제거 필요.");
         }
     }
@@ -178,6 +180,13 @@ public class JwtService {
             refreshToken = tokenUtils.createToken(refreshTokenPayload).substring(BEARER_PREFIX.length());
         }
 
+//        try {
+//            tokenUtils.parseRefreshToken(refreshToken);
+//            log.info("리프레시 토큰 유효성 검증 완료 및 생산");
+//        } catch (SignatureException e) {
+//            log.error("리프레시 토콘 시그니처 손상: {}", e.getMessage());
+//        }
+
         authTemplate.opsForValue().set(REDIS_AUTH_KEY + userId, refreshToken, 7, TimeUnit.DAYS);
 
         String newAccessToken = tokenUtils.createToken(accessTokenPayload);
@@ -192,6 +201,13 @@ public class JwtService {
 
             newAccessToken = tokenUtils.createToken(accessTokenPayload);
         }
+
+//        try {
+//            tokenUtils.getUserIdFromAccessToken(newAccessToken.substring(BEARER_PREFIX.length()));
+//            log.info("엑세스 토큰 유효성 검증 완료 및 생산");
+//        } catch (SignatureException e) {
+//            log.error("엑세스 토큰 시그니처 손상: {}", e.getMessage());
+//        }
 
         return newAccessToken;
     }

@@ -43,12 +43,16 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         MemberRoleEnum role = ((UserDetailsImpl) authentication.getPrincipal()).getMember().getRole();
         Date date = new Date();
 
+        /**
+         * 권한을 토큰에 커스터마이징하려는 게 문제인가?
+         * OAuth 2.0 에서 받아오는 Authentication 과 커스텀에서 받아오는 Authentication 객체가 서로 구현체가 다른가?
+         */
+
         log.info("OAuth 2.0 로그인 ID: {}", userId);
         log.info("OAuth 2.0 로그인 권한: {}", role.getRole());
 
         String accessToken = jwtService.createToken(userId, role, date);
-        response.addHeader(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
-                .replaceAll("\\+", "%20"));
+        response.addHeader(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, StandardCharsets.UTF_8).replaceAll("\\+", "%20"));
 
         Member member = ((UserDetailsImpl) authentication.getPrincipal()).getMember();
         MemberInfoDTO dto = new MemberInfoDTO(member);
