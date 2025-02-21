@@ -6,8 +6,11 @@ import com.example.masterplanbbe.security.filter.CustomLoginFilter;
 import com.example.masterplanbbe.security.filter.JwtAuthenticationFilter;
 import com.example.masterplanbbe.security.filter.JwtAuthorizationFilter;
 import com.example.masterplanbbe.security.handler.CustomLogoutHandler;
+import com.example.masterplanbbe.security.handler.OAuth2FailureHandler;
+import com.example.masterplanbbe.security.handler.OAuth2SuccessHandler;
 import com.example.masterplanbbe.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +25,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -38,6 +42,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     // client url
+    @Value("${client.url}")
     private String clientUrl;
 
     // Dependency Injection
@@ -47,6 +52,9 @@ public class SecurityConfig {
     private final CustomLogoutHandler customLogoutHandler;
     private final JwtAccessDenyHandler jwtAccessDenyHandler;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final DefaultOAuth2UserService oAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final OAuth2FailureHandler oAuth2FailureHandler;
 
     // Crypt Configuration
     @Bean
@@ -89,10 +97,18 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                 .permitAll()
+                .requestMatchers("/oauth2/**", "/favicon.ico", "/error").permitAll() // "/error" 안 열어주면 favicon 401이 뜸. 이게 프론트에 어떤 영향이 있을까
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
                 .anyRequest().authenticated()
+        );
+
+        http.oauth2Login(o -> o
+                .redirectionEndpoint(e -> e.baseUri("/oauth2/callback/*"))
+                .userInfoEndpoint(e -> e.userService(oAuth2UserService))
+                .successHandler(oAuth2SuccessHandler)
+                .failureHandler(oAuth2FailureHandler)
         );
 
         http.addFilterBefore(new JwtAuthorizationFilter(jwtService), CustomLoginFilter.class);
