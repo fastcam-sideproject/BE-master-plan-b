@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.member.api;
 
-import com.example.masterplanbbe.member.dto.MemberResponse;
+import com.example.masterplanbbe.domain.member.dto.MemberResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
 import lombok.AllArgsConstructor;

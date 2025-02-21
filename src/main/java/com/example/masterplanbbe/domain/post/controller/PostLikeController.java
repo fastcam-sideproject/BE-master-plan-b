@@ -3,7 +3,6 @@ package com.example.masterplanbbe.domain.post.controller;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.service.PostLikeService;
-import com.example.masterplanbbe.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

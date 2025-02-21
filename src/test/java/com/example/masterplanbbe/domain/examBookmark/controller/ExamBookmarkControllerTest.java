@@ -7,7 +7,7 @@ import com.example.masterplanbbe.domain.examBookmark.response.CreateExamBookmark
 import com.example.masterplanbbe.domain.examBookmark.service.ExamBookmarkService;
 import com.example.masterplanbbe.domain.fixture.ExamFixture;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

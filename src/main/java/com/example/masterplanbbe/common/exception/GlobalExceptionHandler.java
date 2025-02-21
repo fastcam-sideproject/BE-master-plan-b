@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.common.exception;
 
 import com.example.masterplanbbe.common.response.ErrorResponse;
-import com.example.masterplanbbe.member.exception.DuplicateUserException;
+import com.example.masterplanbbe.domain.member.exception.DuplicateUserException;
 import jakarta.annotation.Priority;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

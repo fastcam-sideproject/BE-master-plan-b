@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.domain.userExamSession.dto;
 
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

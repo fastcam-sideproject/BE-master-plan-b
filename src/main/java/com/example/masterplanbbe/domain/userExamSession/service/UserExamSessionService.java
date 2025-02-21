@@ -7,8 +7,8 @@ import com.example.masterplanbbe.domain.userExamSession.dto.response.UserExamSes
 import com.example.masterplanbbe.domain.userExamSession.dto.response.UserExamSessionResponse;
 import com.example.masterplanbbe.domain.userExamSession.entity.UserExamSession;
 import com.example.masterplanbbe.domain.userExamSession.repository.UserExamSessionRepositoryPort;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
