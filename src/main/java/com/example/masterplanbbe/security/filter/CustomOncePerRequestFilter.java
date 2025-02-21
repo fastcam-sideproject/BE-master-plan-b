@@ -23,8 +23,8 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
 //
 ////            // temp about OAuth 2.0
 ////            "/login",
-            "/favicon.ico"
-//            "/error"
+            "/favicon.ico",
+            "/error" // 얘를 열어줘야 favicon 에러가 안 찍히는데... 시그니처랑은 상관이 없나?
     );
 
     @Override

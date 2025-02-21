@@ -97,7 +97,7 @@ public class SecurityConfig {
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                 .permitAll()
-                .requestMatchers("/oauth2/**", "/favicon.ico").permitAll()
+                .requestMatchers("/oauth2/**", "/favicon.ico", "/error").permitAll() // "/error" 안 열어주면 favicon 401이 뜸. 이게 프론트에 어떤 영향이 있을까
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
