@@ -42,8 +42,10 @@ public class PostController {
 
     @Operation(summary = "전체 게시글 조회")
     @GetMapping("/posts")
-    public ResponseEntity<ApiResponse<List<PostResponse.Summary>>> getAllPost() {
-        List<PostResponse.Summary> postList = postService.getAllPost();
+    public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getAllPost(
+            Pageable pageable
+    ) {
+        Page<PostResponse.Summary> postList = postService.getAllPost(pageable);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(postList));

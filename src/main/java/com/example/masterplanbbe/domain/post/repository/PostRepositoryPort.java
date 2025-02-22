@@ -12,7 +12,7 @@ public interface PostRepositoryPort {
 
     Post save(Post post);
 
-    List<Post> findAll();
+    Page<Post> findAll(Pageable pageable);
 
     void delete(Long id);
 

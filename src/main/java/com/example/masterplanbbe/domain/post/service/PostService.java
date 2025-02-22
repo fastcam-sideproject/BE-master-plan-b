@@ -70,10 +70,9 @@ public class PostService {
      * 전체 게시글 조회
      * @return
      */
-    public List<PostResponse.Summary> getAllPost() {
-        return postRepositoryPort.findAll().stream()
-                .map(PostResponse.Summary::from)
-                .toList();
+    public Page<PostResponse.Summary> getAllPost(Pageable pageable) {
+        return postRepositoryPort.findAll(pageable)
+                .map(PostResponse.Summary::from);
     }
 
     /**
@@ -130,4 +129,5 @@ public class PostService {
         return postRepositoryPort.findByTitleContaining(query, pageable)
                 .map(PostResponse.Summary::from);
     }
+
 }
