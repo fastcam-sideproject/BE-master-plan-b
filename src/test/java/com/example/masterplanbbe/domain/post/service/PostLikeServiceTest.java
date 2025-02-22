@@ -89,7 +89,6 @@ public class PostLikeServiceTest {
     @DisplayName("게시글 좋아요 이미 있을 경우")
     void addLike_alreadyLike() {
         // Given
-        // Given
         Long postId = 1L;
         Long memberId = 1L;
         Member member = Member.builder()
