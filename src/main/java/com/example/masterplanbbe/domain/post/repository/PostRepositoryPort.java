@@ -1,6 +1,5 @@
 package com.example.masterplanbbe.domain.post.repository;
 
-import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +16,6 @@ public interface PostRepositoryPort {
     void delete(Long id);
 
     Page<Post> findByTitleContaining(String keyword, Pageable pageable);
+
+    Page<Post> findAllByIdIn(List<Long> postIdList, Pageable pageable);
 }

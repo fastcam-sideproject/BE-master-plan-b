@@ -44,4 +44,9 @@ public class PostRepositoryAdapter implements PostRepositoryPort{
         return postRepository.findByTitleContaining(keyword,pageable);
     }
 
+    @Override
+    public Page<Post> findAllByIdIn(List<Long> postIdList, Pageable pageable) {
+        return postRepository.findByIdIn(postIdList, pageable);
+    }
+
 }
