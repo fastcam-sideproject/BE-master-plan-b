@@ -51,14 +51,7 @@ public class Post extends FullAuditEntity {
         this.content = content;
     }
 
-    public void addLike(){
-        if (this.likeCount == null) {
-            this.likeCount = 0; //
-        }
-        this.likeCount += 1;
-    }
-
-    public void deleteLike(){
-        this.likeCount -= 1;
+    public void updateLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 }

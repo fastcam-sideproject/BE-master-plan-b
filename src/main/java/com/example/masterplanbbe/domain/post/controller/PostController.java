@@ -7,6 +7,8 @@ import com.example.masterplanbbe.domain.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,6 +49,16 @@ public class PostController {
                 .body(ApiResponse.ok(postList));
     }
 
+    @Operation(summary = "게시글 검색")
+    @GetMapping("/posts/search")
+    public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> searchPost(
+            @RequestParam String query,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(postService.searchPost(query, pageable)));
+    }
+
     @Operation(summary = "특정 게시글 수정")
     @PatchMapping("/posts/{postId}")
     public ResponseEntity<ApiResponse<PostResponse.Detail>> updatePost(
@@ -67,5 +79,6 @@ public class PostController {
         postService.deletePost(postId, memberId);
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
+
 }
 

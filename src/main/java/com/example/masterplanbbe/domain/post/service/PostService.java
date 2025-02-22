@@ -8,8 +8,11 @@ import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
 import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,13 +49,7 @@ public class PostService {
         Post post = postRequestDTO.toEntity(member);
         postRepositoryPort.save(post);
 
-        return PostResponse.Summary.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .createdAt(post.getCreatedAt())
-                .nickname(post.getMember().getNickname())
-                .build();
+        return PostResponse.Summary.from(post);
     }
 
     /**
@@ -66,15 +63,7 @@ public class PostService {
                 .map(CommentResponse::from)
                 .toList();
 
-        return PostResponse.Detail.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .createdAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
-                .comments(commentList)
-                .nickname(post.getMember().getNickname())
-                .build();
+        return PostResponse.Detail.from(post);
     }
 
     /**
@@ -82,15 +71,8 @@ public class PostService {
      * @return
      */
     public List<PostResponse.Summary> getAllPost() {
-        List<Post> posts = postRepositoryPort.findAll();
-        return posts.stream()
-                .map(post -> PostResponse.Summary.builder()
-                        .postId(post.getId())
-                        .content(post.getContent())
-                        .title(post.getTitle())
-                        .nickname(post.getMember().getNickname())
-                        .createdAt(post.getCreatedAt())
-                        .build())
+        return postRepositoryPort.findAll().stream()
+                .map(PostResponse.Summary::from)
                 .toList();
     }
 
@@ -119,15 +101,7 @@ public class PostService {
         post.updatePost(title, content);
         postRepositoryPort.save(post);
 
-        return PostResponse.Detail.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .createdAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
-                .nickname(post.getMember().getNickname())
-                .comments(commentList)
-                .build();
+        return PostResponse.Detail.from(post);
     }
 
     /**
@@ -139,12 +113,21 @@ public class PostService {
         Post post = postRepositoryPort.findById(postId);
 
         Member member = memberRepositoryPort.findById(memberId);
-        if (!post.getMember().getId().equals(member.getId())) {
+
+        if (!post.getMember().getId().equals(member.getId()) && member.getRole() != MemberRoleEnum.ADMIN) {
             throw new GlobalException(ErrorCode.NOT_DELETED_POST) {};
         }
 
         postRepositoryPort.delete(postId);
     }
 
-
+    /**
+     * 게시글 검색
+     * @param query
+     * @return
+     */
+    public Page<PostResponse.Summary> searchPost(String query, Pageable pageable) {
+        return postRepositoryPort.findByTitleContaining(query, pageable)
+                .map(PostResponse.Summary::from);
+    }
 }

@@ -25,6 +25,7 @@ public class PostLikeService {
 
     private static final String POST_LIKE_KEY = "post:like:";
     private static final String POST_LIKE_COUNT_KEY = "post:likeCount:";
+    private final PostService postService;
 
     @Transactional
     public PostResponse.Detail addLike(Long postId, Long memberId) {
@@ -51,14 +52,10 @@ public class PostLikeService {
                 ? Integer.parseInt(redisTemplate.opsForValue().get(postLikeCountKey))
                 : post.getLikeCount();
 
-        return PostResponse.Detail.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .likeCount(likeCount)
-                .nickname(post.getMember().getNickname())
-                .createdAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
-                .build();
+
+        post.updateLikeCount(likeCount);
+        postRepositoryPort.save(post);
+
+        return PostResponse.Detail.from(post);
     }
 }
