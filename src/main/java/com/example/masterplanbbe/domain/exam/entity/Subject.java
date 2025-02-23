@@ -10,28 +10,11 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subject extends FullAuditEntity {
-    @NonNull
     @ManyToOne
-    @JoinColumn(name = "exam_id")
+    @JoinColumn(name = "exam_id", nullable = false)
     private Exam exam;
 
-    @NonNull
-    @Column
-    private String title;
+    @Column(nullable = false)
+    private String name;
 
-    @NonNull
-    @Column
-    private String description;
-
-    @Builder
-    public Subject(Exam exam, String title, String description) {
-        this.exam = exam;
-        this.title = title;
-        this.description = description;
-    }
-
-    public void update(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 }
