@@ -35,23 +35,4 @@ public class ExamDetail extends FullAuditEntity {
     @Column
     private String passingCriteria;
 
-    @Builder
-    public ExamDetail(@NonNull Exam exam,
-                      @Nullable String preparation,
-                      @Nullable String eligibility,
-                      @Nullable String examStructure,
-                      @Nullable String passingCriteria) {
-        this.exam = exam;
-        this.preparation = preparation;
-        this.eligibility = eligibility;
-        this.examStructure = examStructure;
-        this.passingCriteria = passingCriteria;
-    }
-
-    public void update(ExamUpdateRequest request) {
-        this.preparation = request.preparation();
-        this.eligibility = request.eligibility();
-        this.examStructure = request.examStructure();
-        this.passingCriteria = request.passingCriteria();
-    }
 }
