@@ -19,8 +19,9 @@ public class RedisChatRepository {
     @Qualifier
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChatLogRepository chatLogRepository;
-    private static final int MAX_MESSAGES = 3;
     private final ObjectMapper objectMapper;
+
+    private static final int MAX_MESSAGES = 50;
 
     @Autowired
     public RedisChatRepository(@Qualifier("chatTemplate") RedisTemplate<String, Object> redisTemplate, ChatLogRepository chatLogRepository, @Qualifier("objectMapper") ObjectMapper objectMapper) {
@@ -40,10 +41,11 @@ public class RedisChatRepository {
             // 메시지 개수 초과하면 MySQL에 저장
             if (redisTemplate.opsForList().size(key) > MAX_MESSAGES) {
                 List<Object> oldMessages = redisTemplate.opsForList().range(key, MAX_MESSAGES, -1);
+
                 if (oldMessages != null) {
                     for (Object obj : oldMessages) {
                         ChatMessage oldMessage = objectMapper.readValue(obj.toString(), ChatMessage.class);
-                        ChatLog chatLog = new ChatLog(oldMessage.getExamId(), oldMessage.getMemberId(), oldMessage.getContent(), oldMessage.getSendTime());
+                        ChatLog chatLog = new ChatLog(oldMessage.getExamId(), oldMessage.getMemberId(), oldMessage.getContent(), oldMessage.getSendAt());
                         chatLogRepository.save(chatLog);
                     }
                 }

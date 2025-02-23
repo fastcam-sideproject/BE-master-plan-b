@@ -16,5 +16,5 @@ public class ChatMessage {
     private Long memberId;
     private String memberName;
     private String content;
-    private LocalDateTime sendTime;
+    private LocalDateTime sendAt;
 }

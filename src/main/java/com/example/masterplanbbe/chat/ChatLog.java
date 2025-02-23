@@ -26,6 +26,6 @@ public class ChatLog extends FullAuditEntity {
     @Column(name = "content", nullable = false, length = 255)
     private String content;  // 채팅 내용
 
-    @Column(name = "send_time", nullable = false)
-    private LocalDateTime sendTime;
+    @Column(name = "send_at", nullable = false)
+    private LocalDateTime sendAt;
 }
