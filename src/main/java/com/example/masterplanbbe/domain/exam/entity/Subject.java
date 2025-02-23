@@ -11,8 +11,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subject extends FullAuditEntity {
     @ManyToOne
-    @JoinColumn(name = "exam_id", nullable = false)
-    private Exam exam;
+    @JoinColumn(name = "spec_id", nullable = false)
+    private Spec spec;
 
     @Column(nullable = false)
     private String name;
