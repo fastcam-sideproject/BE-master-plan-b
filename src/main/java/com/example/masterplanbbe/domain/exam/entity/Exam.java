@@ -1,6 +1,5 @@
 package com.example.masterplanbbe.domain.exam.entity;
 
-import com.example.masterplanbbe.common.annotation.Nullable;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import jakarta.persistence.*;
@@ -14,17 +13,14 @@ public class Exam extends FullAuditEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String authority;
+    @Enumerated(EnumType.STRING)
+    private CertificationType certificationType;
 
     @Column(nullable = false)
     private Double difficulty;
 
     @Column(nullable = false)
     private Integer participantCount;
-
-    @Enumerated(EnumType.STRING)
-    private CertificationType certificationType;
 
     @Column
     private String preparation;
