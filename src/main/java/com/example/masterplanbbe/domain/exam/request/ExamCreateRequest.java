@@ -2,7 +2,6 @@ package com.example.masterplanbbe.domain.exam.request;
 
 import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 
