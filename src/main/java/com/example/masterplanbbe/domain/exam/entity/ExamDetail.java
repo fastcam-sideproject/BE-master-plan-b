@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.exam.entity;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "exam_details")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ExamDetail extends FullAuditEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "spec_id")

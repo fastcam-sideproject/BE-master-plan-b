@@ -4,13 +4,14 @@ import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.entity.Spec;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
-import org.springframework.data.util.Pair;
+
+import java.util.List;
 
 public record SpecCreateRequest(
         String name,
+        String issuingOrganization,
         Category category,
         CertificationType certificationType,
-        String issuingOrganization,
         String preparation,
         String eligibility,
         String examStructure,
@@ -19,9 +20,9 @@ public record SpecCreateRequest(
     public Spec toSpec() {
         return new Spec(
                 name,
+                issuingOrganization,
                 category,
-                certificationType,
-                issuingOrganization
+                certificationType
         );
     }
 
@@ -31,7 +32,8 @@ public record SpecCreateRequest(
                 preparation,
                 eligibility,
                 examStructure,
-                passingCriteria
+                passingCriteria,
+                List.of()
         );
     }
 }
