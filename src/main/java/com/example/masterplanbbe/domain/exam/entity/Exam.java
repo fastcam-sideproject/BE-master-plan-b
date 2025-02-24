@@ -4,6 +4,8 @@ import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "exams")
 @Getter
@@ -22,4 +24,9 @@ public class Exam extends FullAuditEntity {
     @Column(nullable = false)
     private Integer participantCount;
 
+    @Column(nullable = false)
+    private LocalDate applyStartDate;
+
+    @Column(nullable = false)
+    private LocalDate examStartDate;
 }
