@@ -1,8 +1,17 @@
 package com.example.masterplanbbe.domain.exam.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
+import com.example.masterplanbbe.domain.exam.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.exam.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.SpecUpdateRequest;
+import com.example.masterplanbbe.domain.exam.response.CreateSpecResponse;
+import com.example.masterplanbbe.domain.exam.response.ReadSpecResponse;
+import com.example.masterplanbbe.domain.exam.response.UpdateSpecResponse;
+import com.example.masterplanbbe.domain.exam.service.SpecService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Spec controller api", description = "스펙 API")
 @RestController
+@RequiredArgsConstructor
 public class SpecController {
     private final SpecService specService;
 
@@ -53,10 +63,10 @@ public class SpecController {
 
     @Operation(summary = "스펙 삭제")
     @DeleteMapping("/{specId}")
-    public ResponseEntity<ApiResponse<DeleteSpecResponse>> delete(
+    public ResponseEntity<ApiResponse<String>> delete(
             @PathVariable("specId") Long specId
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specService.delete(specId)));
+                .body(ApiResponse.ok("시험 삭제 성공"));
     }
 }
