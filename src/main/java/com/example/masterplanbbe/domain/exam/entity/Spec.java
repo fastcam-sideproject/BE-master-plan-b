@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.exam.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,6 +20,9 @@ public class Spec extends FullAuditEntity {
 
     @Column(nullable = false)
     private String issuingOrganization;
+
+    @Column(nullable = false)
+    private Category category;
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;

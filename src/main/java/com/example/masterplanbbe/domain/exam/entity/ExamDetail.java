@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "exam_details")
 @Getter
@@ -26,5 +28,8 @@ public class ExamDetail extends FullAuditEntity {
 
     @Column(nullable = false)
     private String passingCriteria;
+
+    @OneToMany(mappedBy = "examDetail")
+    private List<Subject> subjects;
 
 }
