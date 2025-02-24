@@ -6,15 +6,8 @@ import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 public record UpdateSpecResponse(
         Long specId,
         String name,
+        String issuingOrganization,
         Category category,
-        CertificationType certificationType,
-        String issuingOrganization
+        CertificationType certificationType
 ) {
-    public UpdateSpecResponse(Long specId, String name, Category category, CertificationType certificationType, String issuingOrganization) {
-        this.specId = specId;
-        this.name = name;
-        this.category = category;
-        this.certificationType = certificationType;
-        this.issuingOrganization = issuingOrganization;
-    }
 }

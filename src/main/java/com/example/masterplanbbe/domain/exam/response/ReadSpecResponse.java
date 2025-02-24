@@ -1,11 +1,13 @@
 package com.example.masterplanbbe.domain.exam.response;
 
 import com.example.masterplanbbe.domain.exam.enums.Category;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 
 public record ReadSpecResponse(
         String name,
-        Category category,
         String issuingOrganization,
+        Category category,
+        CertificationType certificationType,
         Double difficulty,
         Integer participantCount,
         String preparation,
@@ -15,15 +17,16 @@ public record ReadSpecResponse(
 ) {
     public ReadSpecResponse(SpecWithDetailsDto dto) {
         this(
-                dto.name(),
-                dto.category(),
-                dto.issuingOrganization(),
-                dto.difficulty(),
-                dto.participantCount(),
-                dto.preparation(),
-                dto.eligibility(),
-                dto.examStructure(),
-                dto.passingCriteria()
+                dto.getName(),
+                dto.getIssuingOrganization(),
+                dto.getCategory(),
+                dto.getCertificationType(),
+                dto.getDifficulty(),
+                dto.getParticipantCount(),
+                dto.getPreparation(),
+                dto.getEligibility(),
+                dto.getExamStructure(),
+                dto.getPassingCriteria()
         );
     }
 }
