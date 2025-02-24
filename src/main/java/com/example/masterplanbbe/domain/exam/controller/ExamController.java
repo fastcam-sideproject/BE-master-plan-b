@@ -28,7 +28,7 @@ public class ExamController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
-            @RequestParam(name = "memberId") String memberId//TODO: security context로 변경
+            @RequestParam(name = "memberId") String memberId
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
