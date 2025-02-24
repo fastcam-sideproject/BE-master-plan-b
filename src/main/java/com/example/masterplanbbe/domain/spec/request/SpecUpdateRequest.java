@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.exam.request;
+package com.example.masterplanbbe.domain.spec.request;
 
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;

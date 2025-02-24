@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.exam.entity;
+package com.example.masterplanbbe.domain.spec.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.exam.enums.Category;
@@ -8,8 +8,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Table(name = "specs")

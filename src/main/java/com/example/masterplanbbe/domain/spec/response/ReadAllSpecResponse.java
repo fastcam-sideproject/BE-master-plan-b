@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.domain.exam.response;
+package com.example.masterplanbbe.domain.spec.response;
 
-import com.example.masterplanbbe.domain.exam.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import org.springframework.data.domain.Page;
 
 public record ReadAllSpecResponse(

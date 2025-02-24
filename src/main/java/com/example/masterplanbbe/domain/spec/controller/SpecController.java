@@ -1,13 +1,13 @@
-package com.example.masterplanbbe.domain.exam.controller;
+package com.example.masterplanbbe.domain.spec.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.exam.dto.SpecItemCardDto;
-import com.example.masterplanbbe.domain.exam.request.SpecCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.SpecUpdateRequest;
-import com.example.masterplanbbe.domain.exam.response.CreateSpecResponse;
-import com.example.masterplanbbe.domain.exam.response.ReadSpecResponse;
-import com.example.masterplanbbe.domain.exam.response.UpdateSpecResponse;
-import com.example.masterplanbbe.domain.exam.service.SpecService;
+import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
+import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
+import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
+import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
+import com.example.masterplanbbe.domain.spec.service.SpecService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

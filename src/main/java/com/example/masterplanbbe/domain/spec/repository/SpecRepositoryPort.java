@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.domain.exam.repository;
+package com.example.masterplanbbe.domain.spec.repository;
 
-import com.example.masterplanbbe.domain.exam.entity.Spec;
+import com.example.masterplanbbe.domain.spec.entity.Spec;
 
 public interface SpecRepositoryPort {
     Spec getById(Long specId);

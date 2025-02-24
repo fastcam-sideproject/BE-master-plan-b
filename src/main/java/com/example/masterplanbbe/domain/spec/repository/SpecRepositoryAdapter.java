@@ -1,6 +1,7 @@
-package com.example.masterplanbbe.domain.exam.repository;
+package com.example.masterplanbbe.domain.spec.repository;
 
-import com.example.masterplanbbe.domain.exam.entity.Spec;
+import com.example.masterplanbbe.domain.exam.repository.SpecRepositoryCustom;
+import com.example.masterplanbbe.domain.spec.entity.Spec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;

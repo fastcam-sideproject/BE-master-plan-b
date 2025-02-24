@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.exam.dto;
+package com.example.masterplanbbe.domain.spec.dto;
 
 import com.example.masterplanbbe.domain.exam.enums.Category;
 

@@ -1,12 +1,12 @@
-package com.example.masterplanbbe.domain.exam.service;
+package com.example.masterplanbbe.domain.spec.service;
 
-import com.example.masterplanbbe.domain.exam.dto.SpecItemCardDto;
-import com.example.masterplanbbe.domain.exam.repository.SpecRepositoryPort;
-import com.example.masterplanbbe.domain.exam.request.SpecCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.SpecUpdateRequest;
-import com.example.masterplanbbe.domain.exam.response.CreateSpecResponse;
-import com.example.masterplanbbe.domain.exam.response.ReadSpecResponse;
-import com.example.masterplanbbe.domain.exam.response.UpdateSpecResponse;
+import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
+import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
+import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
+import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
+import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
