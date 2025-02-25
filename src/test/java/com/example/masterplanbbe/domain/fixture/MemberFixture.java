@@ -19,7 +19,7 @@ public class MemberFixture {
                 .build();
     }
 
-    public static Member getExistingMember() {
-        return TestUtils.getExistingEntity(MemberFixture::createMember);
+    public static Member creatfExistingMember() {
+        return TestUtils.createExistingEntity(MemberFixture::createMember);
     }
 }

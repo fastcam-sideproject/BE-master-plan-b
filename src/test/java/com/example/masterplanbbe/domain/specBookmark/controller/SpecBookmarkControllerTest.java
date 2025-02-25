@@ -1,8 +1,18 @@
 package com.example.masterplanbbe.domain.specBookmark.controller;
 
+import com.example.masterplanbbe.domain.specBookmark.service.SpecBookmarkService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -11,15 +21,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@DisplayName("시험 북마크 컨트롤러 테스트")
+@DisplayName("스펙 북마크 컨트롤러 테스트")
 @ExtendWith(MockitoExtension.class)
 public class SpecBookmarkControllerTest {
-/*
     @InjectMocks
-    ExamBookmarkController examBookmarkController;
+    SpecBookmarkController examBookmarkController;
 
     @Mock
-    ExamBookmarkService examBookmarkService;
+    SpecBookmarkService specBookmarkService;
 
     private MockMvc mockMvc;
 
@@ -39,10 +48,15 @@ public class SpecBookmarkControllerTest {
         Long examId = 1L;
         Member member = createExistingMemberFrom(memberId);
         Exam exam = createExistingExamFrom(examId);
-        CreateExamBookmarkResponse mockedResult = new CreateExamBookmarkResponse(createExistingExamBookmarkOf(member, exam));
+        CreateExamBookmarkResponse mockedResult = new CreateExamBookmarkResponse(
+                createExistingExamBookmarkOf(
+                    member,
+                    exam
+                )
+        );
         given(examBookmarkService.createExamBookmark(examId, memberId)).willReturn(mockedResult);
 
-        ResultActions resultActions = mockMvc.perform(post("/api/v1/exam/{examId}/bookmark", examId)
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/spec/{specId}/bookmark", examId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .param("memberId", memberId.toString())
                 .accept(MediaType.APPLICATION_JSON));
@@ -99,5 +113,4 @@ public class SpecBookmarkControllerTest {
                     assertThat(response.getData()).isEqualTo("시험 북마크 삭제 성공");
                 });
     }
-*/
 }

@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class TestUtils {
-    public static <T> T getExistingEntity(Supplier<T> supplier) {
+    public static <T> T createExistingEntity(Supplier<T> supplier) {
         return withSetup(
                 supplier,
                 entity -> setId(entity, 1L)

@@ -18,7 +18,7 @@ public class SpecFixture {
                 .build();
     }
 
-    public static Spec getExistingSpec() {
-        return TestUtils.getExistingEntity(SpecFixture::createSpec);
+    public static Spec createExistingSpec() {
+        return TestUtils.createExistingEntity(SpecFixture::createSpec);
     }
 }
