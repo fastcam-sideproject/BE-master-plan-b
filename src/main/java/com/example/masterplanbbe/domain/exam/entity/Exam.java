@@ -32,4 +32,21 @@ public class Exam extends FullAuditEntity {
 
     @Column(nullable = false)
     private LocalDate examStartDate;
+
+    @Builder
+    public Exam(ExamDetail examDetail,
+                String name,
+                Double difficulty,
+                Integer participantCount,
+                LocalDate applyStartDate,
+                LocalDate applyEndDate,
+                LocalDate examStartDate) {
+        this.examDetail = examDetail;
+        this.name = name;
+        this.difficulty = difficulty;
+        this.participantCount = participantCount;
+        this.applyStartDate = applyStartDate;
+        this.applyEndDate = applyEndDate;
+        this.examStartDate = examStartDate;
+    }
 }
