@@ -9,7 +9,6 @@ import lombok.*;
 @Entity
 @Table(name = "exam_bookmarks")
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SpecBookmark extends IdAndCreatedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,4 +18,10 @@ public class SpecBookmark extends IdAndCreatedEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
+
+    @Builder
+    public SpecBookmark(Member member, Spec spec) {
+        this.member = member;
+        this.spec = spec;
+    }
 }
