@@ -7,21 +7,21 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class TestUtils {
-    public <T> T getExistingEntity(Supplier<T> supplier) {
+    public static <T> T getExistingEntity(Supplier<T> supplier) {
         return withSetup(
                 supplier,
                 entity -> setId(entity, 1L)
         );
     }
 
-    public <T> T simulateSavingEntity(InvocationOnMock invocation) {
+    public static <T> T simulateSavingEntity(InvocationOnMock invocation) {
         return withSetup(
                 () -> invocation.getArgument(0),
                 entity -> setId(entity, 1L)
         );
     }
 
-    private void setId(Object entity, Long id) {
+    private static void setId(Object entity, Long id) {
         ReflectionTestUtils.setField(entity, "id", id);
     }
 
