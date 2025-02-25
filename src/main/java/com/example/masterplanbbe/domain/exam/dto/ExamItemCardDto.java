@@ -11,8 +11,11 @@ public record ExamItemCardDto (
         Integer participants,
         Boolean isBookmarked
 ) {
+/*
     @QueryProjection
     public ExamItemCardDto(Exam exam, Boolean isBookmarked) {
         this(exam.getTitle(), exam.getCategory(), exam.getDifficulty(), exam.getParticipantCount(), isBookmarked);
     }
+*/
+    //TODO: implement this
 }

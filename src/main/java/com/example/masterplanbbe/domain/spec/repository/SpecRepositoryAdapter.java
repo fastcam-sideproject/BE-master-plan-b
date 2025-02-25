@@ -1,8 +1,11 @@
 package com.example.masterplanbbe.domain.spec.repository;
 
 import com.example.masterplanbbe.domain.exam.repository.SpecRepositoryCustom;
+import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +17,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
     @Override
     public Page<SpecItemCardDto> getSpecItemCards(Pageable pageable,
                                                   String memberId) {
-        return null;
+        return Page.empty();
     }
 
     @Override

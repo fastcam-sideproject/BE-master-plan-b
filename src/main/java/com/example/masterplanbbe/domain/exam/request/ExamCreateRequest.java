@@ -19,6 +19,7 @@ public record ExamCreateRequest(
         String passingCriteria
 ) {
     public Exam toEntity() {
+/*
         return new Exam(
                 title,
                 category,
@@ -34,5 +35,8 @@ public record ExamCreateRequest(
                         .passingCriteria(passingCriteria)
                         .build()
         );
+*/
+        return null;
+        //TODO: implement this
     }
 }

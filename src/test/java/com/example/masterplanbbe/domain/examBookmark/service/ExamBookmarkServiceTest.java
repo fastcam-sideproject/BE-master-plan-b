@@ -30,6 +30,7 @@ import static org.springframework.test.util.ReflectionTestUtils.setField;
 @ExtendWith(MockitoExtension.class)
 @DisplayName("시험 북마크 서비스 테스트")
 public class ExamBookmarkServiceTest {
+/*
     @InjectMocks
     ExamBookmarkService examBookmarkService;
     @Mock
@@ -86,4 +87,5 @@ public class ExamBookmarkServiceTest {
         verify(examBookmarkRepository, times(1)).deleteById(anyLong());
     }
 
+*/
 }

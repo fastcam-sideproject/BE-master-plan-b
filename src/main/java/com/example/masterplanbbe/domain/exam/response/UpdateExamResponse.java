@@ -22,6 +22,7 @@ public record UpdateExamResponse(
         String examStructure,
         String passingCriteria
 ) {
+/*
     public UpdateExamResponse(Exam exam) {
         this(
                 exam.getId(),
@@ -41,4 +42,6 @@ public record UpdateExamResponse(
                 exam.getExamDetail().getPassingCriteria()
         );
     }
+*/
+    //TODO: implement this
 }

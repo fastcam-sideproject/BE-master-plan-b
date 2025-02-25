@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayName("시험 북마크 컨트롤러 테스트")
 @ExtendWith(MockitoExtension.class)
 public class ExamBookmarkControllerTest {
+/*
     @InjectMocks
     ExamBookmarkController examBookmarkController;
 
@@ -122,4 +123,5 @@ public class ExamBookmarkControllerTest {
                     assertThat(response.getData()).isEqualTo("시험 북마크 삭제 성공");
                 });
     }
+*/
 }

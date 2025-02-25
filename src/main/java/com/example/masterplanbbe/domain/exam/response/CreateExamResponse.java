@@ -20,6 +20,7 @@ public record CreateExamResponse(
         String examStructure,
         String passingCriteria
 ) {
+/*
     public CreateExamResponse(Exam exam){
         this(
                 exam.getId(),
@@ -36,4 +37,6 @@ public record CreateExamResponse(
                 exam.getExamDetail().getPassingCriteria()
         );
     }
+*/
+    //TODO: implement this
 }

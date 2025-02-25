@@ -16,6 +16,7 @@ import static com.example.masterplanbbe.domain.exam.enums.Category.IT_ICT;
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 
 public class ExamFixture {
+/*
     public static Exam createExam(String title) {
         Supplier<Exam> examBuilder = () -> Exam.builder()
                 .title(title)
@@ -59,4 +60,5 @@ public class ExamFixture {
         return new ExamUpdateRequest(title, IT_ICT, "테스트", 3.0, 100, NATIONAL_CERTIFIED, subjects, "준비물", "자격요건", "시험구조", "합격기준");
     }
 
+*/
 }

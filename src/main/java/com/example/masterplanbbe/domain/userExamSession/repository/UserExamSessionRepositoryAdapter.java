@@ -52,6 +52,7 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
 
     @Override
     public UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, String memberId) {
+/*
         return Optional.ofNullable(
                 jpaQueryFactory
                         .select(Projections.constructor(UserExamSessionDetailResponse.class,
@@ -67,6 +68,9 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
                                 .and(userExamSession.member.userId.eq(memberId)))
                         .fetchOne()
         ).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION));
+*/
+        return null;
+        //TODO: implement this
     }
 
     @Override

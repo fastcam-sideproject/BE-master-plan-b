@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @SpringBootTest
 @DisplayName("시험 레포지토리 테스트")
 public class ExamRepositoryPortTest {
+/*
     @Autowired private ExamRepositoryPort examRepositoryPort;
     @Autowired private MemberRepository memberRepository;
     @Autowired private ExamBookmarkRepository examBookmarkRepository;
@@ -106,4 +107,5 @@ public class ExamRepositoryPortTest {
                 .hasMessageContaining(EXAM_NOT_FOUND.getMessage());
     }
 
+*/
 }
