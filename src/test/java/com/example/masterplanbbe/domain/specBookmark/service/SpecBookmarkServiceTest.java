@@ -15,7 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.example.masterplanbbe.domain.fixture.MemberFixture.creatfExistingMember;
+import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMember;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -41,7 +41,7 @@ public class SpecBookmarkServiceTest {
     @Test
     @DisplayName("사용자는 스펙 북마크를 추가한다.")
     void add_spec_bookmark() {
-        Member member = creatfExistingMember();
+        Member member = createExistingMember();
         Spec spec = createExistingSpec();
         given(memberRepositoryPort.findById(anyLong())).willReturn(member);
         given(specRepositoryPort.getById(anyLong())).willReturn(spec);

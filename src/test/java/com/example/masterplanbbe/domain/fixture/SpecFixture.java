@@ -21,4 +21,8 @@ public class SpecFixture {
     public static Spec createExistingSpec() {
         return TestUtils.createExistingEntity(SpecFixture::createSpec);
     }
+
+    public static Spec createExistingSpecFrom(Long specId) {
+        return TestUtils.createExistingEntity(SpecFixture::createSpec, specId);
+    }
 }

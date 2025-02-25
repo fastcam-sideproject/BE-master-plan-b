@@ -76,18 +76,6 @@ public class SpecBookmarkControllerTest {
                 });
     }
 
-    private Member createExistingMemberFrom(Long memberId) {
-        return TestUtils.withSetup(MemberFixture::createMember, member -> {
-            setField(member, "id", memberId);
-        });
-    }
-
-    private Exam createExistingExamFrom(Long examId) {
-        return TestUtils.withSetup(() -> ExamFixture.createExam("exam1"), exam -> {
-            setField(exam, "id", examId);
-        });
-    }
-
     private ExamBookmark createExistingExamBookmarkOf(Member member,
                                                       Exam exam) {
         return TestUtils.withSetup(() -> new ExamBookmark(member, exam), examBookmark -> {
