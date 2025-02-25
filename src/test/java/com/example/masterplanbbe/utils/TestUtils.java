@@ -14,6 +14,13 @@ public class TestUtils {
         );
     }
 
+    public static <T> T createExistingEntity(Supplier<T> supplier, Long id) {
+        return withSetup(
+                supplier,
+                entity -> setId(entity, id)
+        );
+    }
+
     public static <T> T simulateSavingEntity(InvocationOnMock invocation) {
         return withSetup(
                 () -> invocation.getArgument(0),
