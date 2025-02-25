@@ -1,42 +1,17 @@
 package com.example.masterplanbbe.domain.exam.service;
 
-import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
-import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.examBookmark.entity.ExamBookmark;
-import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
-import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
-import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
-import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
-import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
-import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.*;
-import static org.springframework.test.util.ReflectionTestUtils.*;
+import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("시험 서비스 테스트")
 public class ExamServiceTest {
-/*
     @InjectMocks
     ExamService examService;
     @Mock
@@ -177,5 +152,4 @@ public class ExamServiceTest {
         setField(exam, "id", examId);
         return exam;
     }
-*/
 }

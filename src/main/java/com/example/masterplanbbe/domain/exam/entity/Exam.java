@@ -28,5 +28,8 @@ public class Exam extends FullAuditEntity {
     private LocalDate applyStartDate;
 
     @Column(nullable = false)
+    private LocalDate applyEndDate;
+
+    @Column(nullable = false)
     private LocalDate examStartDate;
 }

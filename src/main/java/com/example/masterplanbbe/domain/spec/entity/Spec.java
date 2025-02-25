@@ -26,4 +26,10 @@ public class Spec extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
 
+    @Column(nullable = false)
+    private Double difficulty;
+
+    @Column(nullable = false)
+    private Integer participantCount;
+
 }

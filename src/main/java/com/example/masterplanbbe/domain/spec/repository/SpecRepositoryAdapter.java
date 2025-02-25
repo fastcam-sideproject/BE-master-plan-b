@@ -4,6 +4,7 @@ import com.example.masterplanbbe.domain.exam.repository.SpecRepositoryCustom;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +14,12 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepositoryCustom {
     private final SpecRepository specRepository;
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public Page<SpecItemCardDto> getSpecItemCards(Pageable pageable,
                                                   String memberId) {
-        return Page.empty();
+        return null;
     }
 
     @Override

@@ -1,44 +1,30 @@
-package com.example.masterplanbbe.domain.examBookmark.service;
+package com.example.masterplanbbe.domain.specBookmark.service;
 
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
-import com.example.masterplanbbe.domain.examBookmark.entity.ExamBookmark;
-import com.example.masterplanbbe.domain.examBookmark.repository.ExamBookmarkRepository;
-import com.example.masterplanbbe.domain.examBookmark.response.CreateExamBookmarkResponse;
-import com.example.masterplanbbe.domain.fixture.ExamFixture;
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
+import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
+import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
-import com.example.masterplanbbe.utils.TestUtils;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
-import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMember;
-import static com.example.masterplanbbe.utils.TestUtils.*;
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.BDDMockito.*;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("시험 북마크 서비스 테스트")
-public class ExamBookmarkServiceTest {
-/*
+public class SpecBookmarkServiceTest {
     @InjectMocks
-    ExamBookmarkService examBookmarkService;
+    SpecBookmarkService specBookmarkService;
     @Mock
-    ExamBookmarkRepository examBookmarkRepository;
+    SpecBookmarkRepository specBookmarkRepository;
     @Mock
     MemberRepositoryPort memberRepositoryPort;
     @Mock
-    ExamRepositoryPort examRepositoryPort;
+    SpecRepositoryPort specRepositoryPort;
 
     @Test
     @DisplayName("사용자는 시험 북마크를 추가한다.")
@@ -72,9 +58,6 @@ public class ExamBookmarkServiceTest {
         return withSetup(MemberFixture::createMember, instance -> setField(instance, "id", 1L));
     }
 
-    private Exam getExistingExam() {
-        return withSetup(() -> createExam("exam1"), instance -> setField(instance, "id", 1L));
-    }
 
     @Test
     @DisplayName("사용자는 시험 북마크를 삭제한다.")
@@ -87,5 +70,10 @@ public class ExamBookmarkServiceTest {
         verify(examBookmarkRepository, times(1)).deleteById(anyLong());
     }
 
-*/
+    private Spec getExistingSpec() {
+        return TestUtils.getExistingEntity(() -> createSpec("Spec1"));
+    }
+    private Exam getExistingExam() {
+        return withSetup(() -> createExam("exam1"), instance -> setField(instance, "id", 1L));
+    }
 }

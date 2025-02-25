@@ -1,43 +1,19 @@
-package com.example.masterplanbbe.domain.examBookmark.controller;
+package com.example.masterplanbbe.domain.specBookmark.controller;
 
-import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.examBookmark.entity.ExamBookmark;
-import com.example.masterplanbbe.domain.examBookmark.response.CreateExamBookmarkResponse;
-import com.example.masterplanbbe.domain.examBookmark.service.ExamBookmarkService;
-import com.example.masterplanbbe.domain.fixture.ExamFixture;
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.utils.TestUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.mockito.BDDMockito.*;
 import static org.springframework.test.util.ReflectionTestUtils.setField;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("시험 북마크 컨트롤러 테스트")
 @ExtendWith(MockitoExtension.class)
-public class ExamBookmarkControllerTest {
+public class SpecBookmarkControllerTest {
 /*
     @InjectMocks
     ExamBookmarkController examBookmarkController;

@@ -1,8 +1,7 @@
-package com.example.masterplanbbe.domain.examBookmark.entity;
+package com.example.masterplanbbe.domain.specBookmark.entity;
 
-import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.domain.IdAndCreatedEntity;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,14 +11,12 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ExamBookmark extends IdAndCreatedEntity {
-    @NonNull
+public class SpecBookmark extends IdAndCreatedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @NonNull
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "exam_id")
-    private Exam exam;
+    @JoinColumn(name = "spec_id", nullable = false)
+    private Spec spec;
 }

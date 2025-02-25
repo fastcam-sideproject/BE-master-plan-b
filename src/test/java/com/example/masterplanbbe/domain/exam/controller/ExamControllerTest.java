@@ -1,57 +1,15 @@
 package com.example.masterplanbbe.domain.exam.controller;
 
-import com.example.masterplanbbe.common.jackson.RestPage;
-import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
-import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.examBookmark.entity.ExamBookmark;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
-import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
-import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
-import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
-import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
-import com.example.masterplanbbe.domain.exam.service.ExamService;
-import com.example.masterplanbbe.domain.fixture.ExamFixture;
-import com.example.masterplanbbe.member.entity.Member;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
-import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMember;
-import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.test.util.ReflectionTestUtils.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("시험 컨트롤러 테스트")
 @ExtendWith(MockitoExtension.class)
