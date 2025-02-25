@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.specBookmark.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
+import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.domain.specBookmark.response.CreateSpecBookmarkResponse;
 import com.example.masterplanbbe.domain.specBookmark.service.SpecBookmarkService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,7 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.*;
+import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMemberFrom;
+import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpecFrom;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -56,7 +58,12 @@ public class SpecBookmarkControllerTest {
     void create_spec_bookmark() throws Exception {
         Long memberId = 1L;
         Long specId = 1L;
-        CreateSpecBookmarkResponse mockedResult = new CreateSpecBookmarkResponse(createExistingSpecBookmarkOf(memberId, specId));
+        CreateSpecBookmarkResponse mockedResult = new CreateSpecBookmarkResponse(
+                SpecBookmark.builder()
+                        .member(createExistingMemberFrom(memberId))
+                        .spec(createExistingSpecFrom(specId))
+                        .build()
+        );
         given(specBookmarkService.createExamBookmark(any(Long.class), any(Long.class))).willReturn(mockedResult);
 
         ResultActions resultActions = mockMvc.perform(post("/api/v1/spec/{specId}/bookmark", specId)
