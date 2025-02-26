@@ -19,7 +19,6 @@ import java.util.function.LongSupplier;
 import static com.example.masterplanbbe.common.exception.GlobalException.*;
 import static com.example.masterplanbbe.common.exception.ErrorCode.*;
 import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
-import static com.example.masterplanbbe.domain.specBookmark.entity.QExamBookmark.examBookmark;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,9 +26,9 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
     private final ExamRepository examRepository;
     private final JPAQueryFactory queryFactory;
 
-    @Override
     public Page<ExamItemCardDto> getExamItemCards(Pageable pageable,
                                                   String memberId) {
+/*
         List<ExamItemCardDto> queryResult = queryFactory.select(
                         new QExamItemCardDto(
                                 exam,
@@ -53,6 +52,14 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
         ).orElse(0L);
 
         return PageableExecutionUtils.getPage(queryResult, pageable, countQuery);
+*/
+        return null;
+    }
+
+    @Override
+    public Page<ExamItemCardDto> getExamItemCards(Pageable pageable,
+                                                  Long memberId) {
+        return null;
     }
 
     @Override

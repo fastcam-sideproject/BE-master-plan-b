@@ -91,8 +91,8 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
                 .select(Projections.constructor(UserExamSessionDetailResponse.class,
                         userExamSession.id,
                         userExamSession.member.userId,
-                        userExamSession.exam.certificationType,
-                        userExamSession.exam.title,
+                        userExamSession.exam.examDetail.spec.certificationType,
+                        userExamSession.exam.name,
                         userExamSession.date,
                         Expressions.numberTemplate(Long.class, "DATEDIFF({0}, {1})", LocalDate.now(), userExamSession.date)
                 ))
