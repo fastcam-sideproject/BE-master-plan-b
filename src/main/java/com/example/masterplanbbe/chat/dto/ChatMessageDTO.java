@@ -1,17 +1,16 @@
-package com.example.masterplanbbe.chat;
+package com.example.masterplanbbe.chat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class ChatMessage {
+public class ChatMessageDTO {
+    private Long id;
     private Long examId;
     private Long memberId;
     private String memberName;
