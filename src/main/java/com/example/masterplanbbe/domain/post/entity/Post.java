@@ -24,6 +24,9 @@ public class Post extends FullAuditEntity {
     @Column(nullable = false)
     private Integer likeCount;
 
+    @Column(nullable = false)
+    private Integer viewCount;
+
     @ManyToOne
     private Member member;
 
@@ -35,10 +38,11 @@ public class Post extends FullAuditEntity {
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, Member member) {
+    public Post(String title, String content, Member member,Category category) {
         this.title = title;
         this.content = content;
         this.member = member;
+        this.category = category;
         this.likeCount = 0; //
     }
 
@@ -57,5 +61,9 @@ public class Post extends FullAuditEntity {
 
     public void updateLikeCount(Integer likeCount) {
         this.likeCount = likeCount;
+    }
+
+    public void addViewCount() {
+        this.viewCount += 1;
     }
 }

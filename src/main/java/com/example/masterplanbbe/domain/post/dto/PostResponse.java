@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.post.dto;
 
 import com.example.masterplanbbe.domain.comment.dto.CommentResponse;
+import com.example.masterplanbbe.domain.post.entity.Category;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import lombok.Builder;
 
@@ -14,7 +15,9 @@ public class PostResponse {
             String content,
             String nickname,
             LocalDateTime createdAt,
+            Category category,
             Integer likeCount,
+            Integer viewCount,
             Integer commentCount
     ) {
         public static Summary from(Post post) {
@@ -24,6 +27,8 @@ public class PostResponse {
                     post.getContent(),
                     post.getMember().getNickname(),
                     post.getCreatedAt(),
+                    post.getCategory(),
+                    post.getViewCount(),
                     post.getLikeCount(),
                     post.getCommentList().size()
             );
@@ -35,6 +40,8 @@ public class PostResponse {
             String title,
             String content,
             String nickname,
+            Category category,
+            Integer viewCount,
             Integer likeCount,
             LocalDateTime createdAt,
             LocalDateTime modifiedAt,
@@ -46,6 +53,8 @@ public class PostResponse {
                     post.getTitle(),
                     post.getContent(),
                     post.getMember().getNickname(),
+                    post.getCategory(),
+                    post.getViewCount(),
                     post.getLikeCount(),
                     post.getCreatedAt(),
                     post.getModifiedAt(),

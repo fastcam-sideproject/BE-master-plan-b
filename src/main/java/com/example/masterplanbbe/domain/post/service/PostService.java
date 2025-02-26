@@ -34,7 +34,6 @@ public class PostService {
     public PostResponse.Summary createPost(Long memberId, PostRequest postRequestDTO) {
 
         Member member = memberRepositoryPort.findById(memberId);
-
         String title = postRequestDTO.title();
         String content = postRequestDTO.content();
 
@@ -57,12 +56,11 @@ public class PostService {
      * @param postId
      * @return
      */
+    @Transactional
     public PostResponse.Detail getPost(Long postId) {
         Post post = postRepositoryPort.findById(postId);
-        List<CommentResponse> commentList = post.getCommentList().stream()
-                .map(CommentResponse::from)
-                .toList();
-
+        post.addViewCount();
+        postRepositoryPort.save(post);
         return PostResponse.Detail.from(post);
     }
 
