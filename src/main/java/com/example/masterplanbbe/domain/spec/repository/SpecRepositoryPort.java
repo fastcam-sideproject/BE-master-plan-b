@@ -2,7 +2,7 @@ package com.example.masterplanbbe.domain.spec.repository;
 
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 
-public interface SpecRepositoryPort {
+public interface SpecRepositoryPort extends SpecRepositoryCustom {
     Spec getById(Long specId);
     Spec save(Spec spec);
     void saveAll(Iterable<Spec> specs);

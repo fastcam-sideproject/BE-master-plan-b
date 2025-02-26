@@ -47,4 +47,13 @@ public class Spec extends FullAuditEntity {
         this.difficulty = difficulty;
         this.participantCount = participantCount;
     }
+
+    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount) {
+        this.name = name;
+        this.issuingOrganization = issuingOrganization;
+        this.category = category;
+        this.certificationType = certificationType;
+        this.difficulty = difficulty;
+        this.participantCount = participantCount;
+    }
 }

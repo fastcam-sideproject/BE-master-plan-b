@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.spec.service;
 
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
@@ -19,18 +20,20 @@ public class SpecService {
     private final SpecRepositoryPort specRepositoryPort;
 
     public Page<SpecItemCardDto> getAllSpec(Pageable pageable,
-                                            String memberId) {
-//        return specRepositoryPort.getSpecItemCards(pageable, memberId);
-        return null;
+                                            Long memberId) {
+        return specRepositoryPort.getSpecItemCards(pageable, memberId);
     }
 
     public ReadSpecResponse getSpec(Long specId) {
-//        return new ReadSpecResponse(specRepositoryPort.getSpecWithDetails(specId));
-        return null;
+        return new ReadSpecResponse(specRepositoryPort.getSpecWithDetails(specId));
     }
 
     public CreateSpecResponse create(SpecCreateRequest request) {
-        return null;
+        Spec spec = specRepositoryPort.save(request.toSpec());
+        return new CreateSpecResponse(
+                spec,
+                request.toExamDetail(spec)
+        );
     }
 
     public void delete(Long specId) {
@@ -40,9 +43,8 @@ public class SpecService {
     @Transactional
     public UpdateSpecResponse update(Long specId,
                                      SpecUpdateRequest request) {
-//        Spec spec = specRepositoryPort.getById(specId);
-//        spec.update(request);
-//        return new UpdateSpecResponse(spec);
-        return null;
+        Spec spec = specRepositoryPort.getById(specId);
+        request.update(spec);
+        return new UpdateSpecResponse(spec);
     }
 }

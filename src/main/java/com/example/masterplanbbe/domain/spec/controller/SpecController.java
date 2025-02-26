@@ -27,7 +27,7 @@ public class SpecController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<SpecItemCardDto>>> getAllSpec(
             @PageableDefault Pageable pageable,
-            @RequestParam(name = "memberId") String memberId
+            @RequestParam(name = "memberId") Long memberId
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(specService.getAllSpec(pageable, memberId)));
@@ -66,7 +66,8 @@ public class SpecController {
     public ResponseEntity<ApiResponse<String>> delete(
             @PathVariable("specId") Long specId
     ) {
+        specService.delete(specId);
         return ResponseEntity.ok()
-                .body(ApiResponse.ok("시험 삭제 성공"));
+                .body(ApiResponse.ok("스펙 삭제 성공"));
     }
 }
