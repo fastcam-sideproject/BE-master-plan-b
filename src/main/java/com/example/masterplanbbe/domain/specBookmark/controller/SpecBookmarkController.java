@@ -30,6 +30,6 @@ public class SpecBookmarkController {
     ) {
         specBookmarkService.deleteExamBookmark(specId);
         return ResponseEntity.ok()
-                .body(ApiResponse.ok("시험 북마크 삭제 성공"));
+                .body(ApiResponse.ok("스펙 북마크 삭제 성공"));
     }
 }

@@ -63,7 +63,7 @@ public class SpecBookmarkServiceTest {
     @DisplayName("사용자는 스펙 북마크를 삭제한다.")
     void delete_spec_bookmark() {
         Long examBookmarkId = 1L;
-        willDoNothing().given(specRepositoryPort).deleteById(examBookmarkId);
+        willDoNothing().given(specBookmarkRepository).deleteById(examBookmarkId);
 
         specBookmarkService.deleteExamBookmark(examBookmarkId);
 

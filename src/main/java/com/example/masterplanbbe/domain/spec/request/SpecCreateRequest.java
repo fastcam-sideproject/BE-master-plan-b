@@ -22,7 +22,9 @@ public record SpecCreateRequest(
                 name,
                 issuingOrganization,
                 category,
-                certificationType
+                certificationType,
+                0.0,
+                0
         );
     }
 

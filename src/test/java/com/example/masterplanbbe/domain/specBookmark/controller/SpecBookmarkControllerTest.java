@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMemberFrom;
+import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createExistingSpecBookmark;
+import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpecFrom;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -59,10 +61,10 @@ public class SpecBookmarkControllerTest {
         Long memberId = 1L;
         Long specId = 1L;
         CreateSpecBookmarkResponse mockedResult = new CreateSpecBookmarkResponse(
-                SpecBookmark.builder()
-                        .member(createExistingMemberFrom(memberId))
-                        .spec(createExistingSpecFrom(specId))
-                        .build()
+                createExistingSpecBookmark(
+                        createExistingMemberFrom(memberId),
+                        createExistingSpecFrom(specId)
+                )
         );
         given(specBookmarkService.createExamBookmark(any(Long.class), any(Long.class))).willReturn(mockedResult);
 
@@ -101,7 +103,7 @@ public class SpecBookmarkControllerTest {
                     String responseContent = result.getResponse().getContentAsString(UTF_8);
                     ApiResponse<String> response = objectMapper.readValue(responseContent, new TypeReference<>() {
                     });
-                    assertThat(response.getData()).isEqualTo("스펙 북마크 삭제 성공");
+                    assertThat(response.getMessage()).isEqualTo("스펙 북마크 삭제 성공");
                 });
     }
 }
