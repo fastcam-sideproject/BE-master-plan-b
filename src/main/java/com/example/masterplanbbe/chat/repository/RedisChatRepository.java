@@ -1,63 +1,73 @@
 package com.example.masterplanbbe.chat.repository;
 
-import com.example.masterplanbbe.chat.ChatLog;
-import com.example.masterplanbbe.chat.ChatMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Repository
 public class RedisChatRepository {
-
-    @Qualifier
     private final RedisTemplate<String, Object> redisTemplate;
-    private final ChatLogRepository chatLogRepository;
-    private final ObjectMapper objectMapper;
-
-    private static final int MAX_MESSAGES = 50;
 
     @Autowired
-    public RedisChatRepository(@Qualifier("chatTemplate") RedisTemplate<String, Object> redisTemplate, ChatLogRepository chatLogRepository, @Qualifier("objectMapper") ObjectMapper objectMapper) {
-        this.chatLogRepository = chatLogRepository;
+    public RedisChatRepository(@Qualifier("chatTemplate") RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
-        redisTemplate.setKeySerializer(new StringRedisSerializer()); // 키 한글 깨짐 방지
-        redisTemplate.setValueSerializer(new StringRedisSerializer()); // 값 한글 깨짐 방지
-        this.objectMapper = objectMapper;
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
     }
 
-    public void saveMessage(String examId, ChatMessage message) {
+    /**
+     * 채팅 메시지를 Redis에 저장
+     */
+    public void saveMessage(Long examId, String jsonMessage) {
         String key = "chat:" + examId;
-        try {
-            String jsonMessage = objectMapper.writeValueAsString(message);
-            redisTemplate.opsForList().leftPush(key, jsonMessage);
-
-            // 메시지 개수 초과하면 MySQL에 저장
-            if (redisTemplate.opsForList().size(key) > MAX_MESSAGES) {
-                List<Object> oldMessages = redisTemplate.opsForList().range(key, MAX_MESSAGES, -1);
-
-                if (oldMessages != null) {
-                    for (Object obj : oldMessages) {
-                        ChatMessage oldMessage = objectMapper.readValue(obj.toString(), ChatMessage.class);
-                        ChatLog chatLog = new ChatLog(oldMessage.getExamId(), oldMessage.getMemberId(), oldMessage.getContent(), oldMessage.getSendAt());
-                        chatLogRepository.save(chatLog);
-                    }
-                }
-                redisTemplate.opsForList().trim(key, 0, MAX_MESSAGES - 1); // 오래된 메시지 삭제
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
+        redisTemplate.opsForList().leftPush(key, jsonMessage);
     }
 
-    public List<Object> getRecentMessages(Long examId) {
+    /**
+     * 특정 채팅방의 메시지 개수 조회
+     */
+    public Long getMessageCount(Long examId) {
         String key = "chat:" + examId;
-        return redisTemplate.opsForList().range(key, 0, -1);
+        Long count = redisTemplate.opsForList().size(key);
+        return count != null ? count : 0;
+    }
+
+    /**
+     * 특정 범위의 채팅 메시지를 조회
+     */
+    public List<String> getMessagesInRange(Long examId, int start, int end) {
+        String key = "chat:" + examId;
+        List<Object> rawMessages = redisTemplate.opsForList().range(key, start, end);
+        return rawMessages != null ? rawMessages.stream().map(Object::toString).toList() : List.of();
+    }
+
+    /**
+     * MySQL로 이동된 메시지 삭제
+     */
+    public void trimMessages(Long examId, int maxMessages) {
+        String key = "chat:" + examId;
+        redisTemplate.opsForList().trim(key, 0, maxMessages - 1);
+    }
+
+    /**
+     * 저장된 모든 채팅방 리스트 조회 (배치 서비스에서 사용)
+     */
+    public List<String> getAllChatRooms() {
+        Set<String> keys = redisTemplate.keys("chat:*");
+        return keys != null ? List.copyOf(keys) : List.of();
+    }
+
+    /**
+     * 특정 채팅 메시지를 삭제
+     */
+    public void deleteMessage(Long examId, String message) {
+        String key = "chat:" + examId;
+        redisTemplate.opsForList().remove(key, 1, message);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat;
+package com.example.masterplanbbe.chat.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

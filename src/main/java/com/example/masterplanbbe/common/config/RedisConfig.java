@@ -99,14 +99,20 @@ public class RedisConfig {
 
     //=======================Chat==============================//
 
+    /**
+     * ObjectMapper 설정 (LocalDateTime 직렬화 문제 해결)
+     */
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 지원
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Timestamp 형식 방지
+        objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Timestamp 형식 방지
         return objectMapper;
     }
 
+    /**
+     * RedisTemplate 설정 (채팅 메시지 저장용)
+     */
     @Bean(name = "chatTemplate")
     public RedisTemplate<String, Object> chatRedisTemplate(RedisConnectionFactory redisConnectionFactory, ObjectMapper objectMapper) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -120,16 +126,21 @@ public class RedisConfig {
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
 
+        template.afterPropertiesSet();
         return template;
     }
 
-    // RedisSubscriber 메시지 리스너 어댑터
+    /**
+     * RedisSubscriber 메시지 리스너 어댑터
+     */
     @Bean
     public MessageListenerAdapter listenerAdapter(RedisSubscriber redisSubscriber) {
         return new MessageListenerAdapter(redisSubscriber, "onMessage");
     }
 
-    // Redis Pub/Sub 메시지 리스너 설정
+    /**
+     * Redis Pub/Sub 메시지 리스너 설정
+     */
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory redisConnectionFactory, MessageListenerAdapter listenerAdapter) {
@@ -141,7 +152,9 @@ public class RedisConfig {
         return container;
     }
 
-    // Redis 메시지 처리를 위한 비동기 TaskExecutor 설정
+    /**
+     * Redis 메시지 처리를 위한 비동기 TaskExecutor 설정
+     */
     @Bean
     public ThreadPoolTaskExecutor redisTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
