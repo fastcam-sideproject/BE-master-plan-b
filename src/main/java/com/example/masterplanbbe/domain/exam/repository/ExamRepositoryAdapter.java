@@ -49,7 +49,6 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
                                 exam.count()
                         )
                         .from(exam)
-                        .offset(pageable.getOffset())
                         .fetchOne()
         ).orElse(0L);
 

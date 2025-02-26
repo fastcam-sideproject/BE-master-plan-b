@@ -28,7 +28,7 @@ public class ExamController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
-            @RequestParam(name = "memberId") String memberId
+            @RequestParam(name = "memberId") Long memberId
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));

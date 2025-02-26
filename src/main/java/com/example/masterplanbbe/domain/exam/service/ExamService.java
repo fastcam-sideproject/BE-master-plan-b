@@ -20,7 +20,7 @@ public class ExamService {
     private final ExamRepositoryPort examRepositoryPort;
 
     public Page<ExamItemCardDto> getAllExam(Pageable pageable,
-                                            String memberId) {
+                                            Long memberId) {
         return examRepositoryPort.getExamItemCards(pageable, memberId);
     }
 
