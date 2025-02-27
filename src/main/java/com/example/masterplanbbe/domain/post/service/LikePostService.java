@@ -3,22 +3,23 @@ package com.example.masterplanbbe.domain.post.service;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PostLikeService {
+public class LikePostService {
 
-    private final MemberRepositoryPort memberRepositoryPort;
     private final PostRepositoryPort postRepositoryPort;
 
     private final RedisTemplate<String, String> redisTemplate;
@@ -26,21 +27,29 @@ public class PostLikeService {
     private static final String POST_LIKE_KEY = "post:like:";
     private static final String POST_LIKE_COUNT_KEY = "post:likeCount:";
 
+    /**
+     * 게시글 좋아요
+     * @param postId
+     * @param memberId
+     * @return
+     */
     @Transactional
     public PostResponse.Detail addLike(Long postId, Long memberId) {
-        Member member = memberRepositoryPort.findById(memberId);
         Post post = postRepositoryPort.findById(postId);
 
         String postLikeKey = POST_LIKE_KEY + postId;
         String postLikeCountKey = POST_LIKE_COUNT_KEY + postId;
+        String memberLikeKey = "member:likedPosts:" + memberId;
 
         Boolean isLiked = redisTemplate.opsForSet().isMember(postLikeKey, memberId.toString());
 
         if (Boolean.TRUE.equals(isLiked)) {
             redisTemplate.opsForSet().remove(postLikeKey, memberId.toString());
+            redisTemplate.opsForSet().remove(memberLikeKey, postId.toString());
             redisTemplate.opsForValue().decrement(postLikeCountKey);
         } else {
             redisTemplate.opsForSet().add(postLikeKey, memberId.toString());
+            redisTemplate.opsForSet().add(memberLikeKey, postId.toString());
             redisTemplate.opsForValue().increment(postLikeCountKey);
             redisTemplate.expire(postLikeKey, 1, TimeUnit.DAYS);
             redisTemplate.expire(postLikeCountKey, 1, TimeUnit.DAYS);
@@ -51,14 +60,33 @@ public class PostLikeService {
                 ? Integer.parseInt(redisTemplate.opsForValue().get(postLikeCountKey))
                 : post.getLikeCount();
 
-        return PostResponse.Detail.builder()
-                .postId(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .likeCount(likeCount)
-                .nickname(post.getMember().getNickname())
-                .createdAt(post.getCreatedAt())
-                .modifiedAt(post.getModifiedAt())
-                .build();
+
+        post.updateLikeCount(likeCount);
+        postRepositoryPort.save(post);
+
+        return PostResponse.Detail.from(post);
+    }
+
+    /**
+     * 좋아요한 게시글 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
+    @Transactional
+    public Page<PostResponse.Summary> getLikedPosts(Long memberId, Pageable pageable) {
+        String memberLikeKey = "member:likedPosts:" + memberId;
+
+        Set<String> likedPostIds = redisTemplate.opsForSet().members(memberLikeKey);
+
+        if (likedPostIds == null || likedPostIds.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        List<Long> postIdList = likedPostIds.stream().map(Long::valueOf).toList();
+        Page<Post> posts = postRepositoryPort.findAllByIdIn(postIdList,pageable);
+
+
+        return posts.map(PostResponse.Summary::from);
     }
 }

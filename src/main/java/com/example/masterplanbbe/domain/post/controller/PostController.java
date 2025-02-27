@@ -4,13 +4,14 @@ import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.service.PostService;
+import com.example.masterplanbbe.security.jwt.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Post controller api", description = "게시판 API")
 @RestController
@@ -40,11 +41,23 @@ public class PostController {
 
     @Operation(summary = "전체 게시글 조회")
     @GetMapping("/posts")
-    public ResponseEntity<ApiResponse<List<PostResponse.Summary>>> getAllPost() {
-        List<PostResponse.Summary> postList = postService.getAllPost();
+    public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getAllPost(
+            Pageable pageable
+    ) {
+        Page<PostResponse.Summary> postList = postService.getAllPost(pageable);
 
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(postList));
+    }
+
+    @Operation(summary = "게시글 검색")
+    @GetMapping("/posts/search")
+    public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> searchPost(
+            @RequestParam String query,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(postService.searchPost(query, pageable)));
     }
 
     @Operation(summary = "특정 게시글 수정")
@@ -67,5 +80,16 @@ public class PostController {
         postService.deletePost(postId, memberId);
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
+
+    @Operation(summary = "내가 작성한 글 조회")
+    @GetMapping("/posts/my")
+    public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getMyPost(
+            @RequestHeader(value = "memberId") Long memberId,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(postService.getMyPost(memberId, pageable)));
+    }
+
 }
 

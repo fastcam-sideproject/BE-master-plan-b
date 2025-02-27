@@ -12,7 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "post_likes",
         uniqueConstraints = {@UniqueConstraint(name = "unique_post_like", columnNames = {"post_id", "member_id"})})
-public class PostLike extends FullAuditEntity {
+public class LikePost extends FullAuditEntity {
 
     @ManyToOne
     @JoinColumn(name = "post_id",nullable = false)

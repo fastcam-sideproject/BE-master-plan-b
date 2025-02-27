@@ -23,9 +23,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("게시글 좋아요 테스트")
-public class PostLikeServiceTest {
+public class LikePostServiceTest {
     @InjectMocks
-    PostLikeService likeService;
+    LikePostService likeService;
 
     @Mock
     PostRepositoryPort postRepositoryPort;

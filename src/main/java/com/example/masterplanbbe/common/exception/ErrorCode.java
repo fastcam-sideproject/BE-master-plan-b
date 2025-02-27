@@ -49,6 +49,7 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT(400, "C001" ,"댓글을 찾을 수 없습니다." ),
     NOT_BELONG_COMMENT(400,"C002" ,"속해있는 댓글이 아닙니다." ),
     NOT_MODIFIED_COMMENT(400,"C003" , "댓글 수정 권한이 없습니다."),
+    NOT_DELETED_COMMENT(400,"C004","댓글을 삭제 할 수 없습니다."),
 
     // UserExamSession
     NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다.")
