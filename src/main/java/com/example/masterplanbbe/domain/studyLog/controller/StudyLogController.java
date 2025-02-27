@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "StudyLog controller api", description = "공부기록 API")
 @RestController
@@ -29,6 +26,17 @@ public class StudyLogController {
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(studyLogService.create(studyLogRequest, userDetails.getUsername())));
+    }
+
+    @Operation(summary = "학습 기록 수정")
+    @PatchMapping(path = "/{study-log-id}")
+    public ResponseEntity<ApiResponse<?>> update(
+            @RequestBody StudyLogRequest studyLogRequest,
+            @PathVariable(name = "study-log-id") Long studyLogId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(studyLogService.update(studyLogRequest, studyLogId, userDetails.getUsername())));
     }
 
 }
