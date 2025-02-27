@@ -30,4 +30,15 @@ public class StudyLogService {
 
         return StudyLogResponse.from(studyLog);
     }
+
+    @Transactional
+    public StudyLogResponse update(StudyLogRequest studyLogRequest, Long studyLogId, String memberId) {
+        StudyLog studyLog = studyLogRepositoryPort.findByIdAndMemberId(studyLogId, memberId);
+
+        Exam exam = examRepositoryPort.getById(studyLogRequest.examId());
+
+        studyLog.updateStudyLog(studyLogRequest, exam);
+
+        return StudyLogResponse.from(studyLog);
+    }
 }
