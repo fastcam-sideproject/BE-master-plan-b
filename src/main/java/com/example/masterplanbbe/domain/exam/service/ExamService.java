@@ -39,12 +39,8 @@ public class ExamService {
     @Transactional
     public UpdateExamResponse update(Long examId,
                                      ExamUpdateRequest request) {
-        return null;
-        //TODO: implement this
-/*
         Exam exam = examRepositoryPort.getById(examId);
-        exam.update(request);
+        request.update(exam);
         return new UpdateExamResponse(exam);
-*/
     }
 }

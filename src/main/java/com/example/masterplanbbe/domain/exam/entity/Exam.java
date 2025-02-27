@@ -49,4 +49,18 @@ public class Exam extends FullAuditEntity {
         this.applyEndDate = applyEndDate;
         this.examStartDate = examStartDate;
     }
+
+    public void update(String name,
+                       Double difficulty,
+                       Integer participantCount,
+                       LocalDate applyStartDate,
+                       LocalDate applyEndDate,
+                       LocalDate examStartDate) {
+        this.name = name;
+        this.difficulty = difficulty;
+        this.participantCount = participantCount;
+        this.applyStartDate = applyStartDate;
+        this.applyEndDate = applyEndDate;
+        this.examStartDate = examStartDate;
+    }
 }
