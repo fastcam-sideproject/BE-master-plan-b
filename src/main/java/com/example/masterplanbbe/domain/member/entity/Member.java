@@ -20,7 +20,7 @@ public class Member extends FullAuditEntity {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
     @Column
