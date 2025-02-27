@@ -66,8 +66,8 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
             userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());
         } else {
-            // 회원가입 처리
-            Member member = Member.create(dto);
+            // 회원가입 처리(소셜 로그인 사용자는 관리자가 아닐 테니)
+            Member member = new Member(dto);
             memberRepository.save(member);
 
             userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());

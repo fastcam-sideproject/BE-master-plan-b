@@ -10,9 +10,8 @@ import java.time.LocalDate;
 @ToString
 @AllArgsConstructor
 public class MemberCreateRequest {
-    private String userId;
     private String email;
-    private String name;
     private String nickname;
     private String password;
+    private Boolean isAgreed;
 }

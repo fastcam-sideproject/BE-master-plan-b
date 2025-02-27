@@ -23,11 +23,6 @@ public class MemberService {
 
     // 회원가입
     public MemberResponse createMember(MemberCreateRequest request) {
-
-        if (memberRepository.findByUserId(request.getUserId()).isPresent()) {
-            throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_ID);
-        }
-
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
@@ -42,7 +37,7 @@ public class MemberService {
 //        }
 
         String password = passwordEncoder.encode(request.getPassword());
-        Member member = Member.create(request, password, role);
+        Member member = new Member(request, password, role);
         memberRepository.save(member);
 
         return new MemberResponse(member);
