@@ -29,8 +29,7 @@ public class ExamService {
     }
 
     public CreateExamResponse create(ExamCreateRequest request) {
-//        return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
-        return null;
+        return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
     }
 
     public void delete(Long examId) {
