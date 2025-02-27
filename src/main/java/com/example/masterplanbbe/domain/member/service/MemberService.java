@@ -22,7 +22,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
-    public MemberResponse createMember(MemberCreateRequest request) {
+    public void createMember(MemberCreateRequest request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
@@ -39,7 +39,5 @@ public class MemberService {
         String password = passwordEncoder.encode(request.getPassword());
         Member member = new Member(request, password, role);
         memberRepository.save(member);
-
-        return new MemberResponse(member);
     }
 }
