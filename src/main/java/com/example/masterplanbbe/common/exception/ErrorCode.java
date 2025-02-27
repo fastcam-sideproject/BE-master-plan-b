@@ -51,7 +51,10 @@ public enum ErrorCode {
     NOT_MODIFIED_COMMENT(400,"C003" , "댓글 수정 권한이 없습니다."),
 
     // UserExamSession
-    NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다.")
+    NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다."),
+
+    // StudyLog
+    NOT_FOUND_STUDY_LOG(400, "SL001", "학습 기록을 찾을 수 없습니다.")
     ;
 
     private final Integer status;
