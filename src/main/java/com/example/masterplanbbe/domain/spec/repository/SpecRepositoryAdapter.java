@@ -41,7 +41,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .join(exam.examDetail, examDetail)
                 .where(
                         examDetail.spec.id.eq(spec.id)
-                                .and(exam.examStartDate.goe(today))
+                                .and(exam.applyEndDate.goe(today))
                 )
                 .orderBy(exam.examStartDate.asc())
                 .limit(1);

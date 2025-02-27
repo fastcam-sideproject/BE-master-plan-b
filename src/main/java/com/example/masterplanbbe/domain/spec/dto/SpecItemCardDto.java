@@ -12,13 +12,24 @@ public record SpecItemCardDto(
         Category category,
         Double difficulty,
         Integer participants,
-        Boolean isBookmarked,
         LocalDate applyStartDate,
         LocalDate applyEndDate,
-        LocalDate examStartDate
+        LocalDate examStartDate,
+        Boolean isBookmarked
 ) {
     @QueryProjection
-    public SpecItemCardDto(Spec spec, Exam exam, Boolean isBookmarked) {
-        this(spec.getName(), spec.getCategory(), exam.getDifficulty(), exam.getParticipantCount(), isBookmarked, exam.getApplyStartDate(), exam.getApplyEndDate(), exam.getExamStartDate());
+    public SpecItemCardDto(Spec spec,
+                           Exam exam,
+                           Boolean isBookmarked) {
+        this(
+                spec.getName(),
+                spec.getCategory(),
+                exam != null ? exam.getDifficulty() : null,
+                exam != null ? exam.getParticipantCount() : null,
+                exam != null ? exam.getApplyStartDate() : null,
+                exam != null ? exam.getApplyEndDate() : null,
+                exam != null ? exam.getExamStartDate() : null,
+                isBookmarked
+        );
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Exam extends FullAuditEntity {
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "exam_detail_id")
     private ExamDetail examDetail;
 
@@ -42,6 +42,7 @@ public class Exam extends FullAuditEntity {
                 LocalDate applyEndDate,
                 LocalDate examStartDate) {
         this.examDetail = examDetail;
+        examDetail.addExam(this);
         this.name = name;
         this.difficulty = difficulty;
         this.participantCount = participantCount;

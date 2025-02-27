@@ -30,6 +30,9 @@ public class ExamDetail extends FullAuditEntity {
     private String passingCriteria;
 
     @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Exam> exams;
+
+    @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects;
 
     @Builder
@@ -44,7 +47,12 @@ public class ExamDetail extends FullAuditEntity {
         this.eligibility = eligibility;
         this.examStructure = examStructure;
         this.passingCriteria = passingCriteria;
+        this.exams = new ArrayList<>();
         this.subjects = new ArrayList<>();
+    }
+
+    public void addExam(Exam exam) {
+        this.exams.add(exam);
     }
 
     public void addSubject(Subject subject) {

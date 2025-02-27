@@ -1,6 +1,10 @@
 package com.example.masterplanbbe.domain.spec.repository;
 
 
+import com.example.masterplanbbe.common.exception.GlobalException;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
+import com.example.masterplanbbe.domain.fixture.ExamFixture;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
@@ -19,9 +23,11 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createSpec;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -31,10 +37,12 @@ public class SpecRepositoryPortTest {
     @Autowired private SpecRepositoryPort specRepositoryPort;
     @Autowired private MemberRepository memberRepository;
     @Autowired private SpecBookmarkRepository specBookmarkRepository;
+    @Autowired private ExamRepository examRepository;
 
     @BeforeEach
     void setUp() {
         specBookmarkRepository.deleteAll();
+        examRepository.deleteAll();
         specRepositoryPort.deleteAll();
         memberRepository.deleteAll();
     }
@@ -46,7 +54,8 @@ public class SpecRepositoryPortTest {
         Spec spec1 = createSpec();
         Spec spec2 = createSpec();
         specRepositoryPort.saveAll(List.of(spec1, spec2));
-        SpecBookmark specBookmark = specBookmarkRepository.save(createSpecBookmark(member, spec1));
+        examRepository.save(createExam(spec1.getExamDetails().get(0)));
+        specBookmarkRepository.save(createSpecBookmark(member, spec1));
         PageRequest pageRequest = PageRequest.of(0, 25);
 
         Page<SpecItemCardDto> result = specRepositoryPort.getSpecItemCards(pageRequest, member.getId());
@@ -60,7 +69,6 @@ public class SpecRepositoryPortTest {
         );
     }
 
-    //TODO: ExamDetail 의 필드들은 테스트에서 확인되고 있지 않음
     @Test
     @DisplayName("사용자는 스펙의 상세 정보를 조회할 수 있다")
     void retrieve_spec_detail() {
@@ -73,7 +81,19 @@ public class SpecRepositoryPortTest {
                 () -> assertThat(result.name()).isEqualTo(spec.getName()),
                 () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
                 () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
+                () -> assertThat(result.preparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
+                () -> assertThat(result.examStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
+                () -> assertThat(result.eligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria()),
                 () -> assertThat(result.isBookmarked()).isFalse()
         );
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 스펙의 상세 정보를 조회하면 예외를 발생시킨다.")
+    void throw_exception_when_retrieve_spec_detail_with_non_existing_spec() {
+        assertThatThrownBy(() -> specRepositoryPort.getById(-1L))
+                .isInstanceOf(GlobalException.NotFoundException.class)
+                .hasMessageContaining(SPEC_NOT_FOUND.getMessage());
     }
 }
