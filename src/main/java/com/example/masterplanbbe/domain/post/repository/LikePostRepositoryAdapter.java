@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.post.repository;
 
-import com.example.masterplanbbe.domain.post.entity.PostLike;
+import com.example.masterplanbbe.domain.post.entity.LikePost;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -8,22 +8,22 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @AllArgsConstructor
-public class PostLikeRepositoryAdapter implements PostLikeRepositoryPort {
+public class LikePostRepositoryAdapter implements LikePostRepositoryPort {
 
-    private final PostLikeRepository postLikeRepository;
+    private final LikePostRepository likePostRepository;
 
     @Override
     public boolean existsByMemberAndPost(Member member, Post post) {
-        return postLikeRepository.existsByMemberAndPost(member, post);
+        return likePostRepository.existsByMemberAndPost(member, post);
     }
 
     @Override
     public void deleteByMemberAndPost(Member member, Post post) {
-        postLikeRepository.deleteByMemberAndPost(member, post);
+        likePostRepository.deleteByMemberAndPost(member, post);
     }
 
     @Override
-    public void save(PostLike postLike) {
-        postLikeRepository.save(postLike);
+    public void save(LikePost likePost) {
+        likePostRepository.save(likePost);
     }
 }

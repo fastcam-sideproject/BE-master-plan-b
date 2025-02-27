@@ -3,7 +3,6 @@ package com.example.masterplanbbe.domain.post.service;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
-import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,16 +18,14 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PostLikeService {
+public class LikePostService {
 
-    private final MemberRepositoryPort memberRepositoryPort;
     private final PostRepositoryPort postRepositoryPort;
 
     private final RedisTemplate<String, String> redisTemplate;
 
     private static final String POST_LIKE_KEY = "post:like:";
     private static final String POST_LIKE_COUNT_KEY = "post:likeCount:";
-    private final PostService postService;
 
     @Transactional
     public PostResponse.Detail addLike(Long postId, Long memberId) {
