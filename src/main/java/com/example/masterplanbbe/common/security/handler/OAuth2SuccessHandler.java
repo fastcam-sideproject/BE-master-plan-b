@@ -39,7 +39,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             Authentication authentication) throws IOException, ServletException {
         log.info("OAuth 2.0 로그인 성공");
 
-        String userId = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
+        String username = ((UserDetailsImpl) authentication.getPrincipal()).getUsername();
         MemberRoleEnum role = ((UserDetailsImpl) authentication.getPrincipal()).getMember().getRole();
         Date date = new Date();
 
@@ -48,10 +48,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
          * OAuth 2.0 에서 받아오는 Authentication 과 커스텀에서 받아오는 Authentication 객체가 서로 구현체가 다른가?
          */
 
-        log.info("OAuth 2.0 로그인 ID: {}", userId);
+        log.info("OAuth 2.0 로그인 ID: {}", username);
         log.info("OAuth 2.0 로그인 권한: {}", role.getRole());
 
-        String accessToken = jwtService.createToken(userId, role, date);
+        String accessToken = jwtService.createToken(username, role, date);
         response.addHeader(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, StandardCharsets.UTF_8).replaceAll("\\+", "%20"));
 
         Member member = ((UserDetailsImpl) authentication.getPrincipal()).getMember();
