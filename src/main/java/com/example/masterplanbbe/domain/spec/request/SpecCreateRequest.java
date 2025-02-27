@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.spec.request;
 
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
+import com.example.masterplanbbe.domain.exam.entity.Subject;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
@@ -28,14 +29,4 @@ public record SpecCreateRequest(
         );
     }
 
-    public ExamDetail toExamDetail(Spec spec) {
-        return new ExamDetail(
-                spec,
-                preparation,
-                eligibility,
-                examStructure,
-                passingCriteria,
-                List.of()
-        );
-    }
 }

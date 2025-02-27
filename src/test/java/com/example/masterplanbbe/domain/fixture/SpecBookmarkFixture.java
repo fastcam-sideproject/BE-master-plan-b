@@ -6,13 +6,18 @@ import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
 
 public class SpecBookmarkFixture {
-    public static SpecBookmark createExistingSpecBookmark(Member member,
+    public static SpecBookmark createSpecBookmark(Member member,
                                                   Spec spec) {
+        return SpecBookmark.builder()
+                .member(member)
+                .spec(spec)
+                .build();
+    }
+
+    public static SpecBookmark createExistingSpecBookmark(Member member,
+                                                          Spec spec) {
         return TestUtils.createExistingEntity(
-                () -> SpecBookmark.builder()
-                        .member(member)
-                        .spec(spec)
-                        .build()
+                () -> createSpecBookmark(member, spec)
         );
     }
 }

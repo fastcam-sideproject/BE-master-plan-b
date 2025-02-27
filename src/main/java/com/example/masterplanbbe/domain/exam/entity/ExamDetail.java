@@ -3,18 +3,15 @@ package com.example.masterplanbbe.domain.exam.entity;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "exam_details")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 public class ExamDetail extends FullAuditEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "spec_id")
@@ -32,7 +29,25 @@ public class ExamDetail extends FullAuditEntity {
     @Column(nullable = false)
     private String passingCriteria;
 
-    @OneToMany(mappedBy = "examDetail")
+    @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects;
 
+    @Builder
+    public ExamDetail(Spec spec,
+                      String preparation,
+                      String eligibility,
+                      String examStructure,
+                      String passingCriteria) {
+        this.spec = spec;
+        spec.addExamDetail(this);
+        this.preparation = preparation;
+        this.eligibility = eligibility;
+        this.examStructure = examStructure;
+        this.passingCriteria = passingCriteria;
+        this.subjects = new ArrayList<>();
+    }
+
+    public void addSubject(Subject subject) {
+        this.subjects.add(subject);
+    }
 }

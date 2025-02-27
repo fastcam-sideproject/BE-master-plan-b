@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.spec.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import jakarta.persistence.*;
@@ -8,6 +9,9 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "specs")
@@ -33,6 +37,10 @@ public class Spec extends FullAuditEntity {
     @Column(nullable = false)
     private Integer participantCount;
 
+    @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExamDetail> examDetails;
+
+
     @Builder
     public Spec(String name,
                 String issuingOrganization,
@@ -46,14 +54,20 @@ public class Spec extends FullAuditEntity {
         this.certificationType = certificationType;
         this.difficulty = difficulty;
         this.participantCount = participantCount;
+        this.examDetails = new ArrayList<>();
     }
 
-    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount) {
+    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount, List<ExamDetail> examDetails) {
         this.name = name;
         this.issuingOrganization = issuingOrganization;
         this.category = category;
         this.certificationType = certificationType;
         this.difficulty = difficulty;
         this.participantCount = participantCount;
+        this.examDetails = examDetails;
+    }
+
+    public void addExamDetail(ExamDetail examDetail) {
+        this.examDetails.add(examDetail);
     }
 }

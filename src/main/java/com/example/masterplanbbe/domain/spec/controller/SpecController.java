@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Spec controller api", description = "스펙 API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("api/v1/specs")
 public class SpecController {
     private final SpecService specService;
 

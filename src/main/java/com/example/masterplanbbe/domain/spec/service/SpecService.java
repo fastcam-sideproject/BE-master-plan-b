@@ -29,11 +29,7 @@ public class SpecService {
     }
 
     public CreateSpecResponse create(SpecCreateRequest request) {
-        Spec spec = specRepositoryPort.save(request.toSpec());
-        return new CreateSpecResponse(
-                spec,
-                request.toExamDetail(spec)
-        );
+        return new CreateSpecResponse(specRepositoryPort.save(request.toSpec()));
     }
 
     public void delete(Long specId) {

@@ -10,11 +10,18 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subject extends FullAuditEntity {
-    @ManyToOne
-    @JoinColumn(name = "spec_id", nullable = false)
-    private Spec spec;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exam_detail_id")
+    private ExamDetail examDetail;
 
     @Column(nullable = false)
     private String name;
 
+    @Builder
+    public Subject(String name,
+                   ExamDetail examDetail) {
+        this.name = name;
+        this.examDetail = examDetail;
+        examDetail.addSubject(this);
+    }
 }
