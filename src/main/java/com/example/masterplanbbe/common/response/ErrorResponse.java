@@ -11,6 +11,14 @@ public class ErrorResponse<T> {
     private final String message;
     private final T data;
 
+    public static <T> ErrorResponse<T> of(int status, String message) {
+        return new ErrorResponse<>(status, message, null);
+    }
+
+    public static <T> ErrorResponse<T> of(int status, String message, T data) {
+        return new ErrorResponse<>(status, message, data);
+    }
+
     public static <T> ErrorResponse<T> of(ErrorCode errorCode) {
         return new ErrorResponse<>(errorCode.getStatus(), errorCode.getMessage(), null);
     }

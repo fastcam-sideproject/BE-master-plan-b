@@ -5,6 +5,7 @@ import com.example.masterplanbbe.domain.member.service.MemberService;
 import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class MemberController {
 
     @Operation(summary = "멤버 생성")
     @PostMapping("/create")
-    public ApiResponse<?> create(@RequestBody MemberCreateRequest request) {
+    public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequest request) {
         memberService.createMember(request);
         return ApiResponse.ok("회원가입이 완료됐습니다.");
     }

@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
-
 @Getter
 @ToString
 @AllArgsConstructor
@@ -30,6 +28,5 @@ public class MemberCreateRequest {
             message = "비밀번호는 영문, 숫자, 특수문자가 모두 포함되어야 합니다.")
     private String password;
 
-    @NotBlank(message = "맞춤 정보 수신 여부 선택은 필수 입력값입니다.")
     private Boolean isAgreed;
 }
