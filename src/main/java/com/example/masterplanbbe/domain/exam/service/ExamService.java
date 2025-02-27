@@ -28,10 +28,12 @@ public class ExamService {
         return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId));
     }
 
+    @Transactional
     public CreateExamResponse create(ExamCreateRequest request) {
         return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
     }
 
+    @Transactional
     public void delete(Long examId) {
         examRepositoryPort.deleteById(examId);
     }
