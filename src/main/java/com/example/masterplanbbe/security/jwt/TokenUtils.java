@@ -37,8 +37,8 @@ public class TokenUtils {
                         .compact();
     }
 
-    // 유효 엑세스 토큰에서의 userId, role 검증
-    public String getUserIdFromAccessToken(String token) throws JwtException {
+    // 유효 엑세스 토큰에서의 email, role 검증
+    public String getUsernameFromAccessToken(String token) throws JwtException {
         token = getSubstringToken(token);
         return getClaimsFromToken(token).getSubject();
     }
@@ -56,8 +56,8 @@ public class TokenUtils {
                 .getPayload();
     }
 
-    // 기간 만료 엑세스 토큰에서의 userId, role 검출
-    public String getUserIdFromExpiredAccessToken(ExpiredJwtException e) {
+    // 기간 만료 엑세스 토큰에서의 email, role 검출
+    public String getUsernameFromExpiredAccessToken(ExpiredJwtException e) {
         return e.getClaims().getSubject();
     }
 

@@ -42,7 +42,7 @@ public class CustomLogoutHandler implements LogoutHandler {
 
         try {
             jwtService.addBlacklistAccessToken(decodedToken);
-            jwtService.removeRefreshToken(memberPayload.getUserId());
+            jwtService.removeRefreshToken(memberPayload.getEmail());
             ApiResponse<String> apiResponse = ApiResponse.ok("로그아웃에 성공하였습니다.");
             sendResponseMsg(response, 200, apiResponse);
         } catch (Exception e) {
