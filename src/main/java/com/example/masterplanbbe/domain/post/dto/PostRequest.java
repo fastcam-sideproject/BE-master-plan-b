@@ -2,7 +2,7 @@ package com.example.masterplanbbe.domain.post.dto;
 
 import com.example.masterplanbbe.domain.post.entity.Category;
 import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import lombok.Builder;
 
 @Builder

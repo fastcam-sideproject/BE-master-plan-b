@@ -10,7 +10,7 @@ import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

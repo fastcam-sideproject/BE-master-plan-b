@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 
 import java.time.LocalDate;
 
