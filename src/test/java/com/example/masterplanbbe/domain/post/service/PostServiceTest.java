@@ -2,6 +2,7 @@ package com.example.masterplanbbe.domain.post.service;
 
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
+import com.example.masterplanbbe.domain.post.entity.Category;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
 import com.example.masterplanbbe.member.entity.Member;
@@ -15,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,7 +41,7 @@ class PostServiceTest {
         Long memberId = 1L;
         Member member = getMember();
 
-        PostRequest request = new PostRequest("Test Title", "Test Content",memberId);
+        PostRequest request = new PostRequest(Category.TIP,"Test Title", "Test Content",memberId);
         Post post = getPost(member);
 
         when(memberRepositoryPort.findById(memberId)).thenReturn(member);
@@ -65,7 +65,7 @@ class PostServiceTest {
         Long memberId = 1L;
         Member member = getMember();
 
-        PostRequest request = new PostRequest("Test Title", "Test Content",memberId);
+        PostRequest request = new PostRequest(Category.TIP,"Test Title", "Test Content",memberId);
         Post post = getPost(member);
 
         when(postRepositoryPort.findById(post.getId())).thenReturn(post);
@@ -87,7 +87,7 @@ class PostServiceTest {
         Long memberId = 1L;
         Member member = getMember();
         Post post = getPost(member);
-        PostRequest updatedRequest = new PostRequest("Updated Title", "Updated Content",memberId);
+        PostRequest updatedRequest = new PostRequest(Category.TIP,"Updated Title", "Updated Content",memberId);
 
         when(postRepositoryPort.findById(postId)).thenReturn(post);
         when(memberRepositoryPort.findById(memberId)).thenReturn(member);
@@ -138,10 +138,10 @@ class PostServiceTest {
 
     private static Post getPost(Member member) {
         Post post = Post.builder()
+                .category(Category.TIP)
                 .title("Test Title")
                 .content("Test Content")
                 .member(member)
-//                .commentList(new ArrayList<>())
                 .build();
         ReflectionTestUtils.setField(post, "id", 1L);
         return post;

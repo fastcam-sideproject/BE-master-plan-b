@@ -46,6 +46,7 @@ public class Post extends FullAuditEntity {
         this.likeCount = 0; //
     }
 
+
     @Builder(builderMethodName = "fullBuilder")
     public Post(String title, String content, Member member, Integer likeCount) {
         this.title = title;

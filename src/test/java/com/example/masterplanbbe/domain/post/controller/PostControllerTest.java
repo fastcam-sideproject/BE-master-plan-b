@@ -2,6 +2,7 @@ package com.example.masterplanbbe.domain.post.controller;
 
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
+import com.example.masterplanbbe.domain.post.entity.Category;
 import com.example.masterplanbbe.domain.post.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -56,9 +56,9 @@ class PostControllerTest {
     @DisplayName("게시글 생성 성공")
     void createPost() throws Exception {
         // given
-        PostRequest requestDTO = new PostRequest("Test Title", "Test Content", 1L); // memberId 추가
+        PostRequest requestDTO = new PostRequest(Category.TIP,"Test Title", "Test Content", 1L);
         PostResponse.Summary responseDTO = new PostResponse.Summary(
-                1L, "Test Title", "Test Content", "Test Nickname", null, 0, 0);
+                1L, "Test Title", "Test Content", "Test Nickname", null, Category.TIP,0,0,null);
 
         when(postService.createPost(anyLong(), any(PostRequest.class))).thenReturn(responseDTO);
 
@@ -77,7 +77,7 @@ class PostControllerTest {
     void getPost() throws Exception {
         // given
         PostResponse.Detail responseDTO = new PostResponse.Detail(
-                1L, "Test Title", "Test Content", "Test Nickname", null, null, null,null);
+                1L, "Test Title", "Test Content", "Test Nickname", Category.TIP,0,0,null,null,null);
 
         when(postService.getPost(anyLong())).thenReturn(responseDTO);
 
@@ -94,7 +94,7 @@ class PostControllerTest {
     void getAllPost() throws Exception {
         // given
         PostResponse.Summary responseDTO = new PostResponse.Summary(
-                1L, "Test Title", "Test Content", "Test Nickname", null, 0, 0);
+                1L, "Test Title", "Test Content", "Test Nickname",null,Category.TIP,0,0,null);
 
         Pageable pageable = PageRequest.of(0, 10);
         Page<PostResponse.Summary> responsePage = new PageImpl<>(List.of(responseDTO), pageable, 1);
@@ -120,9 +120,9 @@ class PostControllerTest {
     @DisplayName("게시글 수정")
     void updatePost() throws Exception {
         // given
-        PostRequest requestDTO = new PostRequest("Updated Title", "Updated Content",1L);
+        PostRequest requestDTO = new PostRequest(Category.TIP,"Updated Title", "Updated Content",1L);
         PostResponse.Detail responseDTO = new PostResponse.Detail(
-                1L, "Updated Title", "Updated Content", "Test Nickname", null, null, null,null);
+                1L, "Updated Title", "Updated Content", "Test Nickname", Category.TIP,0,0, null, null,null);
 
         when(postService.updatePost(anyLong(), anyLong(), any(PostRequest.class))).thenReturn(responseDTO);
 
