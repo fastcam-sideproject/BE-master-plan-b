@@ -18,4 +18,6 @@ public interface PostRepositoryPort {
     Page<Post> findByTitleContaining(String keyword, Pageable pageable);
 
     Page<Post> findAllByIdIn(List<Long> postIdList, Pageable pageable);
+
+    Page<Post> findByMemberId(Long memberId,Pageable pageable);
 }

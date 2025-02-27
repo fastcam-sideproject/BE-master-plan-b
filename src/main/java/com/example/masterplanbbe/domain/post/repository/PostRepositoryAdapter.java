@@ -49,4 +49,9 @@ public class PostRepositoryAdapter implements PostRepositoryPort{
         return postRepository.findByIdIn(postIdList, pageable);
     }
 
+    @Override
+    public Page<Post> findByMemberId(Long memberId,Pageable pageable) {
+        return postRepository.findByMemberId(memberId, pageable);
+    }
+
 }

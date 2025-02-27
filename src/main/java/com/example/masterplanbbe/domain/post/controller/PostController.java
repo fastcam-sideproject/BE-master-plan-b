@@ -4,6 +4,7 @@ import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.service.PostService;
+import com.example.masterplanbbe.security.jwt.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Post controller api", description = "게시판 API")
 @RestController
@@ -80,6 +79,16 @@ public class PostController {
     ) {
         postService.deletePost(postId, memberId);
         return ResponseEntity.ok().body(ApiResponse.ok());
+    }
+
+    @Operation(summary = "내가 작성한 글 조회")
+    @GetMapping("/posts/my")
+    public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getMyPost(
+            @RequestHeader(value = "memberId") Long memberId,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(postService.getMyPost(memberId, pageable)));
     }
 
 }

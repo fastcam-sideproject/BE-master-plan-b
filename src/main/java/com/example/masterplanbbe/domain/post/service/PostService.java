@@ -128,4 +128,15 @@ public class PostService {
                 .map(PostResponse.Summary::from);
     }
 
+    /**
+     * 내 게시글 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
+    public Page<PostResponse.Summary> getMyPost(Long memberId, Pageable pageable) {
+        return postRepositoryPort.findByMemberId(memberId, pageable)
+                .map(PostResponse.Summary::from);
+    }
+
 }
