@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.LongSupplier;
 
+import static com.example.masterplanbbe.common.exception.ErrorCode.SPEC_NOT_FOUND;
+import static com.example.masterplanbbe.common.exception.GlobalException.*;
 import static com.example.masterplanbbe.domain.exam.entity.QExam.*;
 import static com.example.masterplanbbe.domain.exam.entity.QExamDetail.examDetail;
 import static com.example.masterplanbbe.domain.spec.entity.QSpec.*;
@@ -91,7 +93,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
 
     @Override
     public Spec getById(Long specId) {
-        return specRepository.findById(specId).orElseThrow();
+        return specRepository.findById(specId).orElseThrow(() -> new NotFoundException(SPEC_NOT_FOUND));
     }
 
     @Override

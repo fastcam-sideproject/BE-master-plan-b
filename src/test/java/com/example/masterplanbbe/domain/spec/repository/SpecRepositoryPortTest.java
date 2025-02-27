@@ -2,14 +2,10 @@ package com.example.masterplanbbe.domain.spec.repository;
 
 
 import com.example.masterplanbbe.common.exception.GlobalException;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
-import com.example.masterplanbbe.domain.fixture.ExamFixture;
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.member.repository.MemberRepository;
@@ -23,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.common.exception.ErrorCode.SPEC_NOT_FOUND;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
@@ -90,8 +87,8 @@ public class SpecRepositoryPortTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 스펙의 상세 정보를 조회하면 예외를 발생시킨다.")
-    void throw_exception_when_retrieve_spec_detail_with_non_existing_spec() {
+    @DisplayName("존재하지 않는 스펙을 조회하면 예외를 발생시킨다.")
+    void throw_exception_when_exam_not_found() {
         assertThatThrownBy(() -> specRepositoryPort.getById(-1L))
                 .isInstanceOf(GlobalException.NotFoundException.class)
                 .hasMessageContaining(SPEC_NOT_FOUND.getMessage());
