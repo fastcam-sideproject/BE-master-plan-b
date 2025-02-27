@@ -21,7 +21,7 @@ public record UserExamSessionDetailResponse(
     public static UserExamSessionDetailResponse from(UserExamSession userExamSession, Long dueDate) {
         return UserExamSessionDetailResponse.of(
                 userExamSession.getId(),
-                userExamSession.getMember().getUserId(),
+                userExamSession.getMember().getEmail(),
                 userExamSession.getExam().getCertificationType(),
                 userExamSession.getExam().getTitle(),
                 userExamSession.getDate(),

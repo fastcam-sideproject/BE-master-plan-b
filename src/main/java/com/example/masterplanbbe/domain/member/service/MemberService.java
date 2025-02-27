@@ -7,7 +7,6 @@ import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.domain.member.exception.DuplicateUserException;
 import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
-import com.example.masterplanbbe.domain.member.dto.MemberResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

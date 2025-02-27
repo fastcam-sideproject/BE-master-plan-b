@@ -19,8 +19,8 @@ public class MemberRepositoryAdapter implements MemberRepositoryPort{
     }
 
     @Override
-    public Member findByUserId(String userId) {
-        return memberRepository.findByUserId(userId)
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email)
                 .orElseThrow(() -> new GlobalException(ErrorCode.USER_NOT_FOUND) {});
     }
 }
