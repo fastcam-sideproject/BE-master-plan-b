@@ -21,7 +21,12 @@ public class StoredPostService {
     private final MemberRepositoryAdapter memberRepositoryAdapter;
     private final PostRepositoryAdapter postRepositoryAdapter;
 
-
+    /**
+     * 게시글 북마크
+     * @param memberId
+     * @param postId
+     * @return
+     */
     @Transactional
     public PostResponse.Detail toggleStoredPost(Long memberId, Long postId) {
         Member member = memberRepositoryAdapter.findById(memberId);
@@ -36,6 +41,12 @@ public class StoredPostService {
         return PostResponse.Detail.from(post);
     }
 
+    /**
+     * 북마크 게시글 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
     @Transactional(readOnly = true)
     public Page<PostResponse.Summary> getStoredPost(Long memberId, Pageable pageable) {
         Page<StoredPost> posts = storedPostRepositoryAdapter.findByMemberId(memberId, pageable);

@@ -27,6 +27,12 @@ public class LikePostService {
     private static final String POST_LIKE_KEY = "post:like:";
     private static final String POST_LIKE_COUNT_KEY = "post:likeCount:";
 
+    /**
+     * 게시글 좋아요
+     * @param postId
+     * @param memberId
+     * @return
+     */
     @Transactional
     public PostResponse.Detail addLike(Long postId, Long memberId) {
         Post post = postRepositoryPort.findById(postId);
@@ -61,6 +67,12 @@ public class LikePostService {
         return PostResponse.Detail.from(post);
     }
 
+    /**
+     * 좋아요한 게시글 조회
+     * @param memberId
+     * @param pageable
+     * @return
+     */
     @Transactional
     public Page<PostResponse.Summary> getLikedPosts(Long memberId, Pageable pageable) {
         String memberLikeKey = "member:likedPosts:" + memberId;
