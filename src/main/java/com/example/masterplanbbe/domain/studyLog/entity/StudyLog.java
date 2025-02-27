@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.studyLog.entity;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.studyLog.enums.InputSource;
+import com.example.masterplanbbe.domain.studyLog.request.StudyLogRequest;
 import com.example.masterplanbbe.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -39,6 +40,14 @@ public class StudyLog extends FullAuditEntity {
     @Column(name = "input_source", nullable = false)
     @Enumerated(EnumType.STRING)
     private InputSource inputSource;
+
+    public void updateStudyLog(StudyLogRequest studyLogRequest, Exam exam) {
+        this.exam = exam;
+        this.studyDate = studyLogRequest.studyDate();
+        this.totalStudyTimes = studyLogRequest.hour() * 60 + studyLogRequest.minute();
+        this.content = studyLogRequest.content();
+        this.inputSource = studyLogRequest.inputSource();
+    }
 
     public static StudyLog of(Member member, Exam exam, LocalDate studyDate, Integer hour, Integer minutes, String content, InputSource inputSource) {
         Integer totalStudyTimes = hour * 60 + minutes;
