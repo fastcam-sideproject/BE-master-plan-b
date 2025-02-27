@@ -32,7 +32,7 @@ public class ChatService {
             message.setId(chatId);
 
             String jsonMessage = objectMapper.writeValueAsString(message);
-            redisChatRepository.saveMessage(message.getExamId(), jsonMessage);
+            redisChatRepository.saveMessage(message.getSpecId(), jsonMessage);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

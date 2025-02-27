@@ -18,23 +18,20 @@ public class ChatController {
 
     @MessageMapping("/chat")
     public void sendMessage(ChatMessageDTO message) {
-        Long examId = message.getExamId();
-
+        Long specId = message.getSpecId();
         chatService.saveChatMessage(message);
-
-        // Redis Pub/Sub을 통해 메시지 전송
-        redisPublisher.publish("chat:" + examId, message);
+        redisPublisher.publish("spec:" + specId, message); // Redis Pub/Sub을 통해 메시지 전송
     }
 
     @GetMapping("/recent")
-    public ResponseEntity<?> getRecentMessages(@RequestParam Long examId) {
+    public ResponseEntity<?> getRecentMessages(@RequestParam Long specId) {
         return ResponseEntity.ok()
-                .body(chatService.getRecentMessages(examId));
+                .body(chatService.getRecentMessages(specId));
     }
 
-    @DeleteMapping("/{examId}/{chatId}")
-    public ResponseEntity<?> deleteChat(@PathVariable Long examId, @PathVariable Long chatId, @RequestParam Long memberId, @RequestParam String role) {
-        chatService.deleteChat(examId, chatId, memberId, role);
+    @DeleteMapping("/{specId}/{chatId}")
+    public ResponseEntity<?> deleteChat(@PathVariable Long specId, @PathVariable Long chatId, @RequestParam Long memberId, @RequestParam String role) {
+        chatService.deleteChat(specId, chatId, memberId, role);
         return ResponseEntity.ok().body("채팅 메시지가 성공적으로 삭제되었습니다.");
     }
 }

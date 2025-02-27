@@ -21,8 +21,8 @@ public class ChatLog {
     @Id
     private Long id;
 
-    @Column(name = "exam_id", nullable = false)
-    private Long examId;
+    @Column(name = "spec_id", nullable = false)
+    private Long specId;
 
     @Column(name = "member_id", nullable = false)
     private Long memberId;
@@ -35,13 +35,13 @@ public class ChatLog {
 
     @JsonCreator
     public static ChatLog fromJson(@JsonProperty("id") Long id,
-                                   @JsonProperty("examId") Long examId,
+                                   @JsonProperty("specId") Long specId,
                                    @JsonProperty("memberId") Long memberId,
                                    @JsonProperty("content") String content,
                                    @JsonProperty("sendAt") LocalDateTime sendAt) {
         return ChatLog.builder()
                 .id(id)
-                .examId(examId)
+                .specId(specId)
                 .memberId(memberId)
                 .content(content)
                 .sendAt(sendAt)
@@ -50,7 +50,7 @@ public class ChatLog {
 
     public static ChatLog from(ChatMessageDTO dto) {
         return new ChatLog(dto.getId(),
-                dto.getExamId(),
+                dto.getSpecId(),
                 dto.getMemberId(),
                 dto.getContent(),
                 dto.getSendAt());
