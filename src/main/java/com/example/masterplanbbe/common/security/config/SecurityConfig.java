@@ -99,6 +99,7 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/oauth2/**", "/favicon.ico", "/error").permitAll() // "/error" 안 열어주면 favicon 401이 뜸. 이게 프론트에 어떤 영향이 있을까
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/send-verification-code").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/member/verification").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
