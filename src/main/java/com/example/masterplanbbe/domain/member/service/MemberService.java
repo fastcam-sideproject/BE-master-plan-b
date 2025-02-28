@@ -2,6 +2,7 @@ package com.example.masterplanbbe.domain.member.service;
 
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
+import com.example.masterplanbbe.domain.member.dto.MemberEmailVerificationDTO;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
@@ -33,20 +34,23 @@ public class MemberService {
 
     // 이메일 중복 확인 및 해당 이메일 인증번호 발송
     // MessageException 전역 예외 핸들러 등록하기
-    public void verifyAndSendMail() {
+    public void verifyAndSendMail(MemberEmailVerificationDTO dto) {
+        String email = dto.email();
+
         // 중복 이메일 검증
+        if (memberRepository.findByEmail(email).isPresent()) {
+            throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
+        }
 
         // 인증번호 발송
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-
-            String toMail = null;
             String title = "테스트 제목";
             String content = "테스트 내용";
 
             helper.setFrom(username);
-            helper.setTo(toMail);
+            helper.setTo(email);
             helper.setSubject(title);
             helper.setText(content, true);
             mailSender.send(mimeMessage);
@@ -60,10 +64,6 @@ public class MemberService {
      * @param request 회원가입 DTO
      */
     public void createMember(MemberCreateRequestDTO request) {
-        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
-        }
-
 //        MemberRoleEnum role = null;
         MemberRoleEnum role = MemberRoleEnum.USER;
 
