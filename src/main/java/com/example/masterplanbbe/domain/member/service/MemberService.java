@@ -3,7 +3,7 @@ package com.example.masterplanbbe.domain.member.service;
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.common.exception.GlobalException;
-import com.example.masterplanbbe.domain.member.dto.MemberEmailVerificationDTO;
+import com.example.masterplanbbe.domain.member.dto.MemberEmailSendDTO;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
@@ -37,7 +37,7 @@ public class MemberService {
      * 이메일 중복 확인 및 해당 이메일 인증번호 발송
      * @param dto 인증번호 수신 및 가입 예정 이메일 DTO
      */
-    public void verifyAndSendMail(MemberEmailVerificationDTO dto) {
+    public void sendMailForVerification(MemberEmailSendDTO dto) {
         String email = dto.email();
 
         // 중복 이메일 검증
