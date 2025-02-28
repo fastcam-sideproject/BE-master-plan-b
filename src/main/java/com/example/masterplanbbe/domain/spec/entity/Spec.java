@@ -47,14 +47,15 @@ public class Spec extends FullAuditEntity {
                 Category category,
                 CertificationType certificationType,
                 Double difficulty,
-                Integer participantCount) {
+                Integer participantCount,
+                List<ExamDetail> examDetails) {
         this.name = name;
         this.issuingOrganization = issuingOrganization;
         this.category = category;
         this.certificationType = certificationType;
         this.difficulty = difficulty;
         this.participantCount = participantCount;
-        this.examDetails = new ArrayList<>();
+        this.examDetails = examDetails != null ? examDetails : new ArrayList<>();
     }
 
     public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount, List<ExamDetail> examDetails) {

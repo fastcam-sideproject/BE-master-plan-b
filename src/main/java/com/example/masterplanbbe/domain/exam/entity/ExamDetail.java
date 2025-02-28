@@ -40,15 +40,17 @@ public class ExamDetail extends FullAuditEntity {
                       String preparation,
                       String eligibility,
                       String examStructure,
-                      String passingCriteria) {
+                      String passingCriteria,
+                      List<Exam> exams,
+                      List<Subject> subjects) {
         this.spec = spec;
         spec.addExamDetail(this);
         this.preparation = preparation;
         this.eligibility = eligibility;
         this.examStructure = examStructure;
         this.passingCriteria = passingCriteria;
-        this.exams = new ArrayList<>();
-        this.subjects = new ArrayList<>();
+        this.exams = exams != null ? exams : new ArrayList<>();
+        this.subjects = subjects != null ? subjects: new ArrayList<>();
     }
 
     public void addExam(Exam exam) {
