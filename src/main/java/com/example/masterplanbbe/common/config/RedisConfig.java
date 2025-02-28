@@ -20,10 +20,13 @@ import java.time.Duration;
 @Configuration
 @EnableRedisRepositories
 public class RedisConfig {
+
     @Value("${spring.data.redis.host}")
     private String host;
+
     @Value("${spring.data.redis.port}")
     private int port;
+
     @Value("${spring.data.redis.password}")
     private String password;
 
@@ -56,6 +59,20 @@ public class RedisConfig {
     @Bean(name = "blacklistTokenTemplate")
     public RedisTemplate<String, String> blacklistTokenTemplate(RedisConnectionFactory redisConnectionFactory) {
         return getStringStringRedisTemplate(redisConnectionFactory);
+    }
+
+    @Bean(name = "verifyEmailTemplate")
+    public RedisTemplate<String, Integer> verifyEmailTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Integer> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
+
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(Integer.class));
+
+        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(Integer.class));
+
+        return redisTemplate;
     }
 
     private RedisTemplate<String, String> getStringStringRedisTemplate(RedisConnectionFactory redisConnectionFactory) {

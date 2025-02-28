@@ -14,11 +14,15 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.SecureRandom;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -26,12 +30,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JavaMailSender mailSender;
+    private static final String VERIFICATION = "VERIFY_";
 
     @Value("${spring.mail.username}")
     private String username;
+
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
+    private final RedisTemplate<String, Integer> verifyEmailTemplate;
 
     /**
      * 이메일 중복 확인 및 해당 이메일 인증번호 발송
@@ -46,21 +53,31 @@ public class MemberService {
         }
 
         // 인증번호 발송
+        SecureRandom secureRandom = new SecureRandom();
+        int verificationNumber = 100000 + secureRandom.nextInt(900000);
+
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-            String title = "테스트 제목";
-            String content = "테스트 내용";
+            String title = "[마스터플랜비]회원가입 이메일 인증번호입니다";
+            String content = verificationNumber + "<br />" + "인증번호를 입력해주세요";
 
             helper.setFrom(username);
             helper.setTo(email);
             helper.setSubject(title);
             helper.setText(content, true);
             mailSender.send(mimeMessage);
+
+            verifyEmailTemplate.opsForValue().set(
+                    VERIFICATION + email, verificationNumber, 3, TimeUnit.MINUTES);
         } catch (MessagingException e) {
             log.error(e.getMessage());
             throw new GlobalException.InternalServerException(ErrorCode.INTERNAL_MAIL_EXCEPTION);
         }
+    }
+
+    public void verifyEmail() {
+
     }
 
     /**
