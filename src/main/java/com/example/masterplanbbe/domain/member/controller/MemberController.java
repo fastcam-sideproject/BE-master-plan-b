@@ -17,7 +17,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
+    @Operation(summary = "이메일 중복 확인 및 인증번호 발송")
+    @PostMapping("/send-verification-code")
+    public ApiResponse<?> verifyAndSendMail() {
+        memberService.verifyAndSendMail();
+        return ApiResponse.ok("인증번호가 발송됐습니다.");
+    }
 
     @Operation(summary = "회원가입")
     @PostMapping("/create")

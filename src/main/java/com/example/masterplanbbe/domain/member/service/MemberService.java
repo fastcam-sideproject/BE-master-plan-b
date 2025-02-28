@@ -2,16 +2,24 @@ package com.example.masterplanbbe.domain.member.service;
 
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
+import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.domain.member.exception.DuplicateUserException;
 import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -19,8 +27,39 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender mailSender;
 
-    // 회원가입
+    @Value("${spring.mail.username}")
+    private String username;
+
+    // 이메일 중복 확인 및 해당 이메일 인증번호 발송
+    // MessageException 전역 예외 핸들러 등록하기
+    public void verifyAndSendMail() {
+        // 중복 이메일 검증
+
+        // 인증번호 발송
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+            String toMail = null;
+            String title = "테스트 제목";
+            String content = "테스트 내용";
+
+            helper.setFrom(username);
+            helper.setTo(toMail);
+            helper.setSubject(title);
+            helper.setText(content, true);
+            mailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 신규 사용자 회원가입
+     * @param request 회원가입 DTO
+     */
     public void createMember(MemberCreateRequest request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
