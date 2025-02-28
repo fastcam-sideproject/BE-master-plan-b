@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/member")
 public class MemberController {
+
     private final MemberService memberService;
 
-    @Operation(summary = "멤버 생성")
+
+
+    @Operation(summary = "회원가입")
     @PostMapping("/create")
     public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequest request) {
         memberService.createMember(request);
