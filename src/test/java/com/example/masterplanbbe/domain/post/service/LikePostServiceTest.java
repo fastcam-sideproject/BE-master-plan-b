@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.post.service;
 
+import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
@@ -17,6 +18,7 @@ import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -48,12 +50,7 @@ public class LikePostServiceTest {
         // Given
         Long postId = 1L;
         Long memberId = 1L;
-        Member member = Member.builder()
-                .email("test@naver.com")
-                .name("테스트")
-                .userId("test")
-                .password("test")
-                .build();
+        Member member = createMember();
         when(memberRepositoryPort.findById(memberId)).thenReturn(member);
 
         Post post = Post.builder()
@@ -91,12 +88,7 @@ public class LikePostServiceTest {
         // Given
         Long postId = 1L;
         Long memberId = 1L;
-        Member member = Member.builder()
-                .email("test@naver.com")
-                .name("테스트")
-                .userId("test")
-                .password("test")
-                .build();
+        Member member = createMember();
         when(memberRepositoryPort.findById(memberId)).thenReturn(member);
 
         Post post = Post.fullBuilder()
