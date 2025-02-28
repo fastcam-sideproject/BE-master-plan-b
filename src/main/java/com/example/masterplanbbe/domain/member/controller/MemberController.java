@@ -1,25 +1,43 @@
 package com.example.masterplanbbe.domain.member.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
-import com.example.masterplanbbe.domain.member.dto.MemberResponse;
+import com.example.masterplanbbe.domain.member.dto.MemberEmailSendDTO;
+import com.example.masterplanbbe.domain.member.dto.MemberVerificationDTO;
 import com.example.masterplanbbe.domain.member.service.MemberService;
+import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Member controller api", description = "멤버 API")
+@Tag(name = "Member controller api", description = "회원 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/member")
 public class MemberController {
+
     private final MemberService memberService;
 
-    @Operation(summary = "멤버 생성")
+    @Operation(summary = "이메일 중복 확인 및 인증번호 발송")
+    @PostMapping("/send-verification-code")
+    public ApiResponse<?> sendMailForVerification(@RequestBody MemberEmailSendDTO dto) {
+        memberService.sendMailForVerification(dto);
+        return ApiResponse.ok("인증번호가 발송됐습니다.");
+    }
+
+    @Operation(summary = "인증번호 일치 확인")
+    @PostMapping("/verification")
+    public ApiResponse<?> verifyEmail(@RequestBody MemberVerificationDTO dto) {
+        memberService.verifyEmail(dto);
+        return ApiResponse.ok("인증번호가 확인됐습니다.");
+    }
+
+    @Operation(summary = "회원가입")
     @PostMapping("/create")
-    public ApiResponse<MemberResponse> create(@RequestBody MemberCreateRequest request) {
-        return ApiResponse.ok("회원가입이 완료됐습니다.", memberService.createMember(request));
+    public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequestDTO request) {
+        memberService.createMember(request);
+        return ApiResponse.ok("회원가입이 완료됐습니다.");
     }
 
     @GetMapping("/test")

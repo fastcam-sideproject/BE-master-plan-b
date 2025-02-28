@@ -1,8 +1,8 @@
 package com.example.masterplanbbe.common.security.jwt;
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
-import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.common.security.exception.CustomAuthenticationException;
+import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
@@ -54,7 +54,7 @@ public class JwtService {
      * 4. 처리(리스폰스 헤더 포함 등) 후, 통과
      */
     public MemberPayload validateAccessToken(String tokenValue) {
-        String userId, accessToken;
+        String username, accessToken;
         MemberRoleEnum role;
 
         // 외부 공격자 검증
@@ -65,7 +65,7 @@ public class JwtService {
         }
 
         try {
-            userId = tokenUtils.getUserIdFromAccessToken(tokenValue);
+            username = tokenUtils.getUsernameFromAccessToken(tokenValue);
             role = getRoleFromRoleString(tokenUtils.getRoleFromAccessToken(tokenValue));
             accessToken = tokenValue;
         } catch (ExpiredJwtException e) {
@@ -77,11 +77,11 @@ public class JwtService {
                             ACCESS_TOKEN_EAT,
                             TimeUnit.MILLISECONDS);
 
-            userId = tokenUtils.getUserIdFromExpiredAccessToken(e);
+            username = tokenUtils.getUsernameFromExpiredAccessToken(e);
             role = getRoleFromRoleString(tokenUtils.getRoleFromExpiredAccessToken(e));
 
             // Refresh Token 검증 필요
-            String refreshToken = authTemplate.opsForValue().get(REDIS_AUTH_KEY + userId);
+            String refreshToken = authTemplate.opsForValue().get(REDIS_AUTH_KEY + username);
 
             // 여기서의 커스텀 예외: 강제 로그아웃 + 헤더 엑세스 토큰 제거 + 레디스 리프레시 토큰 제거 + 예외 반환
             if (refreshToken == null)
@@ -91,13 +91,13 @@ public class JwtService {
                         .set(
                                 BLACKLIST_REFRESH_TOKEN + refreshToken,
                                 refreshToken, REFRESH_TOKEN_EAT, TimeUnit.MILLISECONDS);
-                authTemplate.delete(REDIS_AUTH_KEY + userId);
+                authTemplate.delete(REDIS_AUTH_KEY + username);
                 throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "유효하지 않은 리프레시 토큰. 헤더 엑세스 토큰 제거 필요.");
             }
 
             Date date = new Date();
             TokenPayload accessTokenPayload = new TokenPayload(
-                    userId, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role);
+                    username, UUID.randomUUID().toString(), date, new Date(date.getTime() + ACCESS_TOKEN_EAT), role);
             accessToken = tokenUtils.createToken(accessTokenPayload);
 
             // 5번 시도 후 유효한 토큰을 찾을 때까지 반복
@@ -123,7 +123,7 @@ public class JwtService {
             throw new CustomAuthenticationException(ErrorCode.WRONG_TOKEN_ISSUE, "비정상적인 헤더 엑세스 토큰. 헤더 엑세스 토큰 제거 필요.");
         }
 
-        return new MemberPayload(userId, accessToken);
+        return new MemberPayload(username, accessToken);
     }
 
     // 인가 필터에서의 활용을 위한 별도 메소드
@@ -155,7 +155,7 @@ public class JwtService {
     @Getter
     @AllArgsConstructor
     public static class MemberPayload {
-        private String userId;
+        private String email;
         private String accessToken;
     }
 

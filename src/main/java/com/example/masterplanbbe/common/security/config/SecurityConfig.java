@@ -1,14 +1,14 @@
 package com.example.masterplanbbe.common.security.config;
 
-import com.example.masterplanbbe.common.security.filter.CustomLoginFilter;
-import com.example.masterplanbbe.common.security.filter.JwtAuthorizationFilter;
-import com.example.masterplanbbe.common.security.handler.CustomLogoutHandler;
-import com.example.masterplanbbe.common.security.jwt.JwtService;
 import com.example.masterplanbbe.common.security.exception.JwtAccessDenyHandler;
 import com.example.masterplanbbe.common.security.exception.JwtAuthenticationEntryPoint;
 import com.example.masterplanbbe.common.security.filter.JwtAuthenticationFilter;
+import com.example.masterplanbbe.common.security.filter.JwtAuthorizationFilter;
+import com.example.masterplanbbe.common.security.handler.CustomLogoutHandler;
 import com.example.masterplanbbe.common.security.handler.OAuth2FailureHandler;
 import com.example.masterplanbbe.common.security.handler.OAuth2SuccessHandler;
+import com.example.masterplanbbe.common.security.filter.CustomLoginFilter;
+import com.example.masterplanbbe.common.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -98,6 +98,8 @@ public class SecurityConfig {
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                 .permitAll()
                 .requestMatchers("/oauth2/**", "/favicon.ico", "/error").permitAll() // "/error" 안 열어주면 favicon 401이 뜸. 이게 프론트에 어떤 영향이 있을까
+                .requestMatchers(HttpMethod.POST, "/api/v1/member/send-verification-code").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/member/verification").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()

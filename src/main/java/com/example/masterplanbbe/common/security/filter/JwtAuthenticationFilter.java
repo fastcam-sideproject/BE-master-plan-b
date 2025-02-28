@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends CustomOncePerRequestFilter {
 
         // 인증 객체 세팅
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(createAuthentication(memberPayload.getUserId()));
+        context.setAuthentication(createAuthentication(memberPayload.getEmail()));
         SecurityContextHolder.setContext(context);
 
         // 다음 필터 넘기기

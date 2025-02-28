@@ -3,12 +3,12 @@ package com.example.masterplanbbe.common.security.filter;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.common.response.ErrorResponse;
-import com.example.masterplanbbe.common.security.dto.LoginDTO;
-import com.example.masterplanbbe.common.security.dto.MemberInfoDTO;
-import com.example.masterplanbbe.common.security.jwt.JwtService;
 import com.example.masterplanbbe.common.security.user.UserDetailsImpl;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.common.security.dto.LoginDTO;
+import com.example.masterplanbbe.common.security.dto.MemberInfoDTO;
+import com.example.masterplanbbe.common.security.jwt.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -40,7 +40,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     public CustomLoginFilter(JwtService jwtService) {
         this.jwtService = jwtService;
         setFilterProcessesUrl("/api/v1/member/login");
-        super.setUsernameParameter("userId");
+        super.setUsernameParameter("email");
     }
 
     @Override
@@ -52,7 +52,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            requestDto.userId(),
+                            requestDto.email(),
                             requestDto.password(),
                             null));
         } catch (IOException e) {
@@ -65,12 +65,12 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("로그인 성공 및 JWT 생성");
 
-        String userId = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         MemberRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getMember().getRole();
         Date date = new Date();
 
         // 응답 헤더 엑세스 토큰 추가
-        String accessToken = jwtService.createToken(userId, role, date);
+        String accessToken = jwtService.createToken(username, role, date);
         response.addHeader(AUTHORIZATION_HEADER, URLEncoder.encode(accessToken, StandardCharsets.UTF_8).replaceAll("\\+", "%20"));
 
         Member member = ((UserDetailsImpl) authResult.getPrincipal()).getMember();

@@ -44,7 +44,7 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
 
     @Override
     public UserExamSession findByIdAndMemberUserId(Long id, String memberId) {
-        return userExamSessionRepository.findByIdAndMemberUserId(id, memberId).orElseThrow(
+        return userExamSessionRepository.findByIdAndMemberEmail(id, memberId).orElseThrow(
                 () -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION)
         );
 
@@ -52,6 +52,7 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
 
     @Override
     public UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, String memberId) {
+/*
         return Optional.ofNullable(
                 jpaQueryFactory
                         .select(Projections.constructor(UserExamSessionDetailResponse.class,
@@ -67,6 +68,9 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
                                 .and(userExamSession.member.userId.eq(memberId)))
                         .fetchOne()
         ).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION));
+*/
+        return null;
+        //TODO: implement this
     }
 
     @Override
@@ -81,14 +85,14 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
             builder.and(userExamSession.date.month().eq(month));
         }
 
-        builder.and(userExamSession.member.userId.eq(memberId));
+        builder.and(userExamSession.member.email.eq(memberId));
 
         List<UserExamSessionDetailResponse> results = jpaQueryFactory
                 .select(Projections.constructor(UserExamSessionDetailResponse.class,
                         userExamSession.id,
-                        userExamSession.member.userId,
-                        userExamSession.exam.certificationType,
-                        userExamSession.exam.title,
+                        userExamSession.member.email,
+                        userExamSession.exam.examDetail.spec.certificationType,
+                        userExamSession.exam.name,
                         userExamSession.date,
                         Expressions.numberTemplate(Long.class, "DATEDIFF({0}, {1})", LocalDate.now(), userExamSession.date)
                 ))

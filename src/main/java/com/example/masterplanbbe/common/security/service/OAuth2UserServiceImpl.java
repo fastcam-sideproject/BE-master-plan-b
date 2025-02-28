@@ -2,13 +2,13 @@ package com.example.masterplanbbe.common.security.service;
 
 import com.example.masterplanbbe.common.security.response.KakaoResponse;
 import com.example.masterplanbbe.common.security.response.NaverResponse;
-import com.example.masterplanbbe.common.security.user.UserDetailsImpl;
+import com.example.masterplanbbe.common.security.response.OAuth2Response;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.common.security.dto.OAuth2UserDTO;
 import com.example.masterplanbbe.common.security.response.GoogleResponse;
-import com.example.masterplanbbe.common.security.response.OAuth2Response;
+import com.example.masterplanbbe.common.security.user.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -66,8 +66,8 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
 
             userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());
         } else {
-            // 회원가입 처리
-            Member member = Member.create(dto);
+            // 회원가입 처리(소셜 로그인 사용자는 관리자가 아닐 테니)
+            Member member = new Member(dto);
             memberRepository.save(member);
 
             userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());

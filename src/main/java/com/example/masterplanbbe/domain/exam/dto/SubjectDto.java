@@ -10,14 +10,19 @@ public record SubjectDto(
         String title,
         String description
 ) {
+/*
     public SubjectDto(Subject subject) {
         this(subject.getId(), subject.getExam().getId(), subject.getTitle(), subject.getDescription());
     }
+*/
 
+/*
     public Subject toEntity() {
         return Subject.builder()
                 .title(title)
                 .description(description)
                 .build();
     }
+*/
+    //TODO: implement this
 }
