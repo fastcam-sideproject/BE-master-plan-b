@@ -4,6 +4,7 @@ package com.example.masterplanbbe.domain.member.service;
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.domain.member.dto.MemberEmailSendDTO;
+import com.example.masterplanbbe.domain.member.dto.MemberVerificationDTO;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -76,8 +78,27 @@ public class MemberService {
         }
     }
 
-    public void verifyEmail() {
+    /**
+     * 인증번호 일치 확인
+     * @param dto 가입 예정 이메일 및 해당 수신 인증번호
+     */
+    public void verifyEmail(MemberVerificationDTO dto) {
+        String email = dto.email();
+        Integer verificationNumber = dto.verification();
 
+        // 인증번호 만료
+        if (Boolean.FALSE.equals(verifyEmailTemplate.hasKey(VERIFICATION + email))) {
+            throw new GlobalException.BadRequestException(ErrorCode.EXPIRED_VERIFICATION);
+        }
+
+        // 인증번호 불일치
+        if (!Objects.equals(
+                verifyEmailTemplate.opsForValue().get(VERIFICATION + email), verificationNumber)) {
+            throw new GlobalException.BadRequestException(ErrorCode.INCORRECT_VERIFICATION);
+        }
+
+        // 소모된 인증번호 삭제
+        verifyEmailTemplate.delete(VERIFICATION + email);
     }
 
     /**

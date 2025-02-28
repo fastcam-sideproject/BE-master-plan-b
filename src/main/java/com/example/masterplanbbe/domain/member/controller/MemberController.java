@@ -2,6 +2,7 @@ package com.example.masterplanbbe.domain.member.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.member.dto.MemberEmailSendDTO;
+import com.example.masterplanbbe.domain.member.dto.MemberVerificationDTO;
 import com.example.masterplanbbe.domain.member.service.MemberService;
 import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,9 +21,16 @@ public class MemberController {
 
     @Operation(summary = "이메일 중복 확인 및 인증번호 발송")
     @PostMapping("/send-verification-code")
-    public ApiResponse<?> verifyAndSendMail(@RequestBody MemberEmailSendDTO dto) {
+    public ApiResponse<?> sendMailForVerification(@RequestBody MemberEmailSendDTO dto) {
         memberService.sendMailForVerification(dto);
         return ApiResponse.ok("인증번호가 발송됐습니다.");
+    }
+
+    @Operation(summary = "인증번호 일치 확인")
+    @PostMapping("/api/v1/member/verification")
+    public ApiResponse<?> verifyEmail(@RequestBody MemberVerificationDTO dto) {
+        memberService.verifyEmail(dto);
+        return ApiResponse.ok("인증번호가 확인됐습니다.");
     }
 
     @Operation(summary = "회원가입")
