@@ -2,6 +2,7 @@ package com.example.masterplanbbe.domain.member.service;
 
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
+import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.domain.member.dto.MemberEmailVerificationDTO;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
@@ -32,8 +33,10 @@ public class MemberService {
     @Value("${spring.mail.username}")
     private String username;
 
-    // 이메일 중복 확인 및 해당 이메일 인증번호 발송
-    // MessageException 전역 예외 핸들러 등록하기
+    /**
+     * 이메일 중복 확인 및 해당 이메일 인증번호 발송
+     * @param dto 인증번호 수신 및 가입 예정 이메일 DTO
+     */
     public void verifyAndSendMail(MemberEmailVerificationDTO dto) {
         String email = dto.email();
 
@@ -56,6 +59,7 @@ public class MemberService {
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
             log.error(e.getMessage());
+            throw new GlobalException.InternalServerException(ErrorCode.INTERNAL_MAIL_EXCEPTION);
         }
     }
 
