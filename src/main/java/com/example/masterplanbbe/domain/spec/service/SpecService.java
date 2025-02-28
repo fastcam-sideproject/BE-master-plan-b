@@ -28,10 +28,12 @@ public class SpecService {
         return new ReadSpecResponse(specRepositoryPort.getSpecWithDetails(specId));
     }
 
+    @Transactional
     public CreateSpecResponse create(SpecCreateRequest request) {
         return new CreateSpecResponse(specRepositoryPort.save(request.toSpec()));
     }
 
+    @Transactional
     public void delete(Long specId) {
         specRepositoryPort.deleteById(specId);
     }
