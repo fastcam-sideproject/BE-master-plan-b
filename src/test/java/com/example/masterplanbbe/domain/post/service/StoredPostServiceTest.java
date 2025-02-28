@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.post.service;
 
+import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Category;
 import com.example.masterplanbbe.domain.post.entity.Post;
@@ -21,6 +22,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -98,16 +100,7 @@ class StoredPostServiceTest {
     }
 
     private static Member getMember() {
-        Member member = Member.builder()
-                .userId("user123")
-                .email("test@example.com")
-                .name("Test User")
-                .nickname("TestNick")
-                .password("password123")
-                .phoneNumber("010-1234-5678")
-                .birthday(LocalDate.of(1995, 5, 20))
-                .profileImageUrl("http://image.url")
-                .build();
+        Member member = createMember();
         ReflectionTestUtils.setField(member, "id", 1L);
         return member;
     }

@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.spec.service;
 
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
@@ -11,7 +12,6 @@ import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
-import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +46,7 @@ public class SpecServiceTest {
     @Test
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void get_spec_and_check_bookmark() {
-        Member member = MemberFixture.createMember();
+        Member member = createMember();
         PageRequest pageRequest = PageRequest.of(0, 25);
         Page<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
         given(specRepositoryPort.getSpecItemCards(pageRequest, member.getId())).willReturn(mocked);
