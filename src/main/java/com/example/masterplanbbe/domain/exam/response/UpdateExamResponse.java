@@ -5,40 +5,26 @@ import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 public record UpdateExamResponse(
-        Long examId,
-        String title,
-        CertificationType certificationType,
-        Category category,
-        String authority,
+        String name,
         Double difficulty,
         Integer participantCount,
-        List<SubjectDto> subjects,
-        String preparation,
-        String eligibility,
-        String examStructure,
-        String passingCriteria
+        LocalDate applyStartDate,
+        LocalDate applyEndDate,
+        LocalDate examStartDate
 ) {
     public UpdateExamResponse(Exam exam) {
         this(
-                exam.getId(),
-                exam.getTitle(),
-                exam.getCertificationType(),
-                exam.getCategory(),
-                exam.getAuthority(),
+                exam.getName(),
                 exam.getDifficulty(),
                 exam.getParticipantCount(),
-                Objects.requireNonNull(exam.getSubjects())
-                        .stream()
-                        .map(SubjectDto::new)
-                        .toList(),
-                exam.getExamDetail().getPreparation(),
-                exam.getExamDetail().getEligibility(),
-                exam.getExamDetail().getExamStructure(),
-                exam.getExamDetail().getPassingCriteria()
+                exam.getApplyStartDate(),
+                exam.getApplyEndDate(),
+                exam.getExamStartDate()
         );
     }
 }

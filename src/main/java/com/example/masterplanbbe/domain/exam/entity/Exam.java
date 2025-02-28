@@ -1,102 +1,67 @@
 package com.example.masterplanbbe.domain.exam.entity;
 
-import com.example.masterplanbbe.common.annotation.NonNull;
-import com.example.masterplanbbe.common.annotation.Nullable;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
-import com.example.masterplanbbe.domain.exam.enums.Category;
-import com.example.masterplanbbe.domain.exam.enums.CertificationType;
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "exams")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Exam extends FullAuditEntity {
-    @NonNull
-    @Column
-    private String title;
-
-    @NonNull
-    @Column
-    private Category category;
-
-    @NonNull
-    @Column
-    private String authority;
-
-    @NonNull
-    @Column
-    private Double difficulty;
-
-    @NonNull
-    @Column
-    private Integer participantCount;
-
-    @NonNull
-    @Column
-    private CertificationType certificationType;
-
-    @NonNull
-    @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Subject> subjects = List.of();
-
-    @NonNull
-    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "exam_detail_id")
     private ExamDetail examDetail;
 
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
+    private Double difficulty;
+
+    @Column(nullable = false)
+    private Integer participantCount;
+
+    @Column(nullable = false)
+    private LocalDate applyStartDate;
+
+    @Column(nullable = false)
+    private LocalDate applyEndDate;
+
+    @Column(nullable = false)
+    private LocalDate examStartDate;
+
     @Builder
-    public Exam(@NonNull String title,
-                @NonNull Category category,
-                @NonNull String authority,
-                @NonNull Double difficulty,
-                @NonNull Integer participantCount,
-                @NonNull CertificationType certificationType,
-                List<Subject> subjects,
-                @NonNull ExamDetail examDetail) {
-        this.title = title;
-        this.category = category;
-        this.authority = authority;
+    public Exam(ExamDetail examDetail,
+                String name,
+                Double difficulty,
+                Integer participantCount,
+                LocalDate applyStartDate,
+                LocalDate applyEndDate,
+                LocalDate examStartDate) {
+        this.examDetail = examDetail;
+        examDetail.addExam(this);
+        this.name = name;
         this.difficulty = difficulty;
         this.participantCount = participantCount;
-        this.certificationType = certificationType;
-        this.subjects = subjects != null ? subjects : List.of();
-        this.examDetail = examDetail;
+        this.applyStartDate = applyStartDate;
+        this.applyEndDate = applyEndDate;
+        this.examStartDate = examStartDate;
     }
 
-    public void update(ExamUpdateRequest request) {
-        this.title = request.title();
-        this.category = request.category();
-        this.authority = request.authority();
-        this.difficulty = request.difficulty();
-        this.participantCount = request.participantCount();
-        this.certificationType = request.certificationType();
-        this.subjects = getUpdatedSubjects(request.subjects());
-        examDetail.update(request);
-    }
-
-    private List<Subject> getUpdatedSubjects(List<SubjectDto> subjectDtoList) {
-        Map<Long, Subject> subjectMap = this.subjects.stream().collect(Collectors.toMap(Subject::getId, Function.identity()));
-        if (subjectDtoList == null) {
-            return List.of();
-        }
-
-        return subjectDtoList.stream()
-                .map(subjectDto -> {
-                    Subject subject = subjectMap.get(subjectDto.id());
-                    if (subject == null) {
-                        return new Subject(this, subjectDto.title(), subjectDto.description());
-                    }
-                    subject.update(subjectDto.title(), subjectDto.description());
-                    return subject;
-                })
-                .toList();
+    public void update(String name,
+                       Double difficulty,
+                       Integer participantCount,
+                       LocalDate applyStartDate,
+                       LocalDate applyEndDate,
+                       LocalDate examStartDate) {
+        this.name = name;
+        this.difficulty = difficulty;
+        this.participantCount = participantCount;
+        this.applyStartDate = applyStartDate;
+        this.applyEndDate = applyEndDate;
+        this.examStartDate = examStartDate;
     }
 }
