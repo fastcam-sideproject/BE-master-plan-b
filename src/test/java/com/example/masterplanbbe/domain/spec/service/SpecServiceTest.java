@@ -1,15 +1,15 @@
 package com.example.masterplanbbe.domain.spec.service;
 
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
 import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
+import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.member.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
@@ -27,13 +27,12 @@ import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
-import static com.example.masterplanbbe.domain.spec.entity.QSpec.spec;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("스펙 서비스 테스트")
@@ -122,5 +121,41 @@ public class SpecServiceTest {
                 () -> assertThat(result.examStructure()).isEqualTo(request.examStructure()),
                 () -> assertThat(result.passingCriteria()).isEqualTo(request.passingCriteria())
         );
+    }
+
+    @Test
+    @DisplayName("관리자는 스펙을 수정한다.")
+    void update_spec() {
+        Long specId = 1L;
+        Spec spec = createExistingSpecFrom(specId);
+        SpecUpdateRequest request = createSpecUpdateRequest(spec.getExamDetails());
+        given(specRepositoryPort.getById(any(Long.class))).willReturn(spec);
+
+        UpdateSpecResponse result = specService.update(specId, request);
+
+        verify(specRepositoryPort, times(1)).getById(any(Long.class));
+        assertAll(
+                () -> assertThat(result.name()).isEqualTo(request.name()),
+                () -> assertThat(result.issuingOrganization()).isEqualTo(request.issuingOrganization()),
+                () -> assertThat(result.certificationType()).isEqualTo(request.certificationType()),
+                () -> assertThat(result.difficulty()).isEqualTo(request.difficulty()),
+                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount()),
+                () -> assertThat(result.examDetails().size()).isEqualTo(request.examDetails().size()),
+                () -> assertThat(result.examDetails().get(0).getPreparation()).isEqualTo(request.examDetails().get(0).getPreparation()),
+                () -> assertThat(result.examDetails().get(0).getEligibility()).isEqualTo(request.examDetails().get(0).getEligibility()),
+                () -> assertThat(result.examDetails().get(0).getExamStructure()).isEqualTo(request.examDetails().get(0).getExamStructure()),
+                () -> assertThat(result.examDetails().get(0).getPassingCriteria()).isEqualTo(request.examDetails().get(0).getPassingCriteria())
+        );
+    }
+
+    @Test
+    @DisplayName("관리자는 스펙을 삭제한다.")
+    void delete_spec() {
+        Long specId = 1L;
+        willDoNothing().given(specRepositoryPort).deleteById(any(Long.class));
+
+        specService.delete(specId);
+
+        verify(specRepositoryPort, times(1)).deleteById(any(Long.class));
     }
 }

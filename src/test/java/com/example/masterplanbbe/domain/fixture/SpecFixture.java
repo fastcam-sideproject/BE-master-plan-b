@@ -2,10 +2,10 @@ package com.example.masterplanbbe.domain.fixture;
 
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.entity.Subject;
-import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.example.masterplanbbe.domain.exam.request.SubjectCreateRequest;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
 
 import java.util.List;
@@ -66,6 +66,18 @@ public class SpecFixture {
                         new SubjectCreateRequest("LC", "듣기 평가"),
                         new SubjectCreateRequest("RC", "말하기 평가")
                 )
+        );
+    }
+
+    public static SpecUpdateRequest createSpecUpdateRequest(List<ExamDetail> examDetails) {
+        return new SpecUpdateRequest(
+                "TOEIC",
+                LANGUAGE,
+                ETC,
+                "ETS",
+                3.0,
+                100,
+                examDetails
         );
     }
 }
