@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.domain.exam.entity;
 
-import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.domain.spec.entity.Spec;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,28 +10,25 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Subject extends FullAuditEntity {
-    @NonNull
-    @ManyToOne
-    @JoinColumn(name = "exam_id")
-    private Exam exam;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exam_detail_id")
+    private ExamDetail examDetail;
 
-    @NonNull
-    @Column
-    private String title;
+    @Column(nullable = false)
+    private String name;
 
-    @NonNull
     @Column
     private String description;
 
     @Builder
-    public Subject(Exam exam, String title, String description) {
-        this.exam = exam;
-        this.title = title;
-        this.description = description;
-    }
-
-    public void update(String title, String description) {
-        this.title = title;
+    public Subject(
+            ExamDetail examDetail,
+            String name,
+            String description
+    ) {
+        this.examDetail = examDetail;
+        examDetail.addSubject(this);
+        this.name = name;
         this.description = description;
     }
 }

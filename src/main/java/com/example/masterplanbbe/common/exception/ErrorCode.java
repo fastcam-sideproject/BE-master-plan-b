@@ -38,6 +38,9 @@ public enum ErrorCode {
     SOCIAL_EMAIL_LOAD_FAIL(400, "O001", "소셜 로그인에서 이메일을 불러올 수 없습니다."),
     SOCIAL_NAME_LOAD_FAIL(400, "O002", "소셜 로그인에서 이름을 불러올 수 없습니다."),
 
+    // Spec
+    SPEC_NOT_FOUND(404, "S001", "자격증을 찾을 수 없습니다."),
+
     // Exam
     EXAM_NOT_FOUND(404, "E001", "시험을 찾을 수 없습니다."),
 

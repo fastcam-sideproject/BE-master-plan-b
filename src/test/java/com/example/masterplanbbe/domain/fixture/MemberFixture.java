@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.utils.TestUtils;
 
 import java.time.LocalDate;
 
@@ -16,5 +17,13 @@ public class MemberFixture {
                 .birthday(LocalDate.parse("1999-01-01"))
                 .profileImageUrl("profileImageUrl")
                 .build();
+    }
+
+    public static Member createExistingMember() {
+        return TestUtils.createExistingEntity(MemberFixture::createMember);
+    }
+
+    public static Member createExistingMemberFrom(Long memberId) {
+        return TestUtils.createExistingEntity(MemberFixture::createMember, memberId);
     }
 }

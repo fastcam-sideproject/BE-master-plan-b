@@ -19,6 +19,7 @@ public record UserExamSessionDetailResponse(
     }
 
     public static UserExamSessionDetailResponse from(UserExamSession userExamSession, Long dueDate) {
+/*
         return UserExamSessionDetailResponse.of(
                 userExamSession.getId(),
                 userExamSession.getMember().getEmail(),
@@ -27,6 +28,9 @@ public record UserExamSessionDetailResponse(
                 userExamSession.getDate(),
                 dueDate
         );
+*/
+        return null;
+        //TODO: implement this
     }
 
     @QueryProjection

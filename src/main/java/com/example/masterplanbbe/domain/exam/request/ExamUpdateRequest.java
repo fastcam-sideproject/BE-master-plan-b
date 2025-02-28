@@ -1,22 +1,25 @@
 package com.example.masterplanbbe.domain.exam.request;
 
-import com.example.masterplanbbe.domain.exam.dto.SubjectDto;
-import com.example.masterplanbbe.domain.exam.enums.Category;
-import com.example.masterplanbbe.domain.exam.enums.CertificationType;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 
-import java.util.List;
+import java.time.LocalDate;
 
 public record ExamUpdateRequest(
-        String title,
-        Category category,
-        String authority,
+        String name,
         Double difficulty,
         Integer participantCount,
-        CertificationType certificationType,
-        List<SubjectDto> subjects,
-        String preparation,
-        String eligibility,
-        String examStructure,
-        String passingCriteria
+        LocalDate applyStartDate,
+        LocalDate applyEndDate,
+        LocalDate examStartDate
 ) {
+    public void update(Exam exam) {
+        exam.update(
+                name,
+                difficulty,
+                participantCount,
+                applyStartDate,
+                applyEndDate,
+                examStartDate
+        );
+    }
 }

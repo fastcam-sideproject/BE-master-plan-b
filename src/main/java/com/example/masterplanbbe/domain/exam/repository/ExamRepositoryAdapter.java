@@ -2,9 +2,9 @@ package com.example.masterplanbbe.domain.exam.repository;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
-import com.example.masterplanbbe.domain.exam.dto.QExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.QExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.spec.entity.QSpec;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,6 @@ import java.util.function.LongSupplier;
 import static com.example.masterplanbbe.common.exception.GlobalException.*;
 import static com.example.masterplanbbe.common.exception.ErrorCode.*;
 import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
-import static com.example.masterplanbbe.domain.examBookmark.entity.QExamBookmark.examBookmark;
 
 @Repository
 @RequiredArgsConstructor
@@ -29,37 +28,15 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
 
     @Override
     public Page<ExamItemCardDto> getExamItemCards(Pageable pageable,
-                                                  String memberId) {
-        List<ExamItemCardDto> queryResult = queryFactory.select(
-                        new QExamItemCardDto(
-                                exam,
-                                examBookmark.isNotNull()
-                        )
-                )
-                .from(exam)
-                .leftJoin(examBookmark).fetchJoin()
-                .on(exam.id.eq(examBookmark.exam.id))
-                .orderBy(exam.createdAt.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-
-        LongSupplier countQuery = () -> Optional.ofNullable(
-                queryFactory.select(
-                                exam.count()
-                        )
-                        .from(exam)
-                        .offset(pageable.getOffset())
-                        .fetchOne()
-        ).orElse(0L);
-
-        return PageableExecutionUtils.getPage(queryResult, pageable, countQuery);
+                                                  Long memberId) {
+        return null;
     }
 
     @Override
     public ExamWithDetailsDto getExamWithDetails(Long examId) {
         return Optional.ofNullable(
-                queryFactory.select(new QExamWithDetailsDto(exam))
+                queryFactory.select(new QExamWithDetailsDto(exam,
+                                QSpec.spec))
                         .from(exam)
                         .leftJoin(exam.examDetail).fetchJoin()
                         .where(exam.id.eq(examId))
