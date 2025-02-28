@@ -27,7 +27,7 @@ public class MemberController {
     }
 
     @Operation(summary = "인증번호 일치 확인")
-    @PostMapping("/api/v1/member/verification")
+    @PostMapping("/verification")
     public ApiResponse<?> verifyEmail(@RequestBody MemberVerificationDTO dto) {
         memberService.verifyEmail(dto);
         return ApiResponse.ok("인증번호가 확인됐습니다.");
