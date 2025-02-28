@@ -4,8 +4,10 @@ import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
+import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
@@ -73,5 +75,39 @@ public class SpecServiceTest {
     private Boolean isBookmarkedBy(Spec spec,
                                    SpecBookmark specBookmark) {
         return spec.getId().equals(specBookmark.getSpec().getId());
+    }
+
+    @Test
+    @DisplayName("사용자는 스펙 상세 정보를 조회한다.")
+    void get_spec_detail() {
+        Long specId = 1L;
+        Spec spec = createExistingSpecFrom(specId);
+        SpecWithDetailsDto mocked = new SpecWithDetailsDto(spec, spec.getExamDetails().get(0), false);
+        given(specRepositoryPort.getSpecWithDetails(spec.getId())).willReturn(mocked);
+
+        ReadSpecResponse result = specService.getSpec(specId);
+
+        verify(specRepositoryPort, times(1)).getSpecWithDetails(specId);
+        assertAll(
+                () -> assertThat(result.name()).isEqualTo(spec.getName()),
+                () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
+                () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
+                () -> assertThat(result.preparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria())
+        );
+    }
+
+    @Test
+    @DisplayName("관리자는 스펙을 추가한다.")
+    void create_spec() {
+        Spec spec = createSpec();
+        given(specRepositoryPort.save(spec)).willReturn(spec);
+
+        Spec result = specService.createSpec(spec);
+
+        verify(specRepositoryPort, times(1)).save(spec);
+        assertThat(result).isEqualTo(spec);
     }
 }

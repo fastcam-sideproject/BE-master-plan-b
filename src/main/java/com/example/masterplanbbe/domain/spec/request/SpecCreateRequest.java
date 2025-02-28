@@ -1,12 +1,8 @@
 package com.example.masterplanbbe.domain.spec.request;
 
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
-import com.example.masterplanbbe.domain.exam.entity.Subject;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
-
-import java.util.List;
 
 public record SpecCreateRequest(
         String name,
@@ -25,7 +21,8 @@ public record SpecCreateRequest(
                 category,
                 certificationType,
                 0.0,
-                0
+                0,
+                null
         );
     }
 
