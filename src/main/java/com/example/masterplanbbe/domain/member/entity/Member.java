@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.domain.member.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
 import com.example.masterplanbbe.common.security.dto.OAuth2UserDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -40,7 +40,7 @@ public class Member extends FullAuditEntity {
     private MemberRoleEnum role;
 
     // Custom Member Create
-    public Member(MemberCreateRequest request, String password, MemberRoleEnum role) {
+    public Member(MemberCreateRequestDTO request, String password, MemberRoleEnum role) {
         this.email = request.getEmail();
         this.nickname = request.getNickname();
         this.password = password;

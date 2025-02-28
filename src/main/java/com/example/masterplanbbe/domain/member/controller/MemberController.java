@@ -2,7 +2,7 @@ package com.example.masterplanbbe.domain.member.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.member.service.MemberService;
-import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,7 +26,7 @@ public class MemberController {
 
     @Operation(summary = "회원가입")
     @PostMapping("/create")
-    public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequest request) {
+    public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequestDTO request) {
         memberService.createMember(request);
         return ApiResponse.ok("회원가입이 완료됐습니다.");
     }

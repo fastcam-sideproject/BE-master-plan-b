@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @ToString
 @AllArgsConstructor
-public class MemberCreateRequest {
+public class MemberCreateRequestDTO {
     @NotBlank(message = "이메일은 필수 입력값입니다.")
     @Email(message = "이메일 형식을 지켜야 합니다.")
     private String email;

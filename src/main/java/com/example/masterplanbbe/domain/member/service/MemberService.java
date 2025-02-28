@@ -2,12 +2,11 @@ package com.example.masterplanbbe.domain.member.service;
 
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
-import com.example.masterplanbbe.common.exception.GlobalException;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.domain.member.exception.DuplicateUserException;
-import com.example.masterplanbbe.domain.member.dto.MemberCreateRequest;
+import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +59,7 @@ public class MemberService {
      * 신규 사용자 회원가입
      * @param request 회원가입 DTO
      */
-    public void createMember(MemberCreateRequest request) {
+    public void createMember(MemberCreateRequestDTO request) {
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
         }
