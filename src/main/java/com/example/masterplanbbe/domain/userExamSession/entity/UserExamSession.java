@@ -4,7 +4,7 @@ import com.example.masterplanbbe.common.annotation.NonNull;
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionRequest;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

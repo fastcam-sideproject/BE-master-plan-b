@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.domain.post.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 

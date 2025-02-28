@@ -4,7 +4,6 @@ import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.service.PostService;
-import com.example.masterplanbbe.security.jwt.TokenUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

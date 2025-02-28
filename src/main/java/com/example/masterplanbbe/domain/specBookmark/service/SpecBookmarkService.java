@@ -6,8 +6,8 @@ import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
 import com.example.masterplanbbe.domain.specBookmark.response.CreateSpecBookmarkResponse;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

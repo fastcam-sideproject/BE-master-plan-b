@@ -22,7 +22,7 @@ public record UserExamSessionDetailResponse(
 /*
         return UserExamSessionDetailResponse.of(
                 userExamSession.getId(),
-                userExamSession.getMember().getUserId(),
+                userExamSession.getMember().getEmail(),
                 userExamSession.getExam().getCertificationType(),
                 userExamSession.getExam().getTitle(),
                 userExamSession.getDate(),

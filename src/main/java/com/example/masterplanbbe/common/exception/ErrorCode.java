@@ -21,6 +21,9 @@ public enum ErrorCode {
     USER_ID_NOT_INITIALIZED(400, "U003", "사용자 ID가 초기화되지 않았습니다."),
     DUPLICATE_USER_ID(409, "U004", "이미 존재하는 사용자 ID입니다. 다른 ID를 입력하세요."),
     DUPLICATE_USER_EMAIL(409, "U004", "이미 가입된 이메일입니다. 다른 이메일을 입력하세요."),
+    INTERNAL_MAIL_EXCEPTION(500, "U005", "인증번호 발송이 실패했습니다. 잠시 후에 다시 시도해주세요."),
+    EXPIRED_VERIFICATION(400, "U006", "인증번호를 다시 발급해주세요."),
+    INCORRECT_VERIFICATION(400, "U007", "인증번호가 일치하지 않습니다. 다시 시도해주세요"),
 
     // Auth
     DUPLICATED_PHONE_NUMBER(409, "A001", "이미 등록된 전화번호입니다."),
