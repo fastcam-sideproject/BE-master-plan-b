@@ -13,7 +13,10 @@ public record CreateSpecResponse(
         String issuingOrganization,
         Category category,
         CertificationType certificationType,
-        ExamDetail examDetail
+        String preparation,
+        String eligibility,
+        String examStructure,
+        String passingCriteria
 ) {
     public CreateSpecResponse(Spec spec){
         this(
@@ -22,7 +25,10 @@ public record CreateSpecResponse(
                 spec.getIssuingOrganization(),
                 spec.getCategory(),
                 spec.getCertificationType(),
-                spec.getExamDetails().get(0)
+                spec.getExamDetails().get(0).getPreparation(),
+                spec.getExamDetails().get(0).getEligibility(),
+                spec.getExamDetails().get(0).getExamStructure(),
+                spec.getExamDetails().get(0).getPassingCriteria()
         );
     }
 }

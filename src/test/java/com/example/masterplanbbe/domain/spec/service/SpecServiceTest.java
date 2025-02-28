@@ -7,9 +7,12 @@ import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
+import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +27,10 @@ import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
+import static com.example.masterplanbbe.domain.spec.entity.QSpec.spec;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -102,12 +107,20 @@ public class SpecServiceTest {
     @Test
     @DisplayName("관리자는 스펙을 추가한다.")
     void create_spec() {
-        Spec spec = createSpec();
-        given(specRepositoryPort.save(spec)).willReturn(spec);
+        SpecCreateRequest request = createSpecCreateRequest();
+        given(specRepositoryPort.save(any(Spec.class))).willAnswer(TestUtils::simulateSavingEntity);
 
-        Spec result = specService.createSpec(spec);
+        CreateSpecResponse result = specService.create(request);
 
-        verify(specRepositoryPort, times(1)).save(spec);
-        assertThat(result).isEqualTo(spec);
+        verify(specRepositoryPort, times(1)).save(any(Spec.class));
+        assertAll(
+                () -> assertThat(result.name()).isEqualTo(request.name()),
+                () -> assertThat(result.issuingOrganization()).isEqualTo(request.issuingOrganization()),
+                () -> assertThat(result.certificationType()).isEqualTo(request.certificationType()),
+                () -> assertThat(result.preparation()).isEqualTo(request.preparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(request.eligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(request.examStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(request.passingCriteria())
+        );
     }
 }

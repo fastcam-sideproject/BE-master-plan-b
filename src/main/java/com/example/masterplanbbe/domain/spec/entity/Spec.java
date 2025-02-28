@@ -25,7 +25,7 @@ public class Spec extends FullAuditEntity {
     @Column(nullable = false)
     private String issuingOrganization;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @Enumerated(EnumType.STRING)
@@ -71,4 +71,5 @@ public class Spec extends FullAuditEntity {
     public void addExamDetail(ExamDetail examDetail) {
         this.examDetails.add(examDetail);
     }
+
 }

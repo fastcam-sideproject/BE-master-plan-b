@@ -17,11 +17,18 @@ public class Subject extends FullAuditEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String description;
+
     @Builder
-    public Subject(String name,
-                   ExamDetail examDetail) {
-        this.name = name;
+    public Subject(
+            ExamDetail examDetail,
+            String name,
+            String description
+    ) {
         this.examDetail = examDetail;
         examDetail.addSubject(this);
+        this.name = name;
+        this.description = description;
     }
 }
