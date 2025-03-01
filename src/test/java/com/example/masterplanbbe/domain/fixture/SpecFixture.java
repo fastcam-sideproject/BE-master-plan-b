@@ -75,8 +75,8 @@ public class SpecFixture {
                 LANGUAGE,
                 ETC,
                 "ETS",
-                3.0,
-                100,
+                3.2,
+                120,
                 examDetails
         );
     }
