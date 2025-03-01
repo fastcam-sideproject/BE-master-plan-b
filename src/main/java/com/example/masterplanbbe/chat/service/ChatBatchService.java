@@ -2,7 +2,6 @@ package com.example.masterplanbbe.chat.service;
 
 import com.example.masterplanbbe.chat.ChatMessage;
 import com.example.masterplanbbe.chat.repository.BatchChatRepository;
-import com.example.masterplanbbe.chat.repository.ChatLogRepository;
 import com.example.masterplanbbe.chat.repository.RedisChatRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
