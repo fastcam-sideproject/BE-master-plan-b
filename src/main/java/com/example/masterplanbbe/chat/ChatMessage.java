@@ -10,13 +10,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "chat_logs")
+@Table(name = "chat_messages")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ChatLog {
+public class ChatMessage {
 
     @Id
     private Long id;
@@ -27,19 +27,19 @@ public class ChatLog {
     @Column(name = "member_id", nullable = false)
     private Long memberId;
 
-    @Column(name = "content", nullable = false, length = 255)
+    @Column(name = "content", nullable = false)
     private String content;
 
     @Column(name = "send_at", nullable = false)
     private LocalDateTime sendAt;
 
     @JsonCreator
-    public static ChatLog fromJson(@JsonProperty("id") Long id,
-                                   @JsonProperty("specId") Long specId,
-                                   @JsonProperty("memberId") Long memberId,
-                                   @JsonProperty("content") String content,
-                                   @JsonProperty("sendAt") LocalDateTime sendAt) {
-        return ChatLog.builder()
+    public static ChatMessage fromJson(@JsonProperty("id") Long id,
+                                       @JsonProperty("specId") Long specId,
+                                       @JsonProperty("memberId") Long memberId,
+                                       @JsonProperty("content") String content,
+                                       @JsonProperty("sendAt") LocalDateTime sendAt) {
+        return ChatMessage.builder()
                 .id(id)
                 .specId(specId)
                 .memberId(memberId)
@@ -48,8 +48,8 @@ public class ChatLog {
                 .build();
     }
 
-    public static ChatLog from(ChatMessageDTO dto) {
-        return new ChatLog(dto.getId(),
+    public static ChatMessage from(ChatMessageDTO dto) {
+        return new ChatMessage(dto.getId(),
                 dto.getSpecId(),
                 dto.getMemberId(),
                 dto.getContent(),

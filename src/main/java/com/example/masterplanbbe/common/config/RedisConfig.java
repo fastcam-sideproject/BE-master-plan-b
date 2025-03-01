@@ -144,10 +144,9 @@ public class RedisConfig {
     @Bean
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory redisConnectionFactory, MessageListenerAdapter listenerAdapter) {
-
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
-        container.addMessageListener(listenerAdapter, new PatternTopic("chat:*"));
+        container.addMessageListener(listenerAdapter, new PatternTopic("spec:*"));
         container.setTaskExecutor(redisTaskExecutor()); // 멀티스레드 실행 설정
         return container;
     }

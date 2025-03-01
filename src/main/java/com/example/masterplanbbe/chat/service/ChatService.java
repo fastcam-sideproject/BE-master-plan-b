@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.chat.service;
 
-import com.example.masterplanbbe.chat.ChatLog;
+import com.example.masterplanbbe.chat.ChatMessage;
 import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
 import com.example.masterplanbbe.chat.repository.ChatLogRepository;
 import com.example.masterplanbbe.chat.repository.RedisChatRepository;
@@ -38,9 +38,9 @@ public class ChatService {
         }
     }
 
-    public List<ChatMessageDTO> getRecentMessages(Long examId) {
+    public List<ChatMessageDTO> getRecentMessages(Long specId) {
         try {
-            List<String> messages = redisChatRepository.getMessagesInRange(examId, 0, -1);
+            List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, -1);
             return messages.stream()
                     .map(msg -> {
                         try {
@@ -61,8 +61,8 @@ public class ChatService {
     /**
      * 채팅 메시지 삭제 (본인 또는 관리자만 삭제 가능)
      */
-    public boolean deleteChat(Long examId, Long chatId, Long memberId, String role) {
-        boolean isDeleted = deleteFromRedis(examId, chatId, memberId, role);
+    public boolean deleteChat(Long specId, Long chatId, Long memberId, String role) {
+        boolean isDeleted = deleteFromRedis(specId, chatId, memberId, role);
         if (!isDeleted) {
             isDeleted = deleteFromMySQL(chatId, memberId, role);
         }
@@ -72,14 +72,14 @@ public class ChatService {
     /**
      * Redis에서 채팅 삭제 (배치 처리 전 메시지)
      */
-    private boolean deleteFromRedis(Long examId, Long chatId, Long memberId, String role) {
+    private boolean deleteFromRedis(Long specId, Long chatId, Long memberId, String role) {
         try {
-            List<String> messages = redisChatRepository.getMessagesInRange(examId, 0, -1);
+            List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, -1);
             for (String msg : messages) {
                 ChatMessageDTO chatMessage = objectMapper.readValue(msg, ChatMessageDTO.class);
                 if (chatMessage.getId().equals(chatId) &&
                         (chatMessage.getMemberId().equals(memberId) || "ADMIN".equals(role))) {
-                    redisChatRepository.deleteMessage(examId, msg);
+                    redisChatRepository.deleteMessage(specId, msg);
                     return true;
                 }
             }
@@ -94,9 +94,9 @@ public class ChatService {
      */
     private boolean deleteFromMySQL(Long chatId, Long memberId, String role) {
         try {
-            ChatLog chatLog = chatLogRepository.findById(chatId).orElse(null);
-            if (chatLog != null && (chatLog.getMemberId().equals(memberId) || "ADMIN".equals(role))) {
-                chatLogRepository.delete(chatLog);
+            ChatMessage chatMessage = chatLogRepository.findById(chatId).orElse(null);
+            if (chatMessage != null && (chatMessage.getMemberId().equals(memberId) || "ADMIN".equals(role))) {
+                chatLogRepository.delete(chatMessage);
                 return true;
             }
         } catch (Exception e) {
