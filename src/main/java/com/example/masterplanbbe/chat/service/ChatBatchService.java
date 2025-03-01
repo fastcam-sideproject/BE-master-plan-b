@@ -1,64 +1,72 @@
 package com.example.masterplanbbe.chat.service;
 
-import com.example.masterplanbbe.chat.ChatLog;
+import com.example.masterplanbbe.chat.ChatMessage;
+import com.example.masterplanbbe.chat.repository.BatchChatRepository;
 import com.example.masterplanbbe.chat.repository.ChatLogRepository;
 import com.example.masterplanbbe.chat.repository.RedisChatRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ChatBatchService {
-    private static final int MAX_MESSAGES = 50; // 메시지 제한 개수
+    private static final int MAX_MESSAGES = 2; // 메시지 제한 개수
 
     private final RedisChatRepository redisChatRepository;
-    private final ChatLogRepository chatLogRepository;
+    private final BatchChatRepository batchChatRepository;
     private final ObjectMapper objectMapper;
 
     /**
-     * 5초마다 배치 실행
+     * 10초마다 배치 실행
      */
+    @Transactional
     @Scheduled(fixedRate = 5000)
     public void batchSaveChatMessages() {
+        List<ChatMessage> chatMessages = new ArrayList<>();
         List<String> chatRooms = redisChatRepository.getAllChatRooms();
         for (String chatKey : chatRooms) {
             try {
-                String examIdStr = chatKey.replace("chat:", "");
-                Long examId = Long.parseLong(examIdStr);
+                String specIdStr = chatKey.replace("spec:", "");
+                Long specId = Long.parseLong(specIdStr);
 
-                if (redisChatRepository.getMessageCount(examId) > MAX_MESSAGES) {
-                    moveOldMessagesToMySQL(examId);
+                if (redisChatRepository.getMessageCount(specId) > MAX_MESSAGES) {
+                    chatMessages.addAll(findOldMessages(specId));
                 }
             } catch (NumberFormatException e) {
                 log.error(e.getMessage());
             }
         }
+        batchChatRepository.saveAll(chatMessages);
     }
 
-    private void moveOldMessagesToMySQL(Long examId) {
+    private List<ChatMessage> findOldMessages(Long specId) {
+        List<ChatMessage> chatMessages = new ArrayList<>();
         try {
-            List<String> oldMessages = redisChatRepository.getMessagesInRange(examId, MAX_MESSAGES, -1);
+            List<String> oldMessages = redisChatRepository.getMessagesInRange(specId, MAX_MESSAGES, -1);
 
             if (oldMessages != null && !oldMessages.isEmpty()) {
                 for (String jsonMessage : oldMessages) {
                     try {
-                        ChatLog chatLog = objectMapper.readValue(jsonMessage, ChatLog.class);
-                        chatLogRepository.save(chatLog);
+                        ChatMessage chatMessage = objectMapper.readValue(jsonMessage, ChatMessage.class);
+                        chatMessages.add(chatMessage);
                     } catch (JsonProcessingException e) {
                         log.error(e.getMessage());
                     }
                 }
             }
-            redisChatRepository.trimMessages(examId, MAX_MESSAGES);
+            redisChatRepository.trimMessages(specId, MAX_MESSAGES);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        return chatMessages;
     }
 }
