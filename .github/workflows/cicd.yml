@@ -1,8 +1,8 @@
 name: CICD
 
-# on:
-#   push:
-#     branches: [ "dev" ]
+on:
+  push:
+    branches: [ "dev" ]
 
 permissions:
   contents: read
