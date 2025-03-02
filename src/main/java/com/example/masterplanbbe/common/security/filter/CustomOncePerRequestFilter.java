@@ -10,6 +10,7 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
     private static final List<String> passableUris = List.of(
             // Base Endpoint
+            "/env",
             "/api/v1/member/send-verification-code",
             "/api/v1/member/verification",
             "/api/v1/member/create",
