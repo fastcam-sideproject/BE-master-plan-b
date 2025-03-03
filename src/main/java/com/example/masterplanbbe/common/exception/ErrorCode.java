@@ -41,6 +41,11 @@ public enum ErrorCode {
     // Spec
     SPEC_NOT_FOUND(404, "S001", "자격증을 찾을 수 없습니다."),
 
+    // SpecReview
+    NOT_DELETE_REVIEW(400,"R001","리뷰를 삭제할 권한이 없습니다."),
+    NOT_FOUND_REVIEW(400,"R002","리뷰를 찾을 수 없습니다."),
+    NOT_MODIFIED_REVIEW(400,"R003","리뷰 수정 권한이 없습니다."),
+
     // Exam
     EXAM_NOT_FOUND(404, "E001", "시험을 찾을 수 없습니다."),
 
@@ -58,7 +63,10 @@ public enum ErrorCode {
     NOT_DELETED_COMMENT(400,"C004","댓글을 삭제 할 수 없습니다."),
 
     // UserExamSession
-    NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다.")
+    NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다."),
+
+
+
     ;
 
     private final Integer status;
