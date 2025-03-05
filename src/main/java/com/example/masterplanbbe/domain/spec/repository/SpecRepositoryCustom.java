@@ -1,11 +1,12 @@
 package com.example.masterplanbbe.domain.spec.repository;
 
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 
 public interface SpecRepositoryCustom {
-    Page<SpecItemCardDto> getSpecItemCards(Pageable pageable, Long memberId);
+    CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request, Long memberId);
     SpecWithDetailsDto getSpecWithDetails(Long specId);
 }
