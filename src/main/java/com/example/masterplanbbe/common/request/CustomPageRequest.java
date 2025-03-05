@@ -2,10 +2,10 @@ package com.example.masterplanbbe.common.request;
 
 import com.example.masterplanbbe.common.enums.SortOption;
 
-public record CustomPageRequest (
+public record CustomPageRequest<T extends SortOption> (
         Integer page,
         Integer size,
-        SortOption sort,
+        T sort,
         Boolean isAsc
 ) {
     public Long getOffset() {

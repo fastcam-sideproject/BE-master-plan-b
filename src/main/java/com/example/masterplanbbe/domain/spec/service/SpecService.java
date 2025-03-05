@@ -4,6 +4,7 @@ import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class SpecService {
     private final SpecRepositoryPort specRepositoryPort;
 
-    public PageResponse<SpecItemCardDto> getAllSpec(CustomPageRequest request,
+    public PageResponse<SpecItemCardDto> getAllSpec(CustomPageRequest<SpecSortOption> request,
                                                     Long memberId) {
         return new PageResponse<>(specRepositoryPort.getSpecItemCards(request, memberId));
     }

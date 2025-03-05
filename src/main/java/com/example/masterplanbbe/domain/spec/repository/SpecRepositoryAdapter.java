@@ -3,11 +3,13 @@ package com.example.masterplanbbe.domain.spec.repository;
 import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.util.CustomPageUtils;
+import com.example.masterplanbbe.common.util.SortUtil;
 import com.example.masterplanbbe.domain.spec.dto.QSpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.QSpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,7 +35,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest request,
+    public CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request,
                                                         Long memberId) {
         LocalDate today = LocalDate.now();
 
@@ -58,6 +60,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
                 .leftJoin(exam)
+                .orderBy(SortUtil.getOrderSpecifier(request.sort(), false))
                 .on(exam.id.eq(closestExamIdSubquery))
                 .offset(request.getOffset())
                 .limit(request.size())
