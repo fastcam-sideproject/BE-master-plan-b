@@ -1,27 +1,17 @@
 package com.example.masterplanbbe.common.response;
 
+import com.example.masterplanbbe.common.page.CustomPage;
+
 import java.util.List;
 
-public record CustomPageResponse<T>(
+public record PageResponse<T>(
         int page,
         int size,
         long totalElements,
-        List<T> content
+        List<T> content,
+        boolean hasNext
 ) {
-
-    public int getTotalPages() {
-        return (int) Math.ceil((double) totalElements / size);
-    }
-
-    public int getOffset() {
-        return page * size;
-    }
-
-    public boolean hasPrevious() {
-        return page > 0;
-    }
-
-    public boolean hasNext() {
-        return getOffset() + content.size() < totalElements;
+    public PageResponse(CustomPage<T> customPage) {
+        this(customPage.page(), customPage.size(), customPage.totalElements(), customPage.content(), customPage.hasNext());
     }
 }
