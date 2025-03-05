@@ -54,7 +54,8 @@ public class DataDBConfig {
                 "com.example.masterplanbbe.domain.post.entity",
                 "com.example.masterplanbbe.domain.studyLog.entity",
                 "com.example.masterplanbbe.domain.userExamSession.entity",
-                "com.example.masterplanbbe.domain.spec.entity"
+                "com.example.masterplanbbe.domain.spec.entity",
+                "com.example.masterplanbbe.domain.specBookmark.entity"
         );
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
