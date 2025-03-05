@@ -60,7 +60,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
                 .leftJoin(exam)
-                .orderBy(SortUtil.getOrderSpecifier(request.sort(), false))
+                .orderBy(SortUtil.getOrderSpecifier(request.sort(), request.isAsc()))
                 .on(exam.id.eq(closestExamIdSubquery))
                 .offset(request.getOffset())
                 .limit(request.size())
