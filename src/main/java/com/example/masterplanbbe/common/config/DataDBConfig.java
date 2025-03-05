@@ -21,7 +21,8 @@ import java.util.Map;
         basePackages = {
                 "com.example.masterplanbbe.domain.comment.repository",
                 "com.example.masterplanbbe.domain.exam.repository",
-                "com.example.masterplanbbe.domain.examBookmark.repository",
+                "com.example.masterplanbbe.domain.specBookmark.repository",
+                "com.example.masterplanbbe.domain.spec.repository",
                 "com.example.masterplanbbe.domain.member.repository",
                 "com.example.masterplanbbe.domain.post.repository",
                 "com.example.masterplanbbe.domain.studyLog.repository",
@@ -52,7 +53,8 @@ public class DataDBConfig {
                 "com.example.masterplanbbe.domain.member.entity",
                 "com.example.masterplanbbe.domain.post.entity",
                 "com.example.masterplanbbe.domain.studyLog.entity",
-                "com.example.masterplanbbe.domain.userExamSession.entity"
+                "com.example.masterplanbbe.domain.userExamSession.entity",
+                "com.example.masterplanbbe.domain.spec.entity"
         );
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
