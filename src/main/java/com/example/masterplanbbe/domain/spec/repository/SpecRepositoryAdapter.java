@@ -10,6 +10,7 @@ import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -50,6 +51,10 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .orderBy(exam.examStartDate.asc())
                 .limit(1);
 
+        OrderSpecifier<?> orderSpecifier = request.sort() != null ?
+                SortUtil.getOrderSpecifier(request.sort(), request.isAsc()) :
+                spec.createdAt.asc();
+
         List<SpecItemCardDto> list = queryFactory
                 .select(new QSpecItemCardDto(
                         spec,
@@ -60,7 +65,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
                 .leftJoin(exam)
-                .orderBy(SortUtil.getOrderSpecifier(request.sort(), false))
+                .orderBy(orderSpecifier)
                 .on(exam.id.eq(closestExamIdSubquery))
                 .offset(request.getOffset())
                 .limit(request.size())

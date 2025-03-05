@@ -8,6 +8,7 @@ import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
@@ -51,7 +52,7 @@ public class SpecServiceTest {
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void get_spec_and_check_bookmark() {
         Member member = createMember();
-        CustomPageRequest request = new CustomPageRequest(0, 25, null, false);
+        CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
         CustomPage<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
         given(specRepositoryPort.getSpecItemCards(request, member.getId())).willReturn(mocked);
 
