@@ -1,5 +1,8 @@
 package com.example.masterplanbbe.domain.spec.repository;
 
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.util.CustomPageUtils;
 import com.example.masterplanbbe.domain.spec.dto.QSpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.QSpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
@@ -9,9 +12,6 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -33,8 +33,8 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<SpecItemCardDto> getSpecItemCards(Pageable pageable,
-                                                  Long memberId) {
+    public CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest request,
+                                                        Long memberId) {
         LocalDate today = LocalDate.now();
 
         JPQLSubQuery<Long> closestExamIdSubquery = JPAExpressions
@@ -59,8 +59,8 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
                 .leftJoin(exam)
                 .on(exam.id.eq(closestExamIdSubquery))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(request.getOffset())
+                .limit(request.size())
                 .fetch();
 
         LongSupplier countQuery = () -> Optional.ofNullable(
@@ -70,7 +70,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                                 .fetchOne())
                 .orElse(0L);
 
-        return PageableExecutionUtils.getPage(list, pageable, countQuery);
+        return CustomPageUtils.getPage(list, request, countQuery);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.example.masterplanbbe.domain.spec.service;
 
+import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
@@ -10,8 +12,6 @@ import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,9 +19,9 @@ import org.springframework.stereotype.Service;
 public class SpecService {
     private final SpecRepositoryPort specRepositoryPort;
 
-    public Page<SpecItemCardDto> getAllSpec(Pageable pageable,
-                                            Long memberId) {
-        return specRepositoryPort.getSpecItemCards(pageable, memberId);
+    public PageResponse<SpecItemCardDto> getAllSpec(CustomPageRequest request,
+                                                    Long memberId) {
+        return new PageResponse<>(specRepositoryPort.getSpecItemCards(request, memberId));
     }
 
     public ReadSpecResponse getSpec(Long specId) {

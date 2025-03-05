@@ -1,5 +1,8 @@
 package com.example.masterplanbbe.domain.spec.service;
 
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
@@ -13,6 +16,7 @@ import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.utils.TestUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,33 +51,33 @@ public class SpecServiceTest {
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void get_spec_and_check_bookmark() {
         Member member = createMember();
-        PageRequest pageRequest = PageRequest.of(0, 25);
-        Page<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
-        given(specRepositoryPort.getSpecItemCards(pageRequest, member.getId())).willReturn(mocked);
+        CustomPageRequest request = new CustomPageRequest(0, 25, null, false);
+        CustomPage<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
+        given(specRepositoryPort.getSpecItemCards(request, member.getId())).willReturn(mocked);
 
-        Page<SpecItemCardDto> result = specService.getAllSpec(pageRequest, member.getId());
+        PageResponse<SpecItemCardDto> result = specService.getAllSpec(request, member.getId());
 
-        verify(specRepositoryPort, times(1)).getSpecItemCards(pageRequest, member.getId());
+        verify(specRepositoryPort, times(1)).getSpecItemCards(request, member.getId());
         assertSpecItemCardPage(result);
     }
 
-    private Page<SpecItemCardDto> createMockedSpecItemCardPage(Member member) {
+    private CustomPage<SpecItemCardDto> createMockedSpecItemCardPage(Member member) {
         Spec spec1 = createExistingSpecFrom(1L);
         Spec spec2 = createExistingSpecFrom(2L);
         SpecBookmark specBookmark1 = createSpecBookmark(member, spec1);
 
-        return new PageImpl<>(List.of(
+        return new CustomPage<>(0, 25, 2, List.of(
                 new SpecItemCardDto(spec1, null, isBookmarkedBy(spec1, specBookmark1)),
                 new SpecItemCardDto(spec2, null, isBookmarkedBy(spec2, specBookmark1))
         ));
     }
 
-    private void assertSpecItemCardPage(Page<SpecItemCardDto> result) {
+    private void assertSpecItemCardPage(PageResponse<SpecItemCardDto> result) {
         assertThat(result).isNotNull();
         assertAll(
-                () -> assertThat(result.getContent().size()).isEqualTo(2),
-                () -> assertThat(result.getContent().get(0).isBookmarked()).isTrue(),
-                () -> assertThat(result.getContent().get(1).isBookmarked()).isFalse()
+                () -> assertThat(result.content().size()).isEqualTo(2),
+                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
         );
     }
 

@@ -2,6 +2,8 @@ package com.example.masterplanbbe.domain.spec.repository;
 
 
 import com.example.masterplanbbe.common.exception.GlobalException;
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
@@ -53,16 +55,16 @@ public class SpecRepositoryPortTest {
         specRepositoryPort.saveAll(List.of(spec1, spec2));
         examRepository.save(createExam(spec1.getExamDetails().get(0)));
         specBookmarkRepository.save(createSpecBookmark(member, spec1));
-        PageRequest pageRequest = PageRequest.of(0, 25);
+        CustomPageRequest request = new CustomPageRequest(0, 25, null, false);
 
-        Page<SpecItemCardDto> result = specRepositoryPort.getSpecItemCards(pageRequest, member.getId());
+        CustomPage<SpecItemCardDto> result = specRepositoryPort.getSpecItemCards(request, member.getId());
 
-        assertThat(result.getContent().size()).isEqualTo(2);
+        assertThat(result.content().size()).isEqualTo(2);
         assertAll(
-                () -> assertThat(result.getContent().get(0).name()).isEqualTo(spec1.getName()),
-                () -> assertThat(result.getContent().get(1).name()).isEqualTo(spec2.getName()),
-                () -> assertThat(result.getContent().get(0).isBookmarked()).isTrue(),
-                () -> assertThat(result.getContent().get(1).isBookmarked()).isFalse()
+                () -> assertThat(result.content().get(0).name()).isEqualTo(spec1.getName()),
+                () -> assertThat(result.content().get(1).name()).isEqualTo(spec2.getName()),
+                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
         );
     }
 
