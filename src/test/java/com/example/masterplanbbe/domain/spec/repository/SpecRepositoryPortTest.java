@@ -10,6 +10,7 @@ import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -55,7 +56,7 @@ public class SpecRepositoryPortTest {
         specRepositoryPort.saveAll(List.of(spec1, spec2));
         examRepository.save(createExam(spec1.getExamDetails().get(0)));
         specBookmarkRepository.save(createSpecBookmark(member, spec1));
-        CustomPageRequest request = new CustomPageRequest(0, 25, null, false);
+        CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
 
         CustomPage<SpecItemCardDto> result = specRepositoryPort.getSpecItemCards(request, member.getId());
 
