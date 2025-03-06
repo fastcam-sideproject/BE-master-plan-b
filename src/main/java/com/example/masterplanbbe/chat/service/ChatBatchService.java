@@ -24,11 +24,8 @@ public class ChatBatchService {
     private final BatchChatRepository batchChatRepository;
     private final ObjectMapper objectMapper;
 
-    /**
-     * 10초마다 배치 실행
-     */
     @Transactional
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 600_000)
     public void batchSaveChatMessages() {
         List<ChatMessage> chatMessages = new ArrayList<>();
         List<String> chatRooms = redisChatRepository.getAllChatRooms();
