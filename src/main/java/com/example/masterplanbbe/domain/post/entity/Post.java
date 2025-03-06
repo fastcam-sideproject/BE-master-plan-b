@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "exam_posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Post extends FullAuditEntity {
