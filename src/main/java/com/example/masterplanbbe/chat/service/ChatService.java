@@ -2,12 +2,14 @@ package com.example.masterplanbbe.chat.service;
 
 import com.example.masterplanbbe.chat.ChatMessage;
 import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
-import com.example.masterplanbbe.chat.repository.ChatLogRepository;
+import com.example.masterplanbbe.chat.repository.ChatMessageRepository;
 import com.example.masterplanbbe.chat.repository.RedisChatRepository;
 import com.example.masterplanbbe.chat.util.SnowflakeIdGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    private final ChatLogRepository chatLogRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final RedisChatRepository redisChatRepository;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final ObjectMapper objectMapper;
@@ -58,6 +60,10 @@ public class ChatService {
         }
     }
 
+    public Slice<ChatMessage> getChatMessage(Long lastChatId, Long specId, Pageable pageable) {
+        return chatMessageRepository.findChatList(lastChatId, specId, pageable);
+    }
+
     /**
      * 채팅 메시지 삭제 (본인 또는 관리자만 삭제 가능)
      */
@@ -94,9 +100,9 @@ public class ChatService {
      */
     private boolean deleteFromMySQL(Long chatId, Long memberId, String role) {
         try {
-            ChatMessage chatMessage = chatLogRepository.findById(chatId).orElse(null);
+            ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElse(null);
             if (chatMessage != null && (chatMessage.getMemberId().equals(memberId) || "ADMIN".equals(role))) {
-                chatLogRepository.delete(chatMessage);
+                chatMessageRepository.delete(chatMessage);
                 return true;
             }
         } catch (Exception e) {
