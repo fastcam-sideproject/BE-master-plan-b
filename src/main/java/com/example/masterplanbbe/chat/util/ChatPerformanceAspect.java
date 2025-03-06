@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class PerformanceAspect {
+public class ChatPerformanceAspect {
 
     @Around("execution(* com.example.masterplanbbe.chat.repository.*.*(..))")
     public Object measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
