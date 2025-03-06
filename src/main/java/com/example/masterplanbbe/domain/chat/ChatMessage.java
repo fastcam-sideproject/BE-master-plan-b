@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.chat;
+package com.example.masterplanbbe.domain.chat;
 
-import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

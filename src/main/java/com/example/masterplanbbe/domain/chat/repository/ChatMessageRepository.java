@@ -1,7 +1,6 @@
-package com.example.masterplanbbe.chat.repository;
+package com.example.masterplanbbe.domain.chat.repository;
 
-import com.example.masterplanbbe.chat.ChatMessage;
-import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.chat.ChatMessage;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

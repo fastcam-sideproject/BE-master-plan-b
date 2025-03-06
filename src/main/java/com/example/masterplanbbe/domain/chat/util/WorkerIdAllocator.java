@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat.util;
+package com.example.masterplanbbe.domain.chat.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

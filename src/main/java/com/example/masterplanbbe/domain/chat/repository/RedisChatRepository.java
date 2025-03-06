@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat.repository;
+package com.example.masterplanbbe.domain.chat.repository;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,6 @@ public class RedisChatRepository {
     @Autowired
     public RedisChatRepository(@Qualifier("chatTemplate") RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
     }
 
     /**

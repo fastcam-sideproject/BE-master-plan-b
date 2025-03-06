@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat.config;
+package com.example.masterplanbbe.domain.chat.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -12,8 +12,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/sub"); // 클라이언트가 구독할 수 있는 경로
-        config.setApplicationDestinationPrefixes("/pub"); // 클라이언트가 메시지를 보낼 경로 접두사
+        config.enableSimpleBroker("/sub"); // 구독 경로
+        config.setApplicationDestinationPrefixes("/pub"); // 메시지를 보낼 경로
     }
 
     @Override

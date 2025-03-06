@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.chat.service;
+package com.example.masterplanbbe.domain.chat.service;
 
-import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +17,11 @@ public class RedisSubscriber implements MessageListener {
     private final SimpMessagingTemplate messagingTemplate;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 채팅 받기
+     * @param message
+     * @param pattern
+     */
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {

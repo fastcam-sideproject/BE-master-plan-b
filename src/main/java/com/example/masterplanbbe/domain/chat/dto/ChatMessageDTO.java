@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat.dto;
+package com.example.masterplanbbe.domain.chat.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

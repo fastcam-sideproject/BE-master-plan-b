@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.chat.service;
+package com.example.masterplanbbe.domain.chat.service;
 
-import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,11 @@ public class RedisPublisher {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
+    /**
+     * 채팅 보내기
+     * @param channel
+     * @param message
+     */
     public void publish(String channel, ChatMessageDTO message) {
         try {
             String jsonMessage = objectMapper.writeValueAsString(message);

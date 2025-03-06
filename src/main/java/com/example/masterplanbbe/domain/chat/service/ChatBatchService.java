@@ -1,8 +1,8 @@
-package com.example.masterplanbbe.chat.service;
+package com.example.masterplanbbe.domain.chat.service;
 
-import com.example.masterplanbbe.chat.ChatMessage;
-import com.example.masterplanbbe.chat.repository.BatchChatRepository;
-import com.example.masterplanbbe.chat.repository.RedisChatRepository;
+import com.example.masterplanbbe.domain.chat.ChatMessage;
+import com.example.masterplanbbe.domain.chat.repository.BatchChatRepository;
+import com.example.masterplanbbe.domain.chat.repository.RedisChatRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ChatBatchService {
-    private static final int MAX_MESSAGES = 2; // 메시지 제한 개수
+    private static final int MAX_MESSAGES = 2; // 채팅 메시지 제한 개수
 
     private final RedisChatRepository redisChatRepository;
     private final BatchChatRepository batchChatRepository;

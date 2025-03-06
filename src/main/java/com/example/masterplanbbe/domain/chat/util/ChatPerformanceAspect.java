@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat.util;
+package com.example.masterplanbbe.domain.chat.util;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

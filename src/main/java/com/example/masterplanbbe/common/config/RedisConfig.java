@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.common.config;
 
-import com.example.masterplanbbe.chat.service.RedisSubscriber;
+import com.example.masterplanbbe.domain.chat.service.RedisSubscriber;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.lettuce.core.ClientOptions;

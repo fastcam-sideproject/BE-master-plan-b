@@ -1,10 +1,10 @@
-package com.example.masterplanbbe.chat.service;
+package com.example.masterplanbbe.domain.chat.service;
 
-import com.example.masterplanbbe.chat.ChatMessage;
-import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
-import com.example.masterplanbbe.chat.repository.ChatMessageRepository;
-import com.example.masterplanbbe.chat.repository.RedisChatRepository;
-import com.example.masterplanbbe.chat.util.SnowflakeIdGenerator;
+import com.example.masterplanbbe.domain.chat.ChatMessage;
+import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.chat.repository.ChatMessageRepository;
+import com.example.masterplanbbe.domain.chat.repository.RedisChatRepository;
+import com.example.masterplanbbe.domain.chat.util.SnowflakeIdGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class ChatService {
     private final ObjectMapper objectMapper;
 
     /**
-     * 채팅 메시지를 Redis에 저장 (MySQL은 배치 처리)
+     * 채팅을 Redis에 저장
      */
     public void saveChatMessage(ChatMessageDTO message) {
         try {
@@ -40,6 +40,12 @@ public class ChatService {
         }
     }
 
+    /**
+     * 가장 최신 채팅 조회
+     *
+     * @param specId
+     * @return
+     */
     public List<ChatMessageDTO> getRecentMessages(Long specId) {
         try {
             List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, -1);
@@ -60,6 +66,13 @@ public class ChatService {
         }
     }
 
+    /**
+     * 메시지 50개 조회
+     *
+     * @param lastChatId 조회 기준이 될 채팅의 ID
+     * @param specId
+     * @param pageable
+     */
     public Slice<ChatMessage> getChatMessage(Long lastChatId, Long specId, Pageable pageable) {
         return chatMessageRepository.findChatList(lastChatId, specId, pageable);
     }

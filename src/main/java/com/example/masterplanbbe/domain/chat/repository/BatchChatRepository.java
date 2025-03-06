@@ -1,6 +1,6 @@
-package com.example.masterplanbbe.chat.repository;
+package com.example.masterplanbbe.domain.chat.repository;
 
-import com.example.masterplanbbe.chat.ChatMessage;
+import com.example.masterplanbbe.domain.chat.ChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;

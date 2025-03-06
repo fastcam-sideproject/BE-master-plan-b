@@ -1,8 +1,8 @@
-package com.example.masterplanbbe.chat.controller;
+package com.example.masterplanbbe.domain.chat.controller;
 
-import com.example.masterplanbbe.chat.dto.ChatMessageDTO;
-import com.example.masterplanbbe.chat.service.ChatService;
-import com.example.masterplanbbe.chat.service.RedisPublisher;
+import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.chat.service.ChatService;
+import com.example.masterplanbbe.domain.chat.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +11,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/chat")
+@RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
 public class ChatController {
 
@@ -22,19 +22,13 @@ public class ChatController {
     public void sendMessage(ChatMessageDTO message) {
         Long specId = message.getSpecId();
         chatService.saveChatMessage(message);
-        redisPublisher.publish("spec:" + specId, message); // Redis Pub/Sub을 통해 메시지 전송
+        redisPublisher.publish("spec:" + specId, message);
     }
 
     @GetMapping("/recent")
     public ResponseEntity<?> getRecentMessages(@RequestParam Long specId) {
         return ResponseEntity.ok()
                 .body(chatService.getRecentMessages(specId));
-    }
-
-    @DeleteMapping("/{specId}/{chatId}")
-    public ResponseEntity<?> deleteChat(@PathVariable Long specId, @PathVariable Long chatId, @RequestParam Long memberId, @RequestParam String role) {
-        chatService.deleteChat(specId, chatId, memberId, role);
-        return ResponseEntity.ok().body("채팅 메시지가 성공적으로 삭제되었습니다.");
     }
 
     @GetMapping
@@ -46,5 +40,14 @@ public class ChatController {
         }
         Pageable pageable = PageRequest.of(0, Math.min(size, 100)); //최대 사이즈 100으로 제한
         return ResponseEntity.ok().body(chatService.getChatMessage(lastChatId, specId, pageable));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteChat(@RequestParam Long specId,
+                                        @RequestParam Long chatId,
+                                        @RequestParam Long memberId,
+                                        @RequestParam String role) {
+        chatService.deleteChat(specId, chatId, memberId, role);
+        return ResponseEntity.ok().body("채팅 메시지가 성공적으로 삭제되었습니다.");
     }
 }

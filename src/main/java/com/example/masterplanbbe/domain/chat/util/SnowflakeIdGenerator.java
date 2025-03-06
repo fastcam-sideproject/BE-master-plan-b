@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.chat.util;
+package com.example.masterplanbbe.domain.chat.util;
 
 /**
  * Twitter Snowflake 기반의 ID 생성기
@@ -28,7 +28,7 @@ public class SnowflakeIdGenerator {
 
             if (sequence == 0) {
                 while (timestamp <= lastTimestamp) {
-                    timestamp = System.currentTimeMillis(); // 시간이 증가할 때까지 루프
+                    timestamp = System.currentTimeMillis();
                 }
             }
         } else {
