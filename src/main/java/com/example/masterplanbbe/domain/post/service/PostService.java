@@ -115,7 +115,7 @@ public class PostService {
             throw new GlobalException(ErrorCode.NOT_DELETED_POST) {};
         }
 
-        postRepositoryPort.delete(postId);
+        postRepositoryPort.deleteById(postId);
     }
 
     /**

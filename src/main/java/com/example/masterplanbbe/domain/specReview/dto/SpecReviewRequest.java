@@ -6,8 +6,6 @@ import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
 import com.example.masterplanbbe.domain.specReview.enums.*;
 
 public record SpecReviewRequest(
-        Long memberId,
-        Long specId,
         Difficulty difficulty,
         ExamType examType,
         ReflectionLevel reflectionLevel,

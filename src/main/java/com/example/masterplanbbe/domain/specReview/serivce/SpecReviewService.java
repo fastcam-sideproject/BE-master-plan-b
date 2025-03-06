@@ -6,11 +6,10 @@ import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepositoryAdapter;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepository;
-import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryAdapter;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
 import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
-import com.example.masterplanbbe.domain.specReview.repository.SpecReviewRepository;
+import com.example.masterplanbbe.domain.specReview.repository.SpecReviewRepositoryAdapter;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class SpecReviewService {
-    private final SpecReviewRepository specReviewRepository;
+    private final SpecReviewRepositoryAdapter specReviewRepositoryAdapter;
     private final SpecRepository specRepository;
     private final MemberRepositoryAdapter memberRepositoryAdapter;
 
@@ -28,11 +27,15 @@ public class SpecReviewService {
      * @param specReviewRequest
      * @return
      */
-    public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest) {
-        Spec spec = specRepository.getById(specReviewRequest.specId());
-        Member member = memberRepositoryAdapter.findById(specReviewRequest.memberId());
+    public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long specId, Long memberId) {
+        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberId(specId, memberId)) {
+            throw new GlobalException.BadRequestException(ErrorCode.ALREADY_CREATE_REVIEW);
+        }
+
+        Spec spec = specRepository.getById(specId);
+        Member member = memberRepositoryAdapter.findById(memberId);
         SpecReview specReview = specReviewRequest.toEntity(member, spec);
-        SpecReview saved = specReviewRepository.save(specReview);
+        SpecReview saved = specReviewRepositoryAdapter.save(specReview);
 
         return SpecReviewResponse.from(saved);
     }
@@ -42,11 +45,11 @@ public class SpecReviewService {
      * @param specId
      * @return
      */
-    public SpecReviewResponse getReview(Long specId) {
-        Spec spec = specRepository.getById(specId);
-        SpecReview specreview = specReviewRepository.findBySpec(spec);
-
-        return SpecReviewResponse.from(specreview);
+    public SpecReviewResponse getReview(Long specId, Long specReviewId) {
+        SpecReview specReview = specReviewRepositoryAdapter.findByIdAndSpecId(specReviewId, specId);
+        specReview.addViewCount();
+        specReviewRepositoryAdapter.save(specReview);
+        return SpecReviewResponse.from(specReview);
     }
 
     /**
@@ -57,7 +60,7 @@ public class SpecReviewService {
      */
     public Page<SpecReviewResponse> getAllReview(Long specId, Pageable pageable) {
         Spec spec = specRepository.getById(specId);
-        Page<SpecReview> reviewPage = specReviewRepository.findBySpec(spec, pageable);
+        Page<SpecReview> reviewPage = specReviewRepositoryAdapter.findBySpec(spec, pageable);
 
         return reviewPage.map(SpecReviewResponse::from);
     }
@@ -67,9 +70,8 @@ public class SpecReviewService {
      * @param reviewId
      * @param memberId
      */
-    public void deleteReview(Long reviewId, Long memberId) {
-        SpecReview specReview = specReviewRepository.findById(reviewId)
-                .orElseThrow(() -> new GlobalException.NotFoundException(ErrorCode.NOT_FOUND_REVIEW));
+    public void deleteReview(Long specId, Long specReviewId, Long memberId) {
+        SpecReview specReview = specReviewRepositoryAdapter.findByIdAndSpecId(specReviewId, specId);
 
         Member member = memberRepositoryAdapter.findById(memberId);
 
@@ -77,10 +79,28 @@ public class SpecReviewService {
             throw new GlobalException.BadRequestException(ErrorCode.NOT_DELETE_REVIEW);
         }
 
-        specReviewRepository.delete(specReview);
+        specReviewRepositoryAdapter.deleteById(specReviewId);
     }
 
-//    public SpecReviewResponse updateReview(SpecReviewRequest specReviewRequest, Long memberId) {
-//
-//    }
+    /**
+     * 리뷰 수정
+     * @param specReviewRequest
+     * @param memberId
+     * @param specReviewId
+     * @return
+     */
+    public SpecReviewResponse updateReview(SpecReviewRequest specReviewRequest, Long memberId, Long specReviewId, Long specId) {
+        SpecReview specReview = specReviewRepositoryAdapter.findByIdAndSpecId(specReviewId, specId);
+
+        Member member = memberRepositoryAdapter.findById(memberId);
+
+        if (!specReview.getMember().getId().equals(memberId)) {
+            throw new GlobalException.BadRequestException(ErrorCode.NOT_MODIFIED_REVIEW);
+        }
+
+        specReview.updateReview(specReviewRequest);
+        specReviewRepositoryAdapter.save(specReview);
+
+        return SpecReviewResponse.from(specReview);
+    }
 }

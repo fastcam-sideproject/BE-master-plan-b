@@ -13,7 +13,7 @@ public interface PostRepositoryPort {
 
     Page<Post> findAll(Pageable pageable);
 
-    void delete(Long id);
+    void deleteById(Long id);
 
     Page<Post> findByTitleContaining(String keyword, Pageable pageable);
 
