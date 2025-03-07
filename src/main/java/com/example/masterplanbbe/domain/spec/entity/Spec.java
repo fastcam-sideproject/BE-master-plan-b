@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.spec.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
@@ -39,6 +40,9 @@ public class Spec extends FullAuditEntity {
 
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDetail> examDetails;
+
+    @OneToOne
+    private Exam latestExam;
 
 
     @Builder
