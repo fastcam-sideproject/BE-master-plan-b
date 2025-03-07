@@ -1,13 +1,16 @@
 package com.example.masterplanbbe.domain.fixture;
 
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.entity.Subject;
 import com.example.masterplanbbe.domain.exam.request.SubjectCreateRequest;
+import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.exam.enums.Category.*;
@@ -40,6 +43,19 @@ public class SpecFixture {
                 .name("RC")
                 .examDetail(examDetail)
                 .build();
+
+        LocalDate now = LocalDate.now();
+
+        Exam exam = Exam.builder()
+                .examDetail(examDetail)
+                .name(now.getYear() + "년 1회")
+                .applyStartDate(now.minusDays(5L))
+                .applyEndDate(now.plusDays(3L))
+                .examStartDate(now.plusDays(10L))
+                .participantCount(0)
+                .build();
+
+        spec.specifyLatestExam(exam);
 
         return spec;
     }
@@ -78,6 +94,19 @@ public class SpecFixture {
                 3.2,
                 120,
                 examDetails
+        );
+    }
+
+    public static SpecWithDetailsDto createSpecWithDetailsDto(Spec spec) {
+        return new SpecWithDetailsDto(
+                spec.getName(),
+                spec.getIssuingOrganization(),
+                spec.getCertificationType(),
+                false,
+                spec.getLatestExam().getExamDetail().getPreparation(),
+                spec.getLatestExam().getExamDetail().getEligibility(),
+                spec.getLatestExam().getExamDetail().getExamStructure(),
+                spec.getLatestExam().getExamDetail().getPassingCriteria()
         );
     }
 }

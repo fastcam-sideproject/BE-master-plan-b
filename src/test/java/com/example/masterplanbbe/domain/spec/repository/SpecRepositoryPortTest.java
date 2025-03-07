@@ -17,8 +17,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -42,8 +40,8 @@ public class SpecRepositoryPortTest {
     @BeforeEach
     void setUp() {
         specBookmarkRepository.deleteAll();
-        examRepository.deleteAll();
         specRepositoryPort.deleteAll();
+        examRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
@@ -78,14 +76,14 @@ public class SpecRepositoryPortTest {
 
         assertThat(result).isNotNull();
         assertAll(
-                () -> assertThat(result.name()).isEqualTo(spec.getName()),
-                () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
-                () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
-                () -> assertThat(result.preparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
-                () -> assertThat(result.examStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
-                () -> assertThat(result.eligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
-                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria()),
-                () -> assertThat(result.isBookmarked()).isFalse()
+                () -> assertThat(result.getName()).isEqualTo(spec.getName()),
+                () -> assertThat(result.getIssuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
+                () -> assertThat(result.getCertificationType()).isEqualTo(spec.getCertificationType()),
+                () -> assertThat(result.getPreparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
+                () -> assertThat(result.getExamStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
+                () -> assertThat(result.getEligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
+                () -> assertThat(result.getPassingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria()),
+                () -> assertThat(result.getIsBookmarked()).isFalse()
         );
     }
 

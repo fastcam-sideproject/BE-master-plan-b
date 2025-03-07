@@ -4,6 +4,7 @@ import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
+import com.example.masterplanbbe.domain.fixture.SpecFixture;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
@@ -92,7 +93,7 @@ public class SpecServiceTest {
     void get_spec_detail() {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
-        SpecWithDetailsDto mocked = new SpecWithDetailsDto(spec, spec.getExamDetails().get(0), false);
+        SpecWithDetailsDto mocked = createSpecWithDetailsDto(spec);
         given(specRepositoryPort.getSpecWithDetails(spec.getId())).willReturn(mocked);
 
         ReadSpecResponse result = specService.getSpec(specId);
