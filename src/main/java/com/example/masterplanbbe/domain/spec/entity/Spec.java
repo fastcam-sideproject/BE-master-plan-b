@@ -76,4 +76,7 @@ public class Spec extends FullAuditEntity {
         this.examDetails.add(examDetail);
     }
 
+    public void specifyLatestExam(Exam exam) {
+        this.latestExam = exam;
+    }
 }
