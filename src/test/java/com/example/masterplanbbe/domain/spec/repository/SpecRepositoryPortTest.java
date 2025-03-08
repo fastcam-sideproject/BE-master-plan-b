@@ -46,7 +46,7 @@ public class SpecRepositoryPortTest {
     }
 
     @Test
-    @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인할 수 있다.")
+    @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void retrieve_spec_and_check_bookmark_status() {
         Member member = memberRepository.save(createMember());
         Spec spec1 = createSpec();

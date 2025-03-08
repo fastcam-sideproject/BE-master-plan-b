@@ -38,8 +38,8 @@ public class SpecControllerTest {
     }
 
     @Test
-    @DisplayName("사용자는 스펙 목록을 조회한다.")
-    void getSpecList() {
+    @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
+    void retrieve_spec_and_check_bookmark_status() {
         Member member = createMember();
         CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
         CustomPage<SpecItemCardDto> mockedPage = createMockedSpecItemCardPage();
