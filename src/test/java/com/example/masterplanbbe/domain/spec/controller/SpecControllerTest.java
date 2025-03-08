@@ -2,25 +2,42 @@ package com.example.masterplanbbe.domain.spec.controller;
 
 import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.response.ApiResponse;
+import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.example.masterplanbbe.domain.spec.service.SpecService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 public class SpecControllerTest {
@@ -32,6 +49,8 @@ public class SpecControllerTest {
 
     private MockMvc mockMvc;
 
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(specController).build();
@@ -39,10 +58,37 @@ public class SpecControllerTest {
 
     @Test
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
-    void retrieve_spec_and_check_bookmark_status() {
-        Member member = createMember();
+    void retrieve_spec_and_check_bookmark_status() throws Exception {
+        Member member = createExistingMember();
         CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
         CustomPage<SpecItemCardDto> mockedPage = createMockedSpecItemCardPage();
+        given(specService.getAllSpec(request, member.getId())).willReturn(new PageResponse<>(mockedPage));
+
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/specs")
+                .param("page", "0")
+                .param("size", "25")
+                .param("sortOption", (String) null)
+                .param("isAsc", "false")
+                .param("memberId", member.getId().toString())
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding(StandardCharsets.UTF_8)
+                .accept(MediaType.APPLICATION_JSON));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString();
+                    ApiResponse<PageResponse<SpecItemCardDto>> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    PageResponse<SpecItemCardDto> data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertThat(data.content()).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.content().size()).isEqualTo(2),
+                            () -> assertThat(data.content()).usingRecursiveFieldByFieldElementComparator()
+                                    .containsExactlyInAnyOrderElementsOf(mockedPage.content())
+                    );
+                });
     }
 
     private CustomPage<SpecItemCardDto> createMockedSpecItemCardPage() {
