@@ -37,6 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -152,7 +153,21 @@ public class SpecControllerTest {
 
     @Test
     @DisplayName("관리자는 스펙을 삭제한다")
-    void deleteSpec() {
+    void deleteSpec() throws Exception {
+        Long specId = 1L;
+        willDoNothing().given(specService).delete(specId);
 
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/specs/{specId}", specId)
+                .characterEncoding(UTF_8));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<Void> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    assertThat(response).isNotNull();
+                    assertThat(response.getMessage()).isEqualTo("스펙 삭제 성공");
+                });
     }
 }
