@@ -135,7 +135,7 @@ public class SpecServiceTest {
         Spec spec = createExistingSpecFrom(specId);
         SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
         given(specRepositoryPort.getById(any(Long.class))).willReturn(
-                withSetup(() -> createExistingSpecFrom(specId), entity -> setField(entity, "difficulty", 4.0))
+                createUpdatedSpec(() -> spec, 4.0)
         );
 
         UpdateSpecResponse result = specService.update(specId, request);

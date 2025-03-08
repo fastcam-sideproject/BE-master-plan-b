@@ -182,8 +182,9 @@ public class SpecControllerTest {
         Spec spec = createExistingSpecFrom(specId);
         SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
         given(specService.update(specId, request)).willReturn(new UpdateSpecResponse(
-                withSetup(() -> createExistingSpecFrom(specId), entity -> setField(entity, "difficulty", 4.0))
-        ));
+                        createUpdatedSpec(() -> spec, 4.0)
+                )
+        );
 
         ResultActions resultActions = mockMvc.perform(patch("/api/v1/specs/{specId}", specId)
                 .contentType(APPLICATION_JSON)

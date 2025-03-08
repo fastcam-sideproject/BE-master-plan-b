@@ -10,9 +10,11 @@ import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.example.masterplanbbe.domain.exam.enums.Category.*;
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
@@ -67,6 +69,13 @@ public class SpecFixture {
 
     public static Spec createExistingSpecFrom(Long specId) {
         return TestUtils.createExistingEntity(SpecFixture::createSpec, specId);
+    }
+
+    public static Spec createUpdatedSpec(Supplier<Spec> specSupplier, Double difficulty) {
+        return TestUtils.withSetup(
+                specSupplier,
+                spec -> ReflectionTestUtils.setField(spec, "difficulty", difficulty)
+        );
     }
 
     public static SpecCreateRequest createSpecCreateRequest() {
