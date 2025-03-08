@@ -73,8 +73,8 @@ public class SpecServiceTest {
         assertThat(result).isNotNull();
         assertAll(
                 () -> assertThat(result.content().size()).isEqualTo(2),
-                () -> assertThat(result.content().get(0).getIsBookmarked()).isTrue(),
-                () -> assertThat(result.content().get(1).getIsBookmarked()).isFalse()
+                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
         );
     }
 

@@ -60,10 +60,10 @@ public class SpecRepositoryPortTest {
 
         assertThat(result.content().size()).isEqualTo(2);
         assertAll(
-                () -> assertThat(result.content().get(0).getName()).isEqualTo(spec1.getName()),
-                () -> assertThat(result.content().get(1).getName()).isEqualTo(spec2.getName()),
-                () -> assertThat(result.content().get(0).getIsBookmarked()).isTrue(),
-                () -> assertThat(result.content().get(1).getIsBookmarked()).isFalse()
+                () -> assertThat(result.content().get(0).name()).isEqualTo(spec1.getName()),
+                () -> assertThat(result.content().get(1).name()).isEqualTo(spec2.getName()),
+                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
         );
     }
 
@@ -76,14 +76,14 @@ public class SpecRepositoryPortTest {
 
         assertThat(result).isNotNull();
         assertAll(
-                () -> assertThat(result.getName()).isEqualTo(spec.getName()),
-                () -> assertThat(result.getIssuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
-                () -> assertThat(result.getCertificationType()).isEqualTo(spec.getCertificationType()),
-                () -> assertThat(result.getPreparation()).isEqualTo(spec.getLatestExam().getExamDetail().getPreparation()),
-                () -> assertThat(result.getExamStructure()).isEqualTo(spec.getLatestExam().getExamDetail().getExamStructure()),
-                () -> assertThat(result.getEligibility()).isEqualTo(spec.getLatestExam().getExamDetail().getEligibility()),
-                () -> assertThat(result.getPassingCriteria()).isEqualTo(spec.getLatestExam().getExamDetail().getPassingCriteria()),
-                () -> assertThat(result.getIsBookmarked()).isFalse()
+                () -> assertThat(result.name()).isEqualTo(spec.getName()),
+                () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
+                () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
+                () -> assertThat(result.preparation()).isEqualTo(spec.getLatestExam().getExamDetail().getPreparation()),
+                () -> assertThat(result.examStructure()).isEqualTo(spec.getLatestExam().getExamDetail().getExamStructure()),
+                () -> assertThat(result.eligibility()).isEqualTo(spec.getLatestExam().getExamDetail().getEligibility()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getLatestExam().getExamDetail().getPassingCriteria()),
+                () -> assertThat(result.isBookmarked()).isFalse()
         );
     }
 
