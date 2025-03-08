@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.fixture;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.entity.Subject;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.example.masterplanbbe.domain.exam.request.SubjectCreateRequest;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
@@ -71,10 +72,10 @@ public class SpecFixture {
         return TestUtils.createExistingEntity(SpecFixture::createSpec, specId);
     }
 
-    public static Spec createUpdatedSpec(Supplier<Spec> specSupplier, Double difficulty) {
+    public static Spec createUpdatedSpec(Supplier<Spec> specSupplier, CertificationType certificationType) {
         return TestUtils.withSetup(
                 specSupplier,
-                spec -> ReflectionTestUtils.setField(spec, "difficulty", difficulty)
+                spec -> ReflectionTestUtils.setField(spec, "certificationType", NATIONAL_CERTIFIED)
         );
     }
 
@@ -95,13 +96,13 @@ public class SpecFixture {
         );
     }
 
-    public static SpecUpdateRequest createSpecUpdateRequest(Spec spec, Double difficulty) {
+    public static SpecUpdateRequest createSpecUpdateRequest(Spec spec, CertificationType certificationType) {
         return new SpecUpdateRequest(
                 spec.getName(),
                 spec.getCategory(),
-                spec.getCertificationType(),
+                certificationType,
                 spec.getIssuingOrganization(),
-                difficulty,
+                spec.getDifficulty(),
                 spec.getParticipantCount()
         );
     }

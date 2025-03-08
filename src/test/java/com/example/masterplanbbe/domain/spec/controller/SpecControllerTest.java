@@ -4,6 +4,7 @@ import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.common.response.PageResponse;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
@@ -32,6 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
 import static com.example.masterplanbbe.utils.TestUtils.*;
@@ -180,9 +182,9 @@ public class SpecControllerTest {
     void updateSpec() throws Exception {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
-        SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
+        SpecUpdateRequest request = createSpecUpdateRequest(spec, NATIONAL_CERTIFIED);
         given(specService.update(specId, request)).willReturn(new UpdateSpecResponse(
-                        createUpdatedSpec(() -> spec, 4.0)
+                        createUpdatedSpec(() -> spec, NATIONAL_CERTIFIED)
                 )
         );
 

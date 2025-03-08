@@ -19,25 +19,22 @@ import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
-import static com.example.masterplanbbe.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.util.ReflectionTestUtils.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("스펙 서비스 테스트")
@@ -133,9 +130,9 @@ public class SpecServiceTest {
     void update_spec() {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
-        SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
+        SpecUpdateRequest request = createSpecUpdateRequest(spec, NATIONAL_CERTIFIED);
         given(specRepositoryPort.getById(any(Long.class))).willReturn(
-                createUpdatedSpec(() -> spec, 4.0)
+                createUpdatedSpec(() -> spec, NATIONAL_CERTIFIED)
         );
 
         UpdateSpecResponse result = specService.update(specId, request);
