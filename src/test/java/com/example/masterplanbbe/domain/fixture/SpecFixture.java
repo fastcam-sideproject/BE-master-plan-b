@@ -1,14 +1,21 @@
 package com.example.masterplanbbe.domain.fixture;
 
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.entity.Subject;
+import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import com.example.masterplanbbe.domain.exam.request.SubjectCreateRequest;
+import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static com.example.masterplanbbe.domain.exam.enums.Category.*;
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
@@ -41,6 +48,19 @@ public class SpecFixture {
                 .examDetail(examDetail)
                 .build();
 
+        LocalDate now = LocalDate.now();
+
+        Exam exam = Exam.builder()
+                .examDetail(examDetail)
+                .name(now.getYear() + "년 1회")
+                .applyStartDate(now.minusDays(5L))
+                .applyEndDate(now.plusDays(3L))
+                .examStartDate(now.plusDays(10L))
+                .participantCount(0)
+                .build();
+
+        spec.specifyLatestExam(exam);
+
         return spec;
     }
 
@@ -50,6 +70,13 @@ public class SpecFixture {
 
     public static Spec createExistingSpecFrom(Long specId) {
         return TestUtils.createExistingEntity(SpecFixture::createSpec, specId);
+    }
+
+    public static Spec createUpdatedSpec(Supplier<Spec> specSupplier, CertificationType certificationType) {
+        return TestUtils.withSetup(
+                specSupplier,
+                spec -> ReflectionTestUtils.setField(spec, "certificationType", NATIONAL_CERTIFIED)
+        );
     }
 
     public static SpecCreateRequest createSpecCreateRequest() {
@@ -69,15 +96,40 @@ public class SpecFixture {
         );
     }
 
-    public static SpecUpdateRequest createSpecUpdateRequest(List<ExamDetail> examDetails) {
+    public static SpecUpdateRequest createSpecUpdateRequest(Spec spec, CertificationType certificationType) {
         return new SpecUpdateRequest(
-                "TOEIC",
-                LANGUAGE,
-                ETC,
-                "ETS",
-                3.2,
-                120,
-                examDetails
+                spec.getName(),
+                spec.getCategory(),
+                certificationType,
+                spec.getIssuingOrganization(),
+                spec.getDifficulty(),
+                spec.getParticipantCount()
+        );
+    }
+
+    public static SpecItemCardDto createSpecItemCardDto(Spec spec, boolean isBookmarked) {
+        return new SpecItemCardDto(
+                spec.getName(),
+                spec.getCategory(),
+                spec.getDifficulty(),
+                spec.getParticipantCount(),
+                spec.getLatestExam().getApplyStartDate(),
+                spec.getLatestExam().getApplyEndDate(),
+                spec.getLatestExam().getExamStartDate(),
+                isBookmarked
+        );
+    }
+
+    public static SpecWithDetailsDto createSpecWithDetailsDto(Spec spec) {
+        return new SpecWithDetailsDto(
+                spec.getName(),
+                spec.getIssuingOrganization(),
+                spec.getCertificationType(),
+                false,
+                spec.getLatestExam().getExamDetail().getPreparation(),
+                spec.getLatestExam().getExamDetail().getEligibility(),
+                spec.getLatestExam().getExamDetail().getExamStructure(),
+                spec.getLatestExam().getExamDetail().getPassingCriteria()
         );
     }
 }

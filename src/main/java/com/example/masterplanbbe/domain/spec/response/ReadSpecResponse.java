@@ -14,13 +14,13 @@ public record ReadSpecResponse(
 ) {
     public ReadSpecResponse(SpecWithDetailsDto dto) {
         this(
-                dto.name(),
-                dto.issuingOrganization(),
-                dto.certificationType(),
-                dto.preparation(),
-                dto.eligibility(),
-                dto.examStructure(),
-                dto.passingCriteria()
+                dto.getName(),
+                dto.getIssuingOrganization(),
+                dto.getCertificationType(),
+                dto.getPreparation(),
+                dto.getEligibility(),
+                dto.getExamStructure(),
+                dto.getPassingCriteria()
         );
     }
 }

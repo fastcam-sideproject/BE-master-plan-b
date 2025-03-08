@@ -11,22 +11,19 @@ import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.LongSupplier;
 
 import static com.example.masterplanbbe.common.exception.ErrorCode.SPEC_NOT_FOUND;
 import static com.example.masterplanbbe.common.exception.GlobalException.*;
-import static com.example.masterplanbbe.domain.exam.entity.QExam.*;
+import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
 import static com.example.masterplanbbe.domain.exam.entity.QExamDetail.examDetail;
-import static com.example.masterplanbbe.domain.spec.entity.QSpec.*;
+import static com.example.masterplanbbe.domain.spec.entity.QSpec.spec;
 import static com.example.masterplanbbe.domain.specBookmark.entity.QSpecBookmark.specBookmark;
 
 @Repository
@@ -38,35 +35,27 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
     @Override
     public CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request,
                                                         Long memberId) {
-        LocalDate today = LocalDate.now();
-
-        JPQLSubQuery<Long> closestExamIdSubquery = JPAExpressions
-                .select(exam.id)
-                .from(exam)
-                .join(exam.examDetail, examDetail)
-                .where(
-                        examDetail.spec.id.eq(spec.id)
-                                .and(exam.applyEndDate.goe(today))
-                )
-                .orderBy(exam.examStartDate.asc())
-                .limit(1);
-
         OrderSpecifier<?> orderSpecifier = request.sort() != null ?
                 SortUtil.getOrderSpecifier(request.sort(), request.isAsc()) :
                 spec.createdAt.asc();
 
         List<SpecItemCardDto> list = queryFactory
                 .select(new QSpecItemCardDto(
-                        spec,
-                        exam,
+                        spec.name,
+                        spec.category,
+                        spec.difficulty,
+                        spec.participantCount,
+                        exam.applyStartDate,
+                        exam.applyEndDate,
+                        exam.examStartDate,
                         specBookmark.isNotNull()
                 ))
                 .from(spec)
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
                 .leftJoin(exam)
+                .on(exam.id.eq(spec.latestExam.id))
                 .orderBy(orderSpecifier)
-                .on(exam.id.eq(closestExamIdSubquery))
                 .offset(request.getOffset())
                 .limit(request.size())
                 .fetch();
@@ -86,16 +75,23 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
         return queryFactory
                 .select(
                         new QSpecWithDetailsDto(
-                                spec,
-                                examDetail,
-                                specBookmark.isNotNull()
+                                spec.name,
+                                spec.issuingOrganization,
+                                spec.certificationType,
+                                specBookmark.isNotNull(),
+                                examDetail.preparation,
+                                examDetail.eligibility,
+                                examDetail.examStructure,
+                                examDetail.passingCriteria
                         )
                 )
                 .from(spec)
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id))
+                .leftJoin(exam)
+                .on(exam.id.eq(spec.latestExam.id))
                 .leftJoin(examDetail)
-                .on(examDetail.spec.id.eq(spec.id))
+                .on(examDetail.id.eq(exam.examDetail.id))
                 .fetchOne();
     }
 
