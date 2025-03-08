@@ -8,6 +8,7 @@ import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
+import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.spec.service.SpecService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -31,9 +32,11 @@ import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
+import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -70,14 +73,14 @@ public class SpecControllerTest {
                 .param("sortOption", (String) null)
                 .param("isAsc", "false")
                 .param("memberId", member.getId().toString())
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding(StandardCharsets.UTF_8)
-                .accept(MediaType.APPLICATION_JSON));
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .accept(APPLICATION_JSON));
 
-        resultActions.andExpectAll(status().isOk(), content().contentType(MediaType.APPLICATION_JSON))
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andDo(mvcResult -> {
-                    String responseContent = mvcResult.getResponse().getContentAsString();
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
                     ApiResponse<PageResponse<SpecItemCardDto>> response = objectMapper.readValue(responseContent, new TypeReference<>() {
                     });
                     PageResponse<SpecItemCardDto> data = response.getData();
@@ -104,8 +107,35 @@ public class SpecControllerTest {
 
     @Test
     @DisplayName("사용자는 스펙을 상세 조회한다")
-    void getSpecDetail() {
+    void getSpecDetail() throws Exception {
+        Member member = createExistingMember();
+        Long specId = 1L;
+        ReadSpecResponse mockedResult = new ReadSpecResponse(createSpecWithDetailsDto(createExistingSpecFrom(specId)));
+        given(specService.getSpec(specId)).willReturn(mockedResult);
 
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/specs/{specId}", specId)
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .accept(APPLICATION_JSON));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<ReadSpecResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    ReadSpecResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(mockedResult.name()),
+                            () -> assertThat(data.issuingOrganization()).isEqualTo(mockedResult.issuingOrganization()),
+                            () -> assertThat(data.certificationType()).isEqualTo(mockedResult.certificationType()),
+                            () -> assertThat(data.preparation()).isEqualTo(mockedResult.preparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(mockedResult.eligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(mockedResult.examStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(mockedResult.passingCriteria())
+                    );
+                });
     }
 
     @Test
