@@ -79,10 +79,10 @@ public class SpecRepositoryPortTest {
                 () -> assertThat(result.getName()).isEqualTo(spec.getName()),
                 () -> assertThat(result.getIssuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
                 () -> assertThat(result.getCertificationType()).isEqualTo(spec.getCertificationType()),
-                () -> assertThat(result.getPreparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
-                () -> assertThat(result.getExamStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
-                () -> assertThat(result.getEligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
-                () -> assertThat(result.getPassingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria()),
+                () -> assertThat(result.getPreparation()).isEqualTo(spec.getLatestExam().getExamDetail().getPreparation()),
+                () -> assertThat(result.getExamStructure()).isEqualTo(spec.getLatestExam().getExamDetail().getExamStructure()),
+                () -> assertThat(result.getEligibility()).isEqualTo(spec.getLatestExam().getExamDetail().getEligibility()),
+                () -> assertThat(result.getPassingCriteria()).isEqualTo(spec.getLatestExam().getExamDetail().getPassingCriteria()),
                 () -> assertThat(result.getIsBookmarked()).isFalse()
         );
     }

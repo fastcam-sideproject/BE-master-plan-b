@@ -103,10 +103,10 @@ public class SpecServiceTest {
                 () -> assertThat(result.name()).isEqualTo(spec.getName()),
                 () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
                 () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
-                () -> assertThat(result.preparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
-                () -> assertThat(result.eligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
-                () -> assertThat(result.examStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
-                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria())
+                () -> assertThat(result.preparation()).isEqualTo(spec.getLatestExam().getExamDetail().getPreparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(spec.getLatestExam().getExamDetail().getEligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(spec.getLatestExam().getExamDetail().getExamStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getLatestExam().getExamDetail().getPassingCriteria())
         );
     }
 
@@ -146,13 +146,10 @@ public class SpecServiceTest {
                 () -> assertThat(result.issuingOrganization()).isEqualTo(request.issuingOrganization()),
                 () -> assertThat(result.certificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(result.difficulty()).isEqualTo(request.difficulty()),
-                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount()),
-                () -> assertThat(result.examDetails().size()).isEqualTo(request.examDetails().size()),
-                () -> assertThat(result.examDetails().get(0).getPreparation()).isEqualTo(request.examDetails().get(0).getPreparation()),
-                () -> assertThat(result.examDetails().get(0).getEligibility()).isEqualTo(request.examDetails().get(0).getEligibility()),
-                () -> assertThat(result.examDetails().get(0).getExamStructure()).isEqualTo(request.examDetails().get(0).getExamStructure()),
-                () -> assertThat(result.examDetails().get(0).getPassingCriteria()).isEqualTo(request.examDetails().get(0).getPassingCriteria())
+                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount())
         );
+        assertThat(result.examDetails().size()).isEqualTo(request.examDetails().size());
+        assertThat(result.examDetails()).containsExactlyInAnyOrderElementsOf(request.examDetails());
     }
 
     @Test
