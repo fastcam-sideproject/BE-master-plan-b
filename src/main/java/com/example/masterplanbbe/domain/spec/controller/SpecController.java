@@ -27,7 +27,7 @@ public class SpecController {
     @Operation(summary = "스펙 목록 조회")
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<SpecItemCardDto>>> getAllSpec(
-            @RequestBody CustomPageRequest<SpecSortOption> request,
+            @ModelAttribute CustomPageRequest<SpecSortOption> request,
             @RequestParam(name = "memberId") Long memberId
             ) {
         return ResponseEntity.ok()
