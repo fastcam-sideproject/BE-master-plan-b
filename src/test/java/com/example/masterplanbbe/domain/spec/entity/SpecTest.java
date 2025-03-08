@@ -14,7 +14,7 @@ public class SpecTest {
     @DisplayName("update 메서드는 스펙 엔티티의 필드를 수정한다.")
     void update_updates_spec_fields() {
         Spec spec = createExistingSpec();
-        SpecUpdateRequest request = createSpecUpdateRequest(spec.getExamDetails());
+        SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
 
         spec.update(
                 request.name(),
@@ -22,8 +22,7 @@ public class SpecTest {
                 request.category(),
                 request.certificationType(),
                 request.difficulty(),
-                request.participantCount(),
-                request.examDetails()
+                request.participantCount()
         );
 
         assertAll(
@@ -32,8 +31,7 @@ public class SpecTest {
                 () -> assertThat(spec.getCategory()).isEqualTo(request.category()),
                 () -> assertThat(spec.getCertificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(spec.getDifficulty()).isEqualTo(request.difficulty()),
-                () -> assertThat(spec.getParticipantCount()).isEqualTo(request.participantCount()),
-                () -> assertThat(spec.getExamDetails()).isEqualTo(request.examDetails())
+                () -> assertThat(spec.getParticipantCount()).isEqualTo(request.participantCount())
         );
     }
 }

@@ -86,15 +86,14 @@ public class SpecFixture {
         );
     }
 
-    public static SpecUpdateRequest createSpecUpdateRequest(List<ExamDetail> examDetails) {
+    public static SpecUpdateRequest createSpecUpdateRequest(Spec spec, Double difficulty) {
         return new SpecUpdateRequest(
-                "TOEIC",
-                LANGUAGE,
-                ETC,
-                "ETS",
-                3.2,
-                120,
-                examDetails
+                spec.getName(),
+                spec.getCategory(),
+                spec.getCertificationType(),
+                spec.getIssuingOrganization(),
+                difficulty,
+                spec.getParticipantCount()
         );
     }
 

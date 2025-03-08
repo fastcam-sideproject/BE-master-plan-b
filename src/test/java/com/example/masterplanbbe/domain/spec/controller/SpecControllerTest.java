@@ -8,9 +8,13 @@ import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
+import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
+import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
+import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
+import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import com.example.masterplanbbe.domain.spec.service.SpecService;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.example.masterplanbbe.utils.TestUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -18,27 +22,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
+import static com.example.masterplanbbe.utils.TestUtils.*;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.http.MediaType.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.util.ReflectionTestUtils.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -141,14 +144,69 @@ public class SpecControllerTest {
 
     @Test
     @DisplayName("관리자는 스펙을 추가한다")
-    void addSpec() {
+    void addSpec() throws Exception {
+        SpecCreateRequest request = createSpecCreateRequest();
+        CreateSpecResponse mockedResult = new CreateSpecResponse(createExistingSpec());
+        given(specService.create(request)).willReturn(mockedResult);
 
+        ResultActions resultActions = mockMvc.perform(post("/api/v1/specs")
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .content(objectMapper.writeValueAsString(request))
+                .accept(APPLICATION_JSON));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<CreateSpecResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    CreateSpecResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(request.name()),
+                            () -> assertThat(data.issuingOrganization()).isEqualTo(request.issuingOrganization()),
+                            () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
+                            () -> assertThat(data.preparation()).isEqualTo(request.preparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(request.eligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(request.examStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(request.passingCriteria())
+                    );
+                });
     }
 
     @Test
     @DisplayName("관리자는 스펙을 수정한다")
-    void updateSpec() {
+    void updateSpec() throws Exception {
+        Long specId = 1L;
+        Spec spec = createExistingSpecFrom(specId);
+        SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
+        given(specService.update(specId, request)).willReturn(new UpdateSpecResponse(
+                withSetup(() -> createExistingSpecFrom(specId), entity -> setField(entity, "difficulty", 4.0))
+        ));
 
+        ResultActions resultActions = mockMvc.perform(patch("/api/v1/specs/{specId}", specId)
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .content(objectMapper.writeValueAsString(request))
+                .accept(APPLICATION_JSON));
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<UpdateSpecResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    UpdateSpecResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(request.name()),
+                            () -> assertThat(data.issuingOrganization()).isEqualTo(request.issuingOrganization()),
+                            () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
+                            () -> assertThat(data.difficulty()).isEqualTo(request.difficulty()),
+                            () -> assertThat(data.participantCount()).isEqualTo(request.participantCount())
+                    );
+                });
     }
 
     @Test

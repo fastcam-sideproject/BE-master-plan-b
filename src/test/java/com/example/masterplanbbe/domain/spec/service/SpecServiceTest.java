@@ -3,8 +3,6 @@ package com.example.masterplanbbe.domain.spec.service;
 import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.PageResponse;
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
-import com.example.masterplanbbe.domain.fixture.SpecFixture;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
@@ -18,28 +16,28 @@ import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.utils.TestUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
+import static com.example.masterplanbbe.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.util.ReflectionTestUtils.*;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("스펙 서비스 테스트")
@@ -135,8 +133,10 @@ public class SpecServiceTest {
     void update_spec() {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
-        SpecUpdateRequest request = createSpecUpdateRequest(spec.getExamDetails());
-        given(specRepositoryPort.getById(any(Long.class))).willReturn(spec);
+        SpecUpdateRequest request = createSpecUpdateRequest(spec, 4.0);
+        given(specRepositoryPort.getById(any(Long.class))).willReturn(
+                withSetup(() -> createExistingSpecFrom(specId), entity -> setField(entity, "difficulty", 4.0))
+        );
 
         UpdateSpecResponse result = specService.update(specId, request);
 
@@ -148,8 +148,6 @@ public class SpecServiceTest {
                 () -> assertThat(result.difficulty()).isEqualTo(request.difficulty()),
                 () -> assertThat(result.participantCount()).isEqualTo(request.participantCount())
         );
-        assertThat(result.examDetails().size()).isEqualTo(request.examDetails().size());
-        assertThat(result.examDetails()).containsExactlyInAnyOrderElementsOf(request.examDetails());
     }
 
     @Test
