@@ -1,35 +1,40 @@
 package com.example.masterplanbbe.domain.spec.dto;
 
-import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.enums.Category;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-public record SpecItemCardDto(
-        String name,
-        Category category,
-        Double difficulty,
-        Integer participants,
-        LocalDate applyStartDate,
-        LocalDate applyEndDate,
-        LocalDate examStartDate,
-        Boolean isBookmarked
-) {
+@Getter
+public class SpecItemCardDto {
+    private final String name;
+    private final Category category;
+    private final Double difficulty;
+    private final Integer participants;
+    private final LocalDate applyStartDate;
+    private final LocalDate applyEndDate;
+    private final LocalDate examStartDate;
+    private final Boolean isBookmarked;
+
     @QueryProjection
-    public SpecItemCardDto(Spec spec,
-                           Exam exam,
-                           Boolean isBookmarked) {
-        this(
-                spec.getName(),
-                spec.getCategory(),
-                exam != null ? exam.getDifficulty() : null,
-                exam != null ? exam.getParticipantCount() : null,
-                exam != null ? exam.getApplyStartDate() : null,
-                exam != null ? exam.getApplyEndDate() : null,
-                exam != null ? exam.getExamStartDate() : null,
-                isBookmarked
-        );
+    public SpecItemCardDto(
+            String name,
+            Category category,
+            Double difficulty,
+            Integer participants,
+            LocalDate applyStartDate,
+            LocalDate applyEndDate,
+            LocalDate examStartDate,
+            Boolean isBookmarked
+    ) {
+        this.name = name;
+        this.category = category;
+        this.difficulty = difficulty;
+        this.participants = participants;
+        this.applyStartDate = applyStartDate;
+        this.applyEndDate = applyEndDate;
+        this.examStartDate = examStartDate;
+        this.isBookmarked = isBookmarked;
     }
 }

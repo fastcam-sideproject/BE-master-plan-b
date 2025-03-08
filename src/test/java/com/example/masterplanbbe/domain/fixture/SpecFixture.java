@@ -4,6 +4,7 @@ import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.entity.Subject;
 import com.example.masterplanbbe.domain.exam.request.SubjectCreateRequest;
+import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
@@ -94,6 +95,19 @@ public class SpecFixture {
                 3.2,
                 120,
                 examDetails
+        );
+    }
+
+    public static SpecItemCardDto createSpecItemCardDto(Spec spec, boolean isBookmarked) {
+        return new SpecItemCardDto(
+                spec.getName(),
+                spec.getCategory(),
+                spec.getDifficulty(),
+                spec.getParticipantCount(),
+                spec.getLatestExam().getApplyStartDate(),
+                spec.getLatestExam().getApplyEndDate(),
+                spec.getLatestExam().getExamStartDate(),
+                isBookmarked
         );
     }
 

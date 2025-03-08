@@ -4,6 +4,7 @@ import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.example.masterplanbbe.domain.spec.service.SpecService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.List;
+
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
+import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SpecControllerTest {
@@ -42,7 +46,37 @@ public class SpecControllerTest {
     }
 
     private CustomPage<SpecItemCardDto> createMockedSpecItemCardPage() {
+        Spec spec1 = createExistingSpecFrom(1L);
+        Spec spec2 = createExistingSpecFrom(2L);
+        List<SpecItemCardDto> specItemCardDtoList = List.of(
+                createSpecItemCardDto(spec1, false),
+                createSpecItemCardDto(spec2, false)
+        );
 
-        return null;
+        return new CustomPage<>(0, 25, specItemCardDtoList.size(), specItemCardDtoList);
+    }
+
+    @Test
+    @DisplayName("사용자는 스펙을 상세 조회한다")
+    void getSpecDetail() {
+
+    }
+
+    @Test
+    @DisplayName("관리자는 스펙을 추가한다")
+    void addSpec() {
+
+    }
+
+    @Test
+    @DisplayName("관리자는 스펙을 수정한다")
+    void updateSpec() {
+
+    }
+
+    @Test
+    @DisplayName("관리자는 스펙을 삭제한다")
+    void deleteSpec() {
+
     }
 }

@@ -21,9 +21,9 @@ import java.util.function.LongSupplier;
 
 import static com.example.masterplanbbe.common.exception.ErrorCode.SPEC_NOT_FOUND;
 import static com.example.masterplanbbe.common.exception.GlobalException.*;
-import static com.example.masterplanbbe.domain.exam.entity.QExam.*;
+import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
 import static com.example.masterplanbbe.domain.exam.entity.QExamDetail.examDetail;
-import static com.example.masterplanbbe.domain.spec.entity.QSpec.*;
+import static com.example.masterplanbbe.domain.spec.entity.QSpec.spec;
 import static com.example.masterplanbbe.domain.specBookmark.entity.QSpecBookmark.specBookmark;
 
 @Repository
@@ -41,8 +41,13 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
 
         List<SpecItemCardDto> list = queryFactory
                 .select(new QSpecItemCardDto(
-                        spec,
-                        exam,
+                        spec.name,
+                        spec.category,
+                        spec.difficulty,
+                        spec.participantCount,
+                        exam.applyStartDate,
+                        exam.applyEndDate,
+                        exam.examStartDate,
                         specBookmark.isNotNull()
                 ))
                 .from(spec)

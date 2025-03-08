@@ -60,10 +60,10 @@ public class SpecRepositoryPortTest {
 
         assertThat(result.content().size()).isEqualTo(2);
         assertAll(
-                () -> assertThat(result.content().get(0).name()).isEqualTo(spec1.getName()),
-                () -> assertThat(result.content().get(1).name()).isEqualTo(spec2.getName()),
-                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
-                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
+                () -> assertThat(result.content().get(0).getName()).isEqualTo(spec1.getName()),
+                () -> assertThat(result.content().get(1).getName()).isEqualTo(spec2.getName()),
+                () -> assertThat(result.content().get(0).getIsBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).getIsBookmarked()).isFalse()
         );
     }
 

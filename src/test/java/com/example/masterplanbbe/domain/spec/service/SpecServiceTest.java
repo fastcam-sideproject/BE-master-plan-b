@@ -69,8 +69,8 @@ public class SpecServiceTest {
         SpecBookmark specBookmark1 = createSpecBookmark(member, spec1);
 
         return new CustomPage<>(0, 25, 2, List.of(
-                new SpecItemCardDto(spec1, null, isBookmarkedBy(spec1, specBookmark1)),
-                new SpecItemCardDto(spec2, null, isBookmarkedBy(spec2, specBookmark1))
+                createSpecItemCardDto(spec1, isBookmarkedBy(spec1, specBookmark1)),
+                createSpecItemCardDto(spec2, isBookmarkedBy(spec2, specBookmark1))
         ));
     }
 
@@ -78,8 +78,8 @@ public class SpecServiceTest {
         assertThat(result).isNotNull();
         assertAll(
                 () -> assertThat(result.content().size()).isEqualTo(2),
-                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
-                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
+                () -> assertThat(result.content().get(0).getIsBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).getIsBookmarked()).isFalse()
         );
     }
 
