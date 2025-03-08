@@ -2,10 +2,13 @@ package com.example.masterplanbbe.domain.spec.dto;
 
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Getter
 public class SpecItemCardDto {
     private final String name;

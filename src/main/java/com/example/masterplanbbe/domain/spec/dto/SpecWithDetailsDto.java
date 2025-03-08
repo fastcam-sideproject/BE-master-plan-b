@@ -1,11 +1,12 @@
 package com.example.masterplanbbe.domain.spec.dto;
 
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.querydsl.core.annotations.QueryProjection;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @Getter
 public class SpecWithDetailsDto {
     private final String name;
