@@ -17,8 +17,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -42,13 +40,13 @@ public class SpecRepositoryPortTest {
     @BeforeEach
     void setUp() {
         specBookmarkRepository.deleteAll();
-        examRepository.deleteAll();
         specRepositoryPort.deleteAll();
+        examRepository.deleteAll();
         memberRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인할 수 있다.")
+    @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void retrieve_spec_and_check_bookmark_status() {
         Member member = memberRepository.save(createMember());
         Spec spec1 = createSpec();
@@ -62,10 +60,10 @@ public class SpecRepositoryPortTest {
 
         assertThat(result.content().size()).isEqualTo(2);
         assertAll(
-                () -> assertThat(result.content().get(0).name()).isEqualTo(spec1.getName()),
-                () -> assertThat(result.content().get(1).name()).isEqualTo(spec2.getName()),
-                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
-                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
+                () -> assertThat(result.content().get(0).getName()).isEqualTo(spec1.getName()),
+                () -> assertThat(result.content().get(1).getName()).isEqualTo(spec2.getName()),
+                () -> assertThat(result.content().get(0).getIsBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).getIsBookmarked()).isFalse()
         );
     }
 
@@ -78,14 +76,14 @@ public class SpecRepositoryPortTest {
 
         assertThat(result).isNotNull();
         assertAll(
-                () -> assertThat(result.name()).isEqualTo(spec.getName()),
-                () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
-                () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
-                () -> assertThat(result.preparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
-                () -> assertThat(result.examStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
-                () -> assertThat(result.eligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
-                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria()),
-                () -> assertThat(result.isBookmarked()).isFalse()
+                () -> assertThat(result.getName()).isEqualTo(spec.getName()),
+                () -> assertThat(result.getIssuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
+                () -> assertThat(result.getCertificationType()).isEqualTo(spec.getCertificationType()),
+                () -> assertThat(result.getPreparation()).isEqualTo(spec.getLatestExam().getExamDetail().getPreparation()),
+                () -> assertThat(result.getExamStructure()).isEqualTo(spec.getLatestExam().getExamDetail().getExamStructure()),
+                () -> assertThat(result.getEligibility()).isEqualTo(spec.getLatestExam().getExamDetail().getEligibility()),
+                () -> assertThat(result.getPassingCriteria()).isEqualTo(spec.getLatestExam().getExamDetail().getPassingCriteria()),
+                () -> assertThat(result.getIsBookmarked()).isFalse()
         );
     }
 
