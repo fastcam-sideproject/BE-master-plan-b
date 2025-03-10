@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Post controller api", description = "게시판 API")
@@ -83,11 +84,11 @@ public class PostController {
     @Operation(summary = "내가 작성한 글 조회")
     @GetMapping("/posts/my")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getMyPost(
-            @RequestHeader(value = "memberId") Long memberId,
+            @AuthenticationPrincipal String email,
             Pageable pageable
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.getMyPost(memberId, pageable)));
+                .body(ApiResponse.ok(postService.getMyPost(email, pageable)));
     }
 
 }

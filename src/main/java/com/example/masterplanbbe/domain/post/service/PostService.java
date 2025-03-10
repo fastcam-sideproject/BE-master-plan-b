@@ -134,7 +134,10 @@ public class PostService {
      * @param pageable
      * @return
      */
-    public Page<PostResponse.Summary> getMyPost(Long memberId, Pageable pageable) {
+    public Page<PostResponse.Summary> getMyPost(String email, Pageable pageable) {
+        Member member = memberRepositoryPort.findByEmail(email);
+        Long memberId = member.getId();
+
         return postRepositoryPort.findByMemberId(memberId, pageable)
                 .map(PostResponse.Summary::from);
     }
