@@ -28,8 +28,8 @@ public class StoredPostService {
      * @return
      */
     @Transactional
-    public PostResponse.Detail toggleStoredPost(Long memberId, Long postId) {
-        Member member = memberRepositoryAdapter.findById(memberId);
+    public PostResponse.Detail toggleStoredPost(String email, Long postId) {
+        Member member = memberRepositoryAdapter.findByEmail(email);
         Post post = postRepositoryAdapter.findById(postId);
 
         if (storedPostRepositoryAdapter.existsByMemberAndPost(member, post)) {
@@ -48,7 +48,10 @@ public class StoredPostService {
      * @return
      */
     @Transactional(readOnly = true)
-    public Page<PostResponse.Summary> getStoredPost(Long memberId, Pageable pageable) {
+    public Page<PostResponse.Summary> getStoredPost(String email, Pageable pageable) {
+        Member member = memberRepositoryAdapter.findByEmail(email);
+        Long memberId = member.getId();
+
         Page<StoredPost> posts = storedPostRepositoryAdapter.findByMemberId(memberId, pageable);
         return posts.map(s -> PostResponse.Summary.from(s.getPost()));
     }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Like controller api", description = "좋아요 API")
@@ -23,20 +24,23 @@ public class LikePostController {
     @PostMapping("/{postId}/like")
     public ResponseEntity<ApiResponse<PostResponse.Detail>> addLike(
             @PathVariable Long postId,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
+        String email = authentication.getName();
 
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(likePostService.addLike(postId,memberId)));
+                .body(ApiResponse.ok(likePostService.addLike(postId,email)));
     }
 
     @Operation(summary = "내가 좋아요한 게시글 조회")
     @GetMapping("/posts/liked")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getLikedPosts(
-            @RequestHeader("memberId") Long memberId,
+            Authentication authentication,
             Pageable pageable
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(likePostService.getLikedPosts(memberId,pageable)));
+                .body(ApiResponse.ok(likePostService.getLikedPosts(email,pageable)));
     }
 }
