@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "StoredPost controller api", description = "게시판 북마크 API")
@@ -23,20 +24,24 @@ public class StoredPostController {
     @PostMapping("/{postId}/store")
     public ResponseEntity<ApiResponse<PostResponse.Detail>> addStoredPost(
             @PathVariable Long postId,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(storedPostService.toggleStoredPost(memberId, postId)));
+                .body(ApiResponse.ok(storedPostService.toggleStoredPost(email, postId)));
     }
 
     @Operation(summary = "내가 저장한 게시글 확인")
     @GetMapping("/posts/stored")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getStoredPost(
-            @RequestHeader(value = "memberId") Long memberId,
+            Authentication authentication,
             Pageable pageable
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(storedPostService.getStoredPost(memberId, pageable)));
+                .body(ApiResponse.ok(storedPostService.getStoredPost(email, pageable)));
     }
 
 }

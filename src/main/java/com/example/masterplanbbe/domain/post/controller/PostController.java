@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Post controller api", description = "게시판 API")
@@ -24,10 +25,12 @@ public class PostController {
     @PostMapping("/posts")
     public ResponseEntity<ApiResponse<PostResponse.Summary>> createPost(
             @RequestBody PostRequest postRequestDTO,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.createPost(memberId, postRequestDTO)));
+                .body(ApiResponse.ok(postService.createPost(email, postRequestDTO)));
     }
 
     @Operation(summary = "특정 게시글 조회")
@@ -64,30 +67,35 @@ public class PostController {
     public ResponseEntity<ApiResponse<PostResponse.Detail>> updatePost(
             @RequestBody PostRequest postRequestDTO,
             @PathVariable Long postId,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.updatePost(postId, memberId, postRequestDTO)));
+                .body(ApiResponse.ok(postService.updatePost(postId, email, postRequestDTO)));
     }
 
     @Operation(summary = "특정 게시글 삭제")
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePost(
             @PathVariable Long postId,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
-        postService.deletePost(postId, memberId);
+        String email = authentication.getName();
+
+        postService.deletePost(postId, email);
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
 
     @Operation(summary = "내가 작성한 글 조회")
     @GetMapping("/posts/my")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getMyPost(
-            @RequestHeader(value = "memberId") Long memberId,
+            Authentication authentication,
             Pageable pageable
     ) {
+        String email = authentication.getName();
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postService.getMyPost(memberId, pageable)));
+                .body(ApiResponse.ok(postService.getMyPost(email, pageable)));
     }
 
 }
