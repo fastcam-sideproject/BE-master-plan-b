@@ -51,3 +51,5 @@ src/main/resources/db/
 application.yml
 application-local.yml
 application-deploy.yml
+application-local_batch.yml
+application-non_local_batch.yml
