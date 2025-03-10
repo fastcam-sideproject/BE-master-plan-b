@@ -2,12 +2,12 @@ package com.example.masterplanbbe.domain.studyLog.service;
 
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import com.example.masterplanbbe.domain.studyLog.entity.StudyLog;
 import com.example.masterplanbbe.domain.studyLog.repository.StudyLogRepositoryPort;
 import com.example.masterplanbbe.domain.studyLog.request.StudyLogRequest;
 import com.example.masterplanbbe.domain.studyLog.response.StudyLogResponse;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class StudyLogService {
     @Transactional
     public StudyLogResponse create(StudyLogRequest studyLogRequest, String memberId) {
 
-        Member member = memberRepositoryPort.findByUserId(memberId);
+        Member member = memberRepositoryPort.findByEmail(memberId);
 
         Exam exam = examRepositoryPort.getById(studyLogRequest.examId());
 

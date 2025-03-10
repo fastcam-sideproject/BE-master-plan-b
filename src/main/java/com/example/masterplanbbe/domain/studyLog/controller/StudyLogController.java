@@ -1,9 +1,9 @@
 package com.example.masterplanbbe.domain.studyLog.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
+import com.example.masterplanbbe.common.security.user.UserDetailsImpl;
 import com.example.masterplanbbe.domain.studyLog.request.StudyLogRequest;
 import com.example.masterplanbbe.domain.studyLog.service.StudyLogService;
-import com.example.masterplanbbe.security.user.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
