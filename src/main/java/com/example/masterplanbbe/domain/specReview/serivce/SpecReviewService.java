@@ -25,6 +25,8 @@ public class SpecReviewService {
     /**
      * 리뷰 작성하기
      * @param specReviewRequest
+     * @param specId
+     * @param memberId
      * @return
      */
     public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long specId, Long memberId) {
@@ -43,6 +45,7 @@ public class SpecReviewService {
     /**
      * 리뷰 단일 확인
      * @param specId
+     * @param specReviewId
      * @return
      */
     public SpecReviewResponse getReview(Long specId, Long specReviewId) {
@@ -67,6 +70,7 @@ public class SpecReviewService {
 
     /**
      * 리뷰 삭제
+     * @param specId
      * @param reviewId
      * @param memberId
      */
@@ -87,6 +91,7 @@ public class SpecReviewService {
      * @param specReviewRequest
      * @param memberId
      * @param specReviewId
+     * @param specId
      * @return
      */
     public SpecReviewResponse updateReview(SpecReviewRequest specReviewRequest, Long memberId, Long specReviewId, Long specId) {
