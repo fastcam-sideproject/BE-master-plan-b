@@ -11,6 +11,7 @@ import com.example.masterplanbbe.domain.exam.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -28,19 +29,20 @@ public class ExamController {
     @GetMapping
     public ResponseEntity<ApiResponse<Page<ExamItemCardDto>>> getAllExam(
             @PageableDefault Pageable pageable,
-            @RequestParam(name = "memberId") Long memberId
+            Authentication authentication
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getAllExam(pageable, memberId)));
+                .body(ApiResponse.ok(examService.getAllExam(pageable, authentication.name())));
     }
 
     @Operation(summary = "시험 상세 조회")
     @GetMapping("/{examId}")
     public ResponseEntity<ApiResponse<ReadExamResponse>> getExam(
-            @PathVariable("examId") Long examId
+            @PathVariable("examId") Long examId,
+            Authentication authentication
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getExam(examId)));
+                .body(ApiResponse.ok(examService.getExam(examId, authentication.name())));
     }
 
     @Operation(summary = "시험 등록")

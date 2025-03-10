@@ -20,12 +20,12 @@ public class ExamService {
     private final ExamRepositoryPort examRepositoryPort;
 
     public Page<ExamItemCardDto> getAllExam(Pageable pageable,
-                                            Long memberId) {
-        return examRepositoryPort.getExamItemCards(pageable, memberId);
+                                            String email) {
+        return examRepositoryPort.getExamItemCards(pageable, email);
     }
 
-    public ReadExamResponse getExam(Long examId) {
-        return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId));
+    public ReadExamResponse getExam(Long examId, String email) {
+        return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId, email));
     }
 
     @Transactional
