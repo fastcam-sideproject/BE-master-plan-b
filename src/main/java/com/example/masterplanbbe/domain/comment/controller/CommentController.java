@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,22 +34,24 @@ public class CommentController {
     @PostMapping("")
     public ResponseEntity<ApiResponse<CommentResponse>> createComment(
             @PathVariable Long postId,
-            @RequestHeader(value = "memberId") Long memberId,
+            Authentication authentication,
             @RequestBody CommentRequest commentRequestDto
     ) {
+        String email = authentication.getName();
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(commentService.createComment(postId, memberId, commentRequestDto)));
+                .body(ApiResponse.ok(commentService.createComment(postId, email, commentRequestDto)));
     }
 
     @Operation(summary = "댓글 수정")
     @PostMapping("/{commentId}")
     public ResponseEntity<ApiResponse<CommentResponse>> updateComment(
             @PathVariable Long commentId,
-            @RequestHeader(value = "memberId") Long memberId,
+            Authentication authentication,
             @RequestBody CommentRequest commentRequestDto
     ) {
+        String email = authentication.getName();
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(commentService.updateComment(commentId, memberId, commentRequestDto)));
+                .body(ApiResponse.ok(commentService.updateComment(commentId, email, commentRequestDto)));
     }
 
     @Operation(summary = "댓글 삭제")
@@ -56,9 +59,10 @@ public class CommentController {
     public ResponseEntity<ApiResponse<Void>> deleteComment(
             @PathVariable Long postId,
             @PathVariable Long commentId,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
-        commentService.deleteComment(postId, commentId, memberId);
+        String email = authentication.getName();
+        commentService.deleteComment(postId, commentId, email);
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
 }

@@ -31,9 +31,9 @@ public class PostService {
      * @param postRequestDTO
      */
     @Transactional
-    public PostResponse.Summary createPost(Long memberId, PostRequest postRequestDTO) {
+    public PostResponse.Summary createPost(String email, PostRequest postRequestDTO) {
 
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByEmail(email);
         String title = postRequestDTO.title();
         String content = postRequestDTO.content();
 
@@ -80,12 +80,12 @@ public class PostService {
      * @param postRequestDTO
      * @return
      */
-    public PostResponse.Detail updatePost(Long postId, Long memberId, PostRequest postRequestDTO) {
+    public PostResponse.Detail updatePost(Long postId, String email, PostRequest postRequestDTO) {
         String title = postRequestDTO.title();
         String content = postRequestDTO.content();
 
         Post post = postRepositoryPort.findById(postId);
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByEmail(email);
 
         if (!post.getMember().getId().equals(member.getId())) {
             throw new GlobalException(ErrorCode.NOT_MODIFIED_POST) {};
@@ -106,10 +106,10 @@ public class PostService {
      * @param postId
      * @param memberId
      */
-    public void deletePost(Long postId, Long memberId) {
+    public void deletePost(Long postId, String email) {
         Post post = postRepositoryPort.findById(postId);
 
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByEmail(email);
 
         if (!post.getMember().getId().equals(member.getId()) && member.getRole() != MemberRoleEnum.ADMIN) {
             throw new GlobalException(ErrorCode.NOT_DELETED_POST) {};
