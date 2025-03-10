@@ -9,8 +9,7 @@ import lombok.Builder;
 public record PostRequest(
         Category category,
         String title,
-        String content,
-        Long memberId
+        String content
 ) {
     public Post toEntity(Member member) {
         return Post.builder()

@@ -1,5 +1,8 @@
 package com.example.masterplanbbe.domain.post.service;
 
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.repository.MemberRepository;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
@@ -21,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class LikePostService {
 
     private final PostRepositoryPort postRepositoryPort;
-
+    private final MemberRepositoryPort memberRepositoryPort;
     private final RedisTemplate<String, String> redisTemplate;
 
     private static final String POST_LIKE_KEY = "post:like:";
@@ -34,7 +37,10 @@ public class LikePostService {
      * @return
      */
     @Transactional
-    public PostResponse.Detail addLike(Long postId, Long memberId) {
+    public PostResponse.Detail addLike(Long postId, String email) {
+        Member member = memberRepositoryPort.findByEmail(email);
+        Long memberId = member.getId();
+
         Post post = postRepositoryPort.findById(postId);
 
         String postLikeKey = POST_LIKE_KEY + postId;
@@ -74,7 +80,10 @@ public class LikePostService {
      * @return
      */
     @Transactional
-    public Page<PostResponse.Summary> getLikedPosts(Long memberId, Pageable pageable) {
+    public Page<PostResponse.Summary> getLikedPosts(String email, Pageable pageable) {
+        Member member = memberRepositoryPort.findByEmail(email);
+        Long memberId = member.getId();
+
         String memberLikeKey = "member:likedPosts:" + memberId;
 
         Set<String> likedPostIds = redisTemplate.opsForSet().members(memberLikeKey);
