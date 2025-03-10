@@ -2,7 +2,7 @@ package com.example.masterplanbbe.domain.post.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
 import com.example.masterplanbbe.domain.comment.entity.Comment;
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "exam_posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Post extends FullAuditEntity {
@@ -24,19 +25,28 @@ public class Post extends FullAuditEntity {
     @Column(nullable = false)
     private Integer likeCount;
 
+    @Column(nullable = false)
+    private Integer viewCount;
+
     @ManyToOne
     private Member member;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>();
 
     @Builder
-    public Post(String title, String content, Member member) {
+    public Post(String title, String content, Member member,Category category) {
         this.title = title;
         this.content = content;
         this.member = member;
+        this.category = category;
         this.likeCount = 0; //
     }
+
 
     @Builder(builderMethodName = "fullBuilder")
     public Post(String title, String content, Member member, Integer likeCount) {
@@ -51,14 +61,11 @@ public class Post extends FullAuditEntity {
         this.content = content;
     }
 
-    public void addLike(){
-        if (this.likeCount == null) {
-            this.likeCount = 0; //
-        }
-        this.likeCount += 1;
+    public void updateLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 
-    public void deleteLike(){
-        this.likeCount -= 1;
+    public void addViewCount() {
+        this.viewCount += 1;
     }
 }

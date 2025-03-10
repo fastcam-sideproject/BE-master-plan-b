@@ -1,20 +1,34 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.member.entity.Member;
+import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.utils.TestUtils;
 
 import java.time.LocalDate;
 
+import static com.example.masterplanbbe.domain.member.entity.MemberRoleEnum.*;
+
 public class MemberFixture {
     public static Member createMember() {
-        return Member.builder()
-                .userId("test")
-                .email("test@test.com")
-                .name("name")
-                .nickname("nickname")
-                .password("password")
-                .phoneNumber("010-1234-5678")
-                .birthday(LocalDate.parse("1999-01-01"))
-                .profileImageUrl("profileImageUrl")
-                .build();
+        MemberCreateRequestDTO requestDTO = new MemberCreateRequestDTO(
+                "test@test.com",
+                "nickname",
+                "password",
+                false
+        );
+        return new Member(
+                requestDTO,
+                "password",
+                USER
+        );
+    }
+
+    public static Member createExistingMember() {
+        return TestUtils.createExistingEntity(MemberFixture::createMember);
+    }
+
+    public static Member createExistingMemberFrom(Long memberId) {
+        return TestUtils.createExistingEntity(MemberFixture::createMember, memberId);
     }
 }

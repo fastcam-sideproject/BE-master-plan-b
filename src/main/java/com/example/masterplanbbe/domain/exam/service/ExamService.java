@@ -20,7 +20,7 @@ public class ExamService {
     private final ExamRepositoryPort examRepositoryPort;
 
     public Page<ExamItemCardDto> getAllExam(Pageable pageable,
-                                            String memberId) {
+                                            Long memberId) {
         return examRepositoryPort.getExamItemCards(pageable, memberId);
     }
 
@@ -28,10 +28,12 @@ public class ExamService {
         return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId));
     }
 
+    @Transactional
     public CreateExamResponse create(ExamCreateRequest request) {
         return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
     }
 
+    @Transactional
     public void delete(Long examId) {
         examRepositoryPort.deleteById(examId);
     }
@@ -40,7 +42,7 @@ public class ExamService {
     public UpdateExamResponse update(Long examId,
                                      ExamUpdateRequest request) {
         Exam exam = examRepositoryPort.getById(examId);
-        exam.update(request);
+        request.update(exam);
         return new UpdateExamResponse(exam);
     }
 }

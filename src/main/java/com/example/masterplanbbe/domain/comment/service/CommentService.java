@@ -8,8 +8,9 @@ import com.example.masterplanbbe.domain.comment.entity.Comment;
 import com.example.masterplanbbe.domain.comment.repository.CommentRepositoryPort;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
-import com.example.masterplanbbe.member.entity.Member;
-import com.example.masterplanbbe.member.repository.MemberRepositoryPort;
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,13 +49,7 @@ public class CommentService {
 
         commentRepositoryPort.save(comment);
 
-        return CommentResponse.builder()
-                .commentId(comment.getId())
-                .content(comment.getContent())
-                .createdAt(comment.getCreatedAt())
-                .nickname(comment.getMember().getNickname())
-                .modifiedAt(comment.getModifiedAt())
-                .build();
+        return CommentResponse.from(comment);
     }
 
     /**
@@ -92,14 +87,7 @@ public class CommentService {
         commentRepositoryPort.save(comment);
 
 
-        return CommentResponse.builder()
-                .commentId(comment.getId())
-                .content(comment.getContent())
-                .nickname(comment.getMember().getNickname())
-                .createdAt(comment.getCreatedAt())
-                .modifiedAt(comment.getModifiedAt())
-                .build();
-
+        return CommentResponse.from(comment);
     }
 
     /**
@@ -115,8 +103,8 @@ public class CommentService {
 
         Member member = memberRepositoryPort.findById(memberId);
 
-        if (!comment.getMember().getId().equals(member.getId())) {
-            throw new GlobalException(ErrorCode.NOT_MODIFIED_COMMENT) {};
+        if (!comment.getMember().getId().equals(member.getId()) && member.getRole() != MemberRoleEnum.ADMIN) {
+            throw new GlobalException(ErrorCode.NOT_DELETED_COMMENT) {};
         }
 
         if (!comment.getPost().equals(post)) {

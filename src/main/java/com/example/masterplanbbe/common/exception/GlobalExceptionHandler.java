@@ -1,12 +1,21 @@
 package com.example.masterplanbbe.common.exception;
 
 import com.example.masterplanbbe.common.response.ErrorResponse;
-import com.example.masterplanbbe.member.exception.DuplicateUserException;
+import com.example.masterplanbbe.domain.member.exception.DuplicateUserException;
 import jakarta.annotation.Priority;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Slf4j
 @Priority(Integer.MAX_VALUE)
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -33,5 +42,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateUserException.class)
     public ResponseEntity<ErrorResponse<?>> handleDuplicateUserException(DuplicateUserException e) {
         return ResponseEntity.status(e.getErrorCode().getStatus()).body(ErrorResponse.of(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorResponse<?> handleValidationErrors(MethodArgumentNotValidException e) {
+        Map<String, List<String>> fieldErrors = new HashMap<>();
+
+        e.getBindingResult()
+                .getFieldErrors()
+                .forEach(er -> fieldErrors
+                            .computeIfAbsent(er.getField(), k -> new ArrayList<>())
+                            .add(er.getDefaultMessage()));
+
+        return ErrorResponse.of(
+                HttpStatus.BAD_REQUEST.value(),
+                "유효성 검증을 통과하지 못했습니다.",
+                fieldErrors);
     }
 }

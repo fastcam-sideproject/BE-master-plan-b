@@ -6,34 +6,27 @@ import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public record ExamCreateRequest(
-        String title,
-        Category category,
-        String authority,
-        CertificationType certificationType,
-        List<SubjectDto> subjects,
-        String preparation,
-        String eligibility,
-        String examStructure,
-        String passingCriteria
+        String name,
+        Double difficulty,
+        Integer participantCount,
+        LocalDate applyStartDate,
+        LocalDate applyEndDate,
+        LocalDate examStartDate,
+        ExamDetail examDetail
 ) {
     public Exam toEntity() {
         return new Exam(
-                title,
-                category,
-                authority,
-                0.0,
-                0,
-                certificationType,
-                subjects != null ? subjects.stream().map(SubjectDto::toEntity).toList(): List.of(),
-                ExamDetail.builder()
-                        .preparation(preparation)
-                        .eligibility(eligibility)
-                        .examStructure(examStructure)
-                        .passingCriteria(passingCriteria)
-                        .build()
+                examDetail,
+                name,
+                difficulty,
+                participantCount,
+                applyStartDate,
+                applyEndDate,
+                examStartDate
         );
     }
 }

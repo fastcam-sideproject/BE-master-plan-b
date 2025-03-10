@@ -6,6 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ExamRepositoryCustom {
-    Page<ExamItemCardDto> getExamItemCards(Pageable pageable, String memberId);
+    Page<ExamItemCardDto> getExamItemCards(Pageable pageable, Long memberId);
     ExamWithDetailsDto getExamWithDetails(Long examId);
 }

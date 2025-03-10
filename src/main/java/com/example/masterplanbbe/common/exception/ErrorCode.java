@@ -21,6 +21,9 @@ public enum ErrorCode {
     USER_ID_NOT_INITIALIZED(400, "U003", "사용자 ID가 초기화되지 않았습니다."),
     DUPLICATE_USER_ID(409, "U004", "이미 존재하는 사용자 ID입니다. 다른 ID를 입력하세요."),
     DUPLICATE_USER_EMAIL(409, "U004", "이미 가입된 이메일입니다. 다른 이메일을 입력하세요."),
+    INTERNAL_MAIL_EXCEPTION(500, "U005", "인증번호 발송이 실패했습니다. 잠시 후에 다시 시도해주세요."),
+    EXPIRED_VERIFICATION(400, "U006", "인증번호를 다시 발급해주세요."),
+    INCORRECT_VERIFICATION(400, "U007", "인증번호가 일치하지 않습니다. 다시 시도해주세요"),
 
     // Auth
     DUPLICATED_PHONE_NUMBER(409, "A001", "이미 등록된 전화번호입니다."),
@@ -34,6 +37,9 @@ public enum ErrorCode {
     // Oauth
     SOCIAL_EMAIL_LOAD_FAIL(400, "O001", "소셜 로그인에서 이메일을 불러올 수 없습니다."),
     SOCIAL_NAME_LOAD_FAIL(400, "O002", "소셜 로그인에서 이름을 불러올 수 없습니다."),
+
+    // Spec
+    SPEC_NOT_FOUND(404, "S001", "자격증을 찾을 수 없습니다."),
 
     // Exam
     EXAM_NOT_FOUND(404, "E001", "시험을 찾을 수 없습니다."),
@@ -49,6 +55,7 @@ public enum ErrorCode {
     NOT_FOUND_COMMENT(400, "C001" ,"댓글을 찾을 수 없습니다." ),
     NOT_BELONG_COMMENT(400,"C002" ,"속해있는 댓글이 아닙니다." ),
     NOT_MODIFIED_COMMENT(400,"C003" , "댓글 수정 권한이 없습니다."),
+    NOT_DELETED_COMMENT(400,"C004","댓글을 삭제 할 수 없습니다."),
 
     // UserExamSession
     NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다."),

@@ -3,7 +3,7 @@ package com.example.masterplanbbe.domain.userExamSession.controller;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.domain.userExamSession.dto.request.UserExamSessionRequest;
 import com.example.masterplanbbe.domain.userExamSession.service.UserExamSessionService;
-import com.example.masterplanbbe.security.user.UserDetailsImpl;
+import com.example.masterplanbbe.common.security.user.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
