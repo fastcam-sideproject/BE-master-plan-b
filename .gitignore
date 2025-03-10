@@ -48,6 +48,4 @@ src/main/resources/db/
 
 *.properties
 *.yaml
-application.yml
-application-local.yml
-application-deploy.yml
+*.yml
