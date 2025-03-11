@@ -2,8 +2,11 @@ package com.example.masterplanbbe.domain.exam.repository;
 
 import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.util.CustomPageUtils;
+import com.example.masterplanbbe.common.util.SortUtil;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
+import com.example.masterplanbbe.domain.exam.dto.QExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.QExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
@@ -11,7 +14,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.LongSupplier;
 
 import static com.example.masterplanbbe.common.exception.GlobalException.*;
 import static com.example.masterplanbbe.common.exception.ErrorCode.*;
@@ -28,7 +33,31 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
     @Override
     public CustomPage<ExamItemCardDto> getExamItemCards(CustomPageRequest<ExamSortOption> request,
                                                         String email) {
-        return null;
+        List<ExamItemCardDto> list = queryFactory
+                .select(new QExamItemCardDto(
+                        exam.name,
+                        exam.examDetail.spec.difficulty,
+                        exam.examDetail.spec.category,
+                        exam.applyStartDate,
+                        exam.examStartDate,
+                        specBookmark.isNotNull()
+                ))
+                .from(exam)
+                .leftJoin(examDetail)
+                .on(examDetail.id.eq(exam.examDetail.id)).fetchJoin()
+                .leftJoin(specBookmark)
+                .on(specBookmark.spec.id.eq(exam.examDetail.spec.id).and(specBookmark.member.email.eq(email)))
+                .orderBy(SortUtil.getOrderSpecifier(request.sort(), request.isAsc()))
+                .offset(request.getOffset())
+                .limit(request.size())
+                .fetch();
+
+        LongSupplier countQuery = () -> Optional.ofNullable(queryFactory
+                .select(exam.count())
+                .from(exam)
+                .fetchOne()).orElse(0L);
+
+        return CustomPageUtils.getPage(list, request, countQuery);
     }
 
     @Override
