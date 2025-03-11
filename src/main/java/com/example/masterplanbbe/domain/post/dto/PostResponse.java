@@ -28,8 +28,8 @@ public class PostResponse {
                     post.getMember().getNickname(),
                     post.getCreatedAt(),
                     post.getCategory(),
-                    post.getViewCount(),
                     post.getLikeCount(),
+                    post.getViewCount(),
                     post.getCommentList().size()
             );
         }

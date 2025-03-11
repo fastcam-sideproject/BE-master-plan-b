@@ -38,23 +38,20 @@ public class LikePostService {
      */
     @Transactional
     public PostResponse.Detail addLike(Long postId, String email) {
-        Member member = memberRepositoryPort.findByEmail(email);
-        Long memberId = member.getId();
-
         Post post = postRepositoryPort.findById(postId);
 
         String postLikeKey = POST_LIKE_KEY + postId;
         String postLikeCountKey = POST_LIKE_COUNT_KEY + postId;
-        String memberLikeKey = "member:likedPosts:" + memberId;
+        String memberLikeKey = "member:likedPosts:" + email;
 
-        Boolean isLiked = redisTemplate.opsForSet().isMember(postLikeKey, memberId.toString());
+        Boolean isLiked = redisTemplate.opsForSet().isMember(postLikeKey, email);
 
         if (Boolean.TRUE.equals(isLiked)) {
-            redisTemplate.opsForSet().remove(postLikeKey, memberId.toString());
+            redisTemplate.opsForSet().remove(postLikeKey, email);
             redisTemplate.opsForSet().remove(memberLikeKey, postId.toString());
             redisTemplate.opsForValue().decrement(postLikeCountKey);
         } else {
-            redisTemplate.opsForSet().add(postLikeKey, memberId.toString());
+            redisTemplate.opsForSet().add(postLikeKey, email);
             redisTemplate.opsForSet().add(memberLikeKey, postId.toString());
             redisTemplate.opsForValue().increment(postLikeCountKey);
             redisTemplate.expire(postLikeKey, 1, TimeUnit.DAYS);
@@ -81,10 +78,7 @@ public class LikePostService {
      */
     @Transactional
     public Page<PostResponse.Summary> getLikedPosts(String email, Pageable pageable) {
-        Member member = memberRepositoryPort.findByEmail(email);
-        Long memberId = member.getId();
-
-        String memberLikeKey = "member:likedPosts:" + memberId;
+        String memberLikeKey = "member:likedPosts:" + email;
 
         Set<String> likedPostIds = redisTemplate.opsForSet().members(memberLikeKey);
 

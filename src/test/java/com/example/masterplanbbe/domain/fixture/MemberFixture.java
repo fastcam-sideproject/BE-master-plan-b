@@ -4,10 +4,12 @@ import com.example.masterplanbbe.domain.member.dto.MemberCreateRequestDTO;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.utils.TestUtils;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
 
 import static com.example.masterplanbbe.domain.member.entity.MemberRoleEnum.*;
+import static com.example.masterplanbbe.domain.member.entity.QMember.member;
 
 public class MemberFixture {
     public static Member createMember() {

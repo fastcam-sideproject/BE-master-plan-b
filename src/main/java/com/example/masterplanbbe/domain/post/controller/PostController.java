@@ -46,10 +46,8 @@ public class PostController {
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getAllPost(
             Pageable pageable
     ) {
-        Page<PostResponse.Summary> postList = postService.getAllPost(pageable);
-
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(postList));
+                .body(ApiResponse.ok(postService.getAllPost(pageable)));
     }
 
     @Operation(summary = "게시글 검색")
