@@ -1,13 +1,14 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.dto.QExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -25,8 +26,8 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<ExamItemCardDto> getExamItemCards(Pageable pageable,
-                                                  String email) {
+    public CustomPage<ExamItemCardDto> getExamItemCards(CustomPageRequest<ExamSortOption> request,
+                                                        String email) {
         return null;
     }
 
