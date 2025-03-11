@@ -35,7 +35,8 @@ public class UserExamSessionController {
     @PatchMapping(path = "/{exam-sessions-id}")
     public ResponseEntity<ApiResponse<?>> update(
             @RequestBody UserExamSessionRequest request,
-            @PathVariable(name = "exam-sessions-id") Long updateId
+            @PathVariable(name = "exam-sessions-id") Long updateId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(userExamSessionService.update(request, updateId)));

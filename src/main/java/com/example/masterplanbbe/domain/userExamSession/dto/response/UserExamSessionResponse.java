@@ -20,7 +20,7 @@ public record UserExamSessionResponse(
         return UserExamSessionResponse.of(
                 userExamSession.getId(),
                 userExamSession.getExam().getName(),
-                userExamSession.getDate(),
+                userExamSession.getExam().getExamStartDate(),
                 userExamSession.getStartTime(),
                 userExamSession.getEndTime()
         );

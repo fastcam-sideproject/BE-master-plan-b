@@ -28,9 +28,9 @@ public class UserExamSessionService {
     public UserExamSessionResponse create(UserExamSessionRequest request, String memberId) {
         Exam exam = examRepositoryPort.getById(request.examId());
 
-        Member member = memberRepositoryPort.findByEmail(memberId); // * 임시 수정 *
+        Member member = memberRepositoryPort.findByEmail(memberId);
 
-        UserExamSession userExamSession = userExamSessionRepositoryPort.save(UserExamSession.of(exam, member, request.date(), request.startTime(), request.endTime()));
+        UserExamSession userExamSession = userExamSessionRepositoryPort.save(UserExamSession.of(exam, member, request.startTime(), request.endTime()));
 
         return UserExamSessionResponse.from(userExamSession);
     }
