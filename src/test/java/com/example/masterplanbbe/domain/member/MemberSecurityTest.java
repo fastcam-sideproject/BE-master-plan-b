@@ -15,6 +15,7 @@ import com.example.masterplanbbe.domain.member.entity.MemberRoleEnum;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,7 @@ public class MemberSecurityTest {
 //    }
 
     @Test
+    @DisplayName("커스텀 스프링 시큐리티 설정 테스트 환경 통일 처리 인증 테스트")
     @WithMockUser(username = "testUser", roles = {"USER", "ADMIN"})
     void test() throws Exception {
         String mockToken = "token";
