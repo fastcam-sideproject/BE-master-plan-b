@@ -40,17 +40,17 @@ class PostServiceTest {
     @DisplayName("게시글 생성 성공")
     void createPost() {
         // Given
-        Long memberId = 1L;
+        String email = "test@naver.com";
         Member member = getMember();
 
-        PostRequest request = new PostRequest(Category.TIP,"Test Title", "Test Content",memberId);
+        PostRequest request = new PostRequest(Category.TIP,"Test Title", "Test Content");
         Post post = getPost(member);
 
-        when(memberRepositoryPort.findById(memberId)).thenReturn(member);
+        when(memberRepositoryPort.findByEmail(email)).thenReturn(member);
         when(postRepositoryPort.save(any(Post.class))).thenReturn(post);
 
         // When
-        PostResponse.Summary response = postService.createPost(memberId, request);
+        PostResponse.Summary response = postService.createPost(email, request);
 
         // Then
         assertNotNull(response);
@@ -64,10 +64,10 @@ class PostServiceTest {
     @DisplayName("게시글 조회 성공")
     void getPost() {
         // Given
-        Long memberId = 1L;
+        String email = "test@naver.com";
         Member member = getMember();
 
-        PostRequest request = new PostRequest(Category.TIP,"Test Title", "Test Content",memberId);
+        PostRequest request = new PostRequest(Category.TIP,"Test Title", "Test Content");
         Post post = getPost(member);
 
         when(postRepositoryPort.findById(post.getId())).thenReturn(post);
@@ -86,17 +86,17 @@ class PostServiceTest {
     void updatePost() {
         // Given
         Long postId = 1L;
-        Long memberId = 1L;
+        String email = "test@naver.com";
         Member member = getMember();
         Post post = getPost(member);
-        PostRequest updatedRequest = new PostRequest(Category.TIP,"Updated Title", "Updated Content",memberId);
+        PostRequest updatedRequest = new PostRequest(Category.TIP,"Updated Title", "Updated Content");
 
         when(postRepositoryPort.findById(postId)).thenReturn(post);
-        when(memberRepositoryPort.findById(memberId)).thenReturn(member);
+        when(memberRepositoryPort.findByEmail(email)).thenReturn(member);
         when(postRepositoryPort.save(any(Post.class))).thenReturn(post);
 
         // When
-        PostResponse.Detail response = postService.updatePost(postId, memberId, updatedRequest);
+        PostResponse.Detail response = postService.updatePost(postId, email, updatedRequest);
 
         // Then
         assertNotNull(response);
@@ -109,15 +109,15 @@ class PostServiceTest {
     void deletePost() {
         // Given
         Long postId = 1L;
-        Long memberId = 1L;
+        String email = "test@naver.com";
         Member member = getMember();
         Post post = getPost(member);
 
         when(postRepositoryPort.findById(postId)).thenReturn(post);
-        when(memberRepositoryPort.findById(memberId)).thenReturn(member);
+        when(memberRepositoryPort.findByEmail(email)).thenReturn(member);
 
         // When
-        postService.deletePost(postId, memberId);
+        postService.deletePost(postId, email);
 
         // Then
         verify(postRepositoryPort, times(1)).delete(postId);

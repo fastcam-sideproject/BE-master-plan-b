@@ -1,11 +1,10 @@
 package com.example.masterplanbbe.domain.post.service;
 
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +14,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
+import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMember;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("게시글 좋아요 테스트")
@@ -49,9 +49,8 @@ public class LikePostServiceTest {
     void addLike_first() {
         // Given
         Long postId = 1L;
-        Long memberId = 1L;
-        Member member = createMember();
-        when(memberRepositoryPort.findById(memberId)).thenReturn(member);
+        String email = "test@naver.com";
+        Member member = getMember();
 
         Post post = Post.builder()
                 .content("test Content")
@@ -66,30 +65,29 @@ public class LikePostServiceTest {
 
         when(redisTemplate.opsForSet()).thenReturn(setOperations);
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(setOperations.isMember(postLikeKey, memberId.toString())).thenReturn(false);
+        when(setOperations.isMember(postLikeKey, email)).thenReturn(false);
 
         when(valueOperations.increment(postLikeCountKey)).thenReturn(1L);
         when(valueOperations.get(postLikeCountKey)).thenReturn("1");
 
         // When
-        PostResponse.Detail response = likeService.addLike(postId, memberId);
+        PostResponse.Detail response = likeService.addLike(postId, email);
 
         // Then
         assertEquals(1, response.likeCount());
-        verify(setOperations).add(postLikeKey, memberId.toString());
+        verify(setOperations).add(postLikeKey, email);
         verify(valueOperations).increment(postLikeCountKey);
         verify(redisTemplate).expire(postLikeKey, 1, TimeUnit.DAYS);
         verify(redisTemplate).expire(postLikeCountKey, 1, TimeUnit.DAYS);
     }
-    
+
     @Test
     @DisplayName("게시글 좋아요 이미 있을 경우")
     void addLike_alreadyLike() {
         // Given
         Long postId = 1L;
-        Long memberId = 1L;
-        Member member = createMember();
-        when(memberRepositoryPort.findById(memberId)).thenReturn(member);
+        String email = "test@naver.com";
+        Member member = getMember();
 
         Post post = Post.fullBuilder()
                 .content("test Content")
@@ -104,15 +102,21 @@ public class LikePostServiceTest {
         String postLikeCountKey = "post:likeCount:" + postId;
         when(redisTemplate.opsForSet()).thenReturn(setOperations);
         when(redisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(setOperations.isMember(postLikeKey, memberId.toString())).thenReturn(true);
+        when(setOperations.isMember(postLikeKey, email)).thenReturn(true);
         when(valueOperations.get(postLikeCountKey)).thenReturn("4");
 
         // When
-        PostResponse.Detail response = likeService.addLike(postId, memberId);
+        PostResponse.Detail response = likeService.addLike(postId, email);
 
         // Then
         assertEquals(4, response.likeCount());
-        verify(setOperations).remove(postLikeKey, memberId.toString());
+        verify(setOperations).remove(postLikeKey, email);
         verify(valueOperations).decrement(postLikeCountKey);
+    }
+
+    private static Member getMember() {
+        Member member = createMember();
+        ReflectionTestUtils.setField(member, "id", 1L);
+        return member;
     }
 }

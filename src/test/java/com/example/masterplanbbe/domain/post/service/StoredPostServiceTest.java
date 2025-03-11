@@ -19,10 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDate;
 import java.util.List;
 
-import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -31,18 +29,22 @@ import static org.mockito.Mockito.*;
 class StoredPostServiceTest {
 
     @InjectMocks
-    StoredPostService storedPostService;
+    private StoredPostService storedPostService;
 
     @Mock
-    StoredPostRepositoryAdapter storedPostRepositoryAdapter;
+    private StoredPostRepositoryAdapter storedPostRepositoryAdapter;
+
     @Mock
-    MemberRepositoryAdapter memberRepositoryAdapter;
+    private MemberRepositoryAdapter memberRepositoryAdapter;
+
     @Mock
-    PostRepositoryAdapter postRepositoryAdapter;
+    private PostRepositoryAdapter postRepositoryAdapter;
 
     private Member testMember;
     private Post testPost;
     private StoredPost storedPost;
+
+    private final String testEmail = "test@example.com";
 
     @BeforeEach
     void setUp() {
@@ -55,12 +57,12 @@ class StoredPostServiceTest {
     @DisplayName("게시글 북마크 추가")
     void addStorePost() {
         // Given
-        when(memberRepositoryAdapter.findById(1L)).thenReturn(testMember);
+        when(memberRepositoryAdapter.findByEmail(testEmail)).thenReturn(testMember);
         when(postRepositoryAdapter.findById(1L)).thenReturn(testPost);
         when(storedPostRepositoryAdapter.existsByMemberAndPost(testMember, testPost)).thenReturn(false);
 
         // When
-        PostResponse.Detail response = storedPostService.toggleStoredPost(1L, 1L);
+        PostResponse.Detail response = storedPostService.toggleStoredPost(testEmail, 1L);
 
         // Then
         assertThat(response.postId()).isEqualTo(1L);
@@ -71,12 +73,12 @@ class StoredPostServiceTest {
     @DisplayName("게시글 북마크 삭제")
     void deleteStorePost() {
         // Given
-        when(memberRepositoryAdapter.findById(1L)).thenReturn(testMember);
+        when(memberRepositoryAdapter.findByEmail(testEmail)).thenReturn(testMember);
         when(postRepositoryAdapter.findById(1L)).thenReturn(testPost);
         when(storedPostRepositoryAdapter.existsByMemberAndPost(testMember, testPost)).thenReturn(true);
 
         // When
-        PostResponse.Detail response = storedPostService.toggleStoredPost(1L, 1L);
+        PostResponse.Detail response = storedPostService.toggleStoredPost(testEmail, 1L);
 
         // Then
         assertThat(response.postId()).isEqualTo(1L);
@@ -89,10 +91,12 @@ class StoredPostServiceTest {
         // Given
         Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
         Page<StoredPost> storedPostPage = new PageImpl<>(List.of(storedPost), pageable, 1);
-        when(storedPostRepositoryAdapter.findByMemberId(1L, pageable)).thenReturn(storedPostPage);
+
+        when(memberRepositoryAdapter.findByEmail(testEmail)).thenReturn(testMember);
+        when(storedPostRepositoryAdapter.findByMemberId(testMember.getId(), pageable)).thenReturn(storedPostPage);
 
         // When
-        Page<PostResponse.Summary> response = storedPostService.getStoredPost(1L, pageable);
+        Page<PostResponse.Summary> response = storedPostService.getStoredPost(testEmail, pageable);
 
         // Then
         assertThat(response.getTotalElements()).isEqualTo(1);
@@ -100,7 +104,7 @@ class StoredPostServiceTest {
     }
 
     private static Member getMember() {
-        Member member = createMember();
+        Member member = MemberFixture.createMember();
         ReflectionTestUtils.setField(member, "id", 1L);
         return member;
     }
