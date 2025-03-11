@@ -78,7 +78,6 @@ public class StoredPostControllerTest {
     @DisplayName("내가 저장한 게시글 목록 조회 API 테스트")
     void getStoredPost() throws Exception {
         // Given
-        Long memberId = 1L;
         Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
         PostResponse.Summary postSummary = new PostResponse.Summary(1L, "Test Title", "Test Content", "testUser", null, null, 0, 0, 0);
         Page<PostResponse.Summary> pageResponse = new PageImpl<>(List.of(postSummary), pageable, 1);
