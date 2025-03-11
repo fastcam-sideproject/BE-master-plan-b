@@ -20,6 +20,6 @@ public class StudyLogRepositoryAdapter implements StudyLogRepositoryPort {
 
     @Override
     public StudyLog findByIdAndMemberId(Long id, String memberId) {
-        return studyLogRepository.findByIdAndMemberUserId(id, memberId).orElseThrow(() -> new NotFoundException(NOT_FOUND_STUDY_LOG));
+        return studyLogRepository.findByIdAndMemberEmail(id, memberId).orElseThrow(() -> new NotFoundException(NOT_FOUND_STUDY_LOG));
     }
 }

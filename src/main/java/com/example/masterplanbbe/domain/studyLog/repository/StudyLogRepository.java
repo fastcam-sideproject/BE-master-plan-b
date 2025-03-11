@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface StudyLogRepository extends JpaRepository<StudyLog, Long> {
 
-    Optional<StudyLog> findByIdAndMemberUserId(Long id, String memberId);
+    Optional<StudyLog> findByIdAndMemberEmail(Long id, String memberId);
 }
