@@ -49,7 +49,7 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
                         .leftJoin(examDetail)
                         .on(examDetail.id.eq(exam.examDetail.id)).fetchJoin()
                         .leftJoin(specBookmark)
-                        .on(specBookmark.spec.id.eq(exam.examDetail.spec.id).and(specBookmark.member.id.eq(memberId)))
+                        .on(specBookmark.spec.id.eq(exam.examDetail.spec.id).and(specBookmark.member.email.eq(email)))
                         .fetchOne()
         ).orElseThrow(() -> new NotFoundException(EXAM_NOT_FOUND));
     }
