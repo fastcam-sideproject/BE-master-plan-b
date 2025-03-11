@@ -11,6 +11,7 @@ import com.example.masterplanbbe.common.security.filter.CustomLoginFilter;
 import com.example.masterplanbbe.common.security.jwt.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +26,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -105,6 +107,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
+                .requestMatchers(HttpMethod.GET, "/ws").permitAll()
                 .anyRequest().authenticated()
         );
 

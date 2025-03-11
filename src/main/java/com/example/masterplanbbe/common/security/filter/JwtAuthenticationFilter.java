@@ -34,6 +34,12 @@ public class JwtAuthenticationFilter extends CustomOncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("요청 URI : {}", request.getRequestURI());
 
+        // WebSocket 핸드셰이크 요청은 필터링하지 않음
+        if (request.getRequestURI().startsWith("/ws")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String tokenValue = request.getHeader(AUTHORIZATION_HEADER);
         // 여기서의 커스텀 예외: 헤더 엑세스 토큰 제거 + 예외 반환
         if (tokenValue == null || tokenValue.isEmpty())
