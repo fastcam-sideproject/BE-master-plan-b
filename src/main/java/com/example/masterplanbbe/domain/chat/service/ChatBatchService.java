@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +18,21 @@ import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ChatBatchService {
     private static final int MAX_MESSAGES = 2; // 채팅 메시지 제한 개수
 
     private final RedisChatRepository redisChatRepository;
     private final BatchChatRepository batchChatRepository;
     private final ObjectMapper objectMapper;
+
+    @Autowired
+    public ChatBatchService(RedisChatRepository redisChatRepository,
+                            BatchChatRepository batchChatRepository,
+                            @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
+        this.redisChatRepository = redisChatRepository;
+        this.batchChatRepository = batchChatRepository;
+        this.objectMapper = objectMapper;
+    }
 
     @Transactional
     @Scheduled(fixedRate = 600_000)

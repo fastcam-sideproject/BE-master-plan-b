@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SocketOptions;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -101,8 +102,8 @@ public class RedisConfig {
     /**
      * ObjectMapper 설정 (LocalDateTime 직렬화 문제 해결)
      */
-    @Bean
-    public ObjectMapper objectMapper() {
+    @Bean(name = "chatObjectMapper")
+    public ObjectMapper chatObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule()); // LocalDateTime 지원
         objectMapper.disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS); // Timestamp 형식 방지
@@ -113,7 +114,8 @@ public class RedisConfig {
      * RedisTemplate 설정 (채팅 메시지 저장용)
      */
     @Bean(name = "chatTemplate")
-    public RedisTemplate<String, Object> chatRedisTemplate(RedisConnectionFactory redisConnectionFactory, ObjectMapper objectMapper) {
+    public RedisTemplate<String, Object> chatRedisTemplate(RedisConnectionFactory redisConnectionFactory,
+                                                           @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
 

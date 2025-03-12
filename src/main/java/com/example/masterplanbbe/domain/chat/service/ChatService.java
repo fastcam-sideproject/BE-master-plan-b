@@ -8,6 +8,8 @@ import com.example.masterplanbbe.domain.chat.util.SnowflakeIdGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -18,12 +20,22 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final RedisChatRepository redisChatRepository;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final ObjectMapper objectMapper;
+
+    @Autowired
+    public ChatService(ChatMessageRepository chatMessageRepository,
+                       RedisChatRepository redisChatRepository,
+                       SnowflakeIdGenerator snowflakeIdGenerator,
+                       @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
+        this.chatMessageRepository = chatMessageRepository;
+        this.redisChatRepository = redisChatRepository;
+        this.snowflakeIdGenerator = snowflakeIdGenerator;
+        this.objectMapper = objectMapper;
+    }
 
     /**
      * 채팅을 Redis에 저장
