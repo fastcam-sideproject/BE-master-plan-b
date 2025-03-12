@@ -28,7 +28,8 @@ import java.util.Map;
                 "com.example.masterplanbbe.domain.studyLog.repository",
                 "com.example.masterplanbbe.domain.userExamSession.repository",
                 "com.example.masterplanbbe.domain.category.repository",
-                "com.example.masterplanbbe.domain.jobRole.repository"
+                "com.example.masterplanbbe.domain.jobRole.repository",
+                "com.example.masterplanbbe.domain.chat.repository"
         },
         entityManagerFactoryRef = "dataEntityManager",
         transactionManagerRef = "dataTransactionManager"
@@ -59,7 +60,8 @@ public class DataDBConfig {
                 "com.example.masterplanbbe.domain.spec.entity",
                 "com.example.masterplanbbe.domain.specBookmark.entity",
                 "com.example.masterplanbbe.domain.category.entity",
-                "com.example.masterplanbbe.domain.jobRole.entity"
+                "com.example.masterplanbbe.domain.jobRole.entity",
+                "com.example.masterplanbbe.domain.chat.entity"
         );
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 

@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.chat;
+package com.example.masterplanbbe.domain.chat.entity;
 
 import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
 import com.fasterxml.jackson.annotation.JsonCreator;

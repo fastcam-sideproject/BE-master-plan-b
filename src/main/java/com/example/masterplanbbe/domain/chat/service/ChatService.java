@@ -1,12 +1,11 @@
 package com.example.masterplanbbe.domain.chat.service;
 
-import com.example.masterplanbbe.domain.chat.ChatMessage;
+import com.example.masterplanbbe.domain.chat.entity.ChatMessage;
 import com.example.masterplanbbe.domain.chat.dto.ChatMessageDTO;
 import com.example.masterplanbbe.domain.chat.repository.ChatMessageRepository;
 import com.example.masterplanbbe.domain.chat.repository.RedisChatRepository;
 import com.example.masterplanbbe.domain.chat.util.SnowflakeIdGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
