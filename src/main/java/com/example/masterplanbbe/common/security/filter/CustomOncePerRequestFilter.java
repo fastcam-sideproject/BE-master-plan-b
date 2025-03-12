@@ -10,6 +10,7 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
     private static final List<String> passableUris = List.of(
             // Base Endpoint
+            "/env",
             "/api/v1/member/send-verification-code",
             "/api/v1/member/verification",
             "/api/v1/member/create",
@@ -20,13 +21,16 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
             "/swagger",
             "/v3/api-docs",
 
-//            // OAuth 2.0
+            // OAuth 2.0
             "/oauth2",
 //
 ////            // temp about OAuth 2.0
 ////            "/login",
             "/favicon.ico",
-            "/error" // 얘를 열어줘야 favicon 에러가 안 찍히는데... 시그니처랑은 상관이 없나?
+//            "/error" // 얘를 열어줘야 favicon 에러가 안 찍히는데... 시그니처랑은 상관이 없나?
+
+            // Monitoring
+            "/actuator"
     );
 
     @Override

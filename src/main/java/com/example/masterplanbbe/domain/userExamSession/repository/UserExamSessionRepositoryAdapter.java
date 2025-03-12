@@ -52,25 +52,21 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
 
     @Override
     public UserExamSessionDetailResponse findDetailByIdAndMemberId(Long id, String memberId) {
-/*
         return Optional.ofNullable(
                 jpaQueryFactory
                         .select(Projections.constructor(UserExamSessionDetailResponse.class,
                                 userExamSession.id,
-                                userExamSession.member.userId,
-                                userExamSession.exam.certificationType,
-                                userExamSession.exam.title,
-                                userExamSession.date,
-                                Expressions.numberTemplate(Long.class, "DATEDIFF({0}, {1})", LocalDate.now(), userExamSession.date)
+                                userExamSession.member.email,
+                                userExamSession.exam.examDetail.spec.certificationType,
+                                userExamSession.exam.name,
+                                userExamSession.exam.examStartDate,
+                                Expressions.numberTemplate(Long.class, "DATEDIFF({0}, {1})", LocalDate.now(), userExamSession.exam.examStartDate)
                         ))
                         .from(userExamSession)
                         .where(userExamSession.id.eq(id)
-                                .and(userExamSession.member.userId.eq(memberId)))
+                                .and(userExamSession.member.email.eq(memberId)))
                         .fetchOne()
         ).orElseThrow(() -> new NotFoundException(NOT_FOUND_USER_EXAM_SESSION));
-*/
-        return null;
-        //TODO: implement this
     }
 
     @Override
@@ -78,11 +74,11 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
         BooleanBuilder builder = new BooleanBuilder();
 
         if (year != null) {
-            builder.and(userExamSession.date.year().eq(year));
+            builder.and(userExamSession.exam.examStartDate.year().eq(year));
         }
 
         if (month != null) {
-            builder.and(userExamSession.date.month().eq(month));
+            builder.and(userExamSession.exam.examStartDate.month().eq(month));
         }
 
         builder.and(userExamSession.member.email.eq(memberId));
@@ -93,8 +89,8 @@ public class UserExamSessionRepositoryAdapter implements UserExamSessionReposito
                         userExamSession.member.email,
                         userExamSession.exam.examDetail.spec.certificationType,
                         userExamSession.exam.name,
-                        userExamSession.date,
-                        Expressions.numberTemplate(Long.class, "DATEDIFF({0}, {1})", LocalDate.now(), userExamSession.date)
+                        userExamSession.exam.examStartDate,
+                        Expressions.numberTemplate(Long.class, "DATEDIFF({0}, {1})", LocalDate.now(), userExamSession.exam.examStartDate)
                 ))
                 .from(userExamSession)
                 .where(builder)

@@ -1,5 +1,8 @@
 package com.example.masterplanbbe.domain.post.service;
 
+import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.member.repository.MemberRepository;
+import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;
 import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
@@ -21,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class LikePostService {
 
     private final PostRepositoryPort postRepositoryPort;
-
+    private final MemberRepositoryPort memberRepositoryPort;
     private final RedisTemplate<String, String> redisTemplate;
 
     private static final String POST_LIKE_KEY = "post:like:";
@@ -34,21 +37,21 @@ public class LikePostService {
      * @return
      */
     @Transactional
-    public PostResponse.Detail addLike(Long postId, Long memberId) {
+    public PostResponse.Detail addLike(Long postId, String email) {
         Post post = postRepositoryPort.findById(postId);
 
         String postLikeKey = POST_LIKE_KEY + postId;
         String postLikeCountKey = POST_LIKE_COUNT_KEY + postId;
-        String memberLikeKey = "member:likedPosts:" + memberId;
+        String memberLikeKey = "member:likedPosts:" + email;
 
-        Boolean isLiked = redisTemplate.opsForSet().isMember(postLikeKey, memberId.toString());
+        Boolean isLiked = redisTemplate.opsForSet().isMember(postLikeKey, email);
 
         if (Boolean.TRUE.equals(isLiked)) {
-            redisTemplate.opsForSet().remove(postLikeKey, memberId.toString());
+            redisTemplate.opsForSet().remove(postLikeKey, email);
             redisTemplate.opsForSet().remove(memberLikeKey, postId.toString());
             redisTemplate.opsForValue().decrement(postLikeCountKey);
         } else {
-            redisTemplate.opsForSet().add(postLikeKey, memberId.toString());
+            redisTemplate.opsForSet().add(postLikeKey, email);
             redisTemplate.opsForSet().add(memberLikeKey, postId.toString());
             redisTemplate.opsForValue().increment(postLikeCountKey);
             redisTemplate.expire(postLikeKey, 1, TimeUnit.DAYS);
@@ -74,8 +77,8 @@ public class LikePostService {
      * @return
      */
     @Transactional
-    public Page<PostResponse.Summary> getLikedPosts(Long memberId, Pageable pageable) {
-        String memberLikeKey = "member:likedPosts:" + memberId;
+    public Page<PostResponse.Summary> getLikedPosts(String email, Pageable pageable) {
+        String memberLikeKey = "member:likedPosts:" + email;
 
         Set<String> likedPostIds = redisTemplate.opsForSet().members(memberLikeKey);
 

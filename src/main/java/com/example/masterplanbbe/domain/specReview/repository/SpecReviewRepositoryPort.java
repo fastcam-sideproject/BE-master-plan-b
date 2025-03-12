@@ -16,5 +16,5 @@ public interface SpecReviewRepositoryPort{
 
     SpecReview findByIdAndSpecId(Long id, Long specId);
 
-    boolean existsBySpecIdAndMemberId(Long specId, Long memberId);
+    boolean existsBySpecIdAndMemberEmail(Long specId, String email);
 }

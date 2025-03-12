@@ -1,10 +1,13 @@
 package com.example.masterplanbbe.domain.spec.service;
 
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
 import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
@@ -19,12 +22,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
@@ -45,35 +46,35 @@ public class SpecServiceTest {
 
     @Test
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
-    void get_spec_and_check_bookmark() {
+    void retrieve_spec_and_check_bookmark_status() {
         Member member = createMember();
-        PageRequest pageRequest = PageRequest.of(0, 25);
-        Page<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
-        given(specRepositoryPort.getSpecItemCards(pageRequest, member.getId())).willReturn(mocked);
+        CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
+        CustomPage<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
+        given(specRepositoryPort.getSpecItemCards(request, member.getId())).willReturn(mocked);
 
-        Page<SpecItemCardDto> result = specService.getAllSpec(pageRequest, member.getId());
+        PageResponse<SpecItemCardDto> result = specService.getAllSpec(request, member.getId());
 
-        verify(specRepositoryPort, times(1)).getSpecItemCards(pageRequest, member.getId());
+        verify(specRepositoryPort, times(1)).getSpecItemCards(request, member.getId());
         assertSpecItemCardPage(result);
     }
 
-    private Page<SpecItemCardDto> createMockedSpecItemCardPage(Member member) {
+    private CustomPage<SpecItemCardDto> createMockedSpecItemCardPage(Member member) {
         Spec spec1 = createExistingSpecFrom(1L);
         Spec spec2 = createExistingSpecFrom(2L);
         SpecBookmark specBookmark1 = createSpecBookmark(member, spec1);
 
-        return new PageImpl<>(List.of(
-                new SpecItemCardDto(spec1, null, isBookmarkedBy(spec1, specBookmark1)),
-                new SpecItemCardDto(spec2, null, isBookmarkedBy(spec2, specBookmark1))
+        return new CustomPage<>(0, 25, 2, List.of(
+                createSpecItemCardDto(spec1, isBookmarkedBy(spec1, specBookmark1)),
+                createSpecItemCardDto(spec2, isBookmarkedBy(spec2, specBookmark1))
         ));
     }
 
-    private void assertSpecItemCardPage(Page<SpecItemCardDto> result) {
+    private void assertSpecItemCardPage(PageResponse<SpecItemCardDto> result) {
         assertThat(result).isNotNull();
         assertAll(
-                () -> assertThat(result.getContent().size()).isEqualTo(2),
-                () -> assertThat(result.getContent().get(0).isBookmarked()).isTrue(),
-                () -> assertThat(result.getContent().get(1).isBookmarked()).isFalse()
+                () -> assertThat(result.content().size()).isEqualTo(2),
+                () -> assertThat(result.content().get(0).isBookmarked()).isTrue(),
+                () -> assertThat(result.content().get(1).isBookmarked()).isFalse()
         );
     }
 
@@ -87,7 +88,7 @@ public class SpecServiceTest {
     void get_spec_detail() {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
-        SpecWithDetailsDto mocked = new SpecWithDetailsDto(spec, spec.getExamDetails().get(0), false);
+        SpecWithDetailsDto mocked = createSpecWithDetailsDto(spec);
         given(specRepositoryPort.getSpecWithDetails(spec.getId())).willReturn(mocked);
 
         ReadSpecResponse result = specService.getSpec(specId);
@@ -97,10 +98,10 @@ public class SpecServiceTest {
                 () -> assertThat(result.name()).isEqualTo(spec.getName()),
                 () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),
                 () -> assertThat(result.certificationType()).isEqualTo(spec.getCertificationType()),
-                () -> assertThat(result.preparation()).isEqualTo(spec.getExamDetails().get(0).getPreparation()),
-                () -> assertThat(result.eligibility()).isEqualTo(spec.getExamDetails().get(0).getEligibility()),
-                () -> assertThat(result.examStructure()).isEqualTo(spec.getExamDetails().get(0).getExamStructure()),
-                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getExamDetails().get(0).getPassingCriteria())
+                () -> assertThat(result.preparation()).isEqualTo(spec.getLatestExam().getExamDetail().getPreparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(spec.getLatestExam().getExamDetail().getEligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(spec.getLatestExam().getExamDetail().getExamStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(spec.getLatestExam().getExamDetail().getPassingCriteria())
         );
     }
 
@@ -129,8 +130,10 @@ public class SpecServiceTest {
     void update_spec() {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
-        SpecUpdateRequest request = createSpecUpdateRequest(spec.getExamDetails());
-        given(specRepositoryPort.getById(any(Long.class))).willReturn(spec);
+        SpecUpdateRequest request = createSpecUpdateRequest(spec, NATIONAL_CERTIFIED);
+        given(specRepositoryPort.getById(any(Long.class))).willReturn(
+                createUpdatedSpec(() -> spec, NATIONAL_CERTIFIED)
+        );
 
         UpdateSpecResponse result = specService.update(specId, request);
 
@@ -140,12 +143,7 @@ public class SpecServiceTest {
                 () -> assertThat(result.issuingOrganization()).isEqualTo(request.issuingOrganization()),
                 () -> assertThat(result.certificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(result.difficulty()).isEqualTo(request.difficulty()),
-                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount()),
-                () -> assertThat(result.examDetails().size()).isEqualTo(request.examDetails().size()),
-                () -> assertThat(result.examDetails().get(0).getPreparation()).isEqualTo(request.examDetails().get(0).getPreparation()),
-                () -> assertThat(result.examDetails().get(0).getEligibility()).isEqualTo(request.examDetails().get(0).getEligibility()),
-                () -> assertThat(result.examDetails().get(0).getExamStructure()).isEqualTo(request.examDetails().get(0).getExamStructure()),
-                () -> assertThat(result.examDetails().get(0).getPassingCriteria()).isEqualTo(request.examDetails().get(0).getPassingCriteria())
+                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount())
         );
     }
 

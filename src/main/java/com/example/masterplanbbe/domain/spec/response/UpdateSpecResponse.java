@@ -15,8 +15,7 @@ public record UpdateSpecResponse(
         Category category,
         CertificationType certificationType,
         Double difficulty,
-        Integer participantCount,
-        List<ExamDetail> examDetails
+        Integer participantCount
 ) {
     public UpdateSpecResponse(Spec spec) {
         this(
@@ -26,8 +25,7 @@ public record UpdateSpecResponse(
                 spec.getCategory(),
                 spec.getCertificationType(),
                 spec.getDifficulty(),
-                spec.getParticipantCount(),
-                spec.getExamDetails()
+                spec.getParticipantCount()
         );
     }
 }

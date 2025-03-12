@@ -64,7 +64,15 @@ public enum ErrorCode {
     NOT_DELETED_COMMENT(400,"C004","댓글을 삭제 할 수 없습니다."),
 
     // UserExamSession
+<<<<<<< HEAD
     NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다.");
+=======
+    NOT_FOUND_USER_EXAM_SESSION(400, "UES001", "해당하는 시험 일정을 찾을 수 없습니다."),
+
+    // StudyLog
+    NOT_FOUND_STUDY_LOG(400, "SL001", "학습 기록을 찾을 수 없습니다.")
+    ;
+>>>>>>> dev
 
     private final Integer status;
     private final String code;

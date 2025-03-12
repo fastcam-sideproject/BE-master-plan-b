@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Table(name = "exam_posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Post extends FullAuditEntity {
@@ -22,10 +23,10 @@ public class Post extends FullAuditEntity {
     private String content;
 
     @Column(nullable = false)
-    private Integer likeCount;
+    private Integer likeCount = 0;
 
     @Column(nullable = false)
-    private Integer viewCount;
+    private Integer viewCount = 0;
 
     @ManyToOne
     private Member member;
@@ -43,7 +44,6 @@ public class Post extends FullAuditEntity {
         this.content = content;
         this.member = member;
         this.category = category;
-        this.likeCount = 0; //
     }
 
 

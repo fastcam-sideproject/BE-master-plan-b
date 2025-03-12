@@ -36,10 +36,10 @@ public class CommentService {
      * @param memberId
      * @return
      */
-    public CommentResponse createComment(Long postId, Long memberId, CommentRequest commentRequestDto) {
+    public CommentResponse createComment(Long postId, String email, CommentRequest commentRequestDto) {
 
         Post post = postRepositoryPort.findById(postId);
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByEmail(email);
 
         Comment comment = Comment.builder()
                 .content(commentRequestDto.content())
@@ -74,10 +74,10 @@ public class CommentService {
      * @param memberId
      * @return
      */
-    public CommentResponse updateComment( Long commentId, Long memberId, CommentRequest commentRequestDto) {
+    public CommentResponse updateComment( Long commentId, String email, CommentRequest commentRequestDto) {
         Comment comment = commentRepositoryPort.findById(commentId);
 
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByEmail(email);
 
         if (!comment.getMember().getId().equals(member.getId())) {
             throw new GlobalException(ErrorCode.NOT_MODIFIED_COMMENT) {};
@@ -96,12 +96,12 @@ public class CommentService {
      * @param commentId
      * @param memberId
      */
-    public void deleteComment(Long postId, Long commentId, Long memberId) {
+    public void deleteComment(Long postId, Long commentId, String email) {
         Post post = postRepositoryPort.findById(postId);
 
         Comment comment = commentRepositoryPort.findById(commentId);
 
-        Member member = memberRepositoryPort.findById(memberId);
+        Member member = memberRepositoryPort.findByEmail(email);
 
         if (!comment.getMember().getId().equals(member.getId()) && member.getRole() != MemberRoleEnum.ADMIN) {
             throw new GlobalException(ErrorCode.NOT_DELETED_COMMENT) {};

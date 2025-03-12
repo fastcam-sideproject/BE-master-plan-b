@@ -6,22 +6,22 @@ import com.example.masterplanbbe.domain.studyLog.enums.InputSource;
 import java.time.LocalDate;
 
 
-public record CreateStudyLogResponse(
+public record StudyLogResponse(
         Long id,
         LocalDate studyDate,
-        String subject,
-        Integer elapsedTime,
-        String title,
+        Integer totalStudyTimes,
         String content,
         InputSource inputSource
 ) {
-    public CreateStudyLogResponse(StudyLog studyLog) {
-        this(
+    public static StudyLogResponse of(Long id, LocalDate studyDate, Integer totalStudyTimes, String content, InputSource inputSource) {
+        return new StudyLogResponse(id, studyDate, totalStudyTimes, content, inputSource);
+    }
+
+    public static StudyLogResponse from(StudyLog studyLog) {
+        return StudyLogResponse.of(
                 studyLog.getId(),
                 studyLog.getStudyDate(),
-                studyLog.getSubject(),
-                studyLog.getElapsedTime(),
-                studyLog.getTitle(),
+                studyLog.getTotalStudyTimes(),
                 studyLog.getContent(),
                 studyLog.getInputSource()
         );

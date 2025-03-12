@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.post.controller;
 import com.example.masterplanbbe.domain.post.dto.PostRequest;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Category;
+import com.example.masterplanbbe.domain.post.repository.PostRepository;
 import com.example.masterplanbbe.domain.post.service.PostService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,62 +11,62 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(PostController.class)
+@MockBean(JpaMetamodelMappingContext.class)
 @DisplayName("게시글 컨트롤러 테스트")
 class PostControllerTest {
 
+    @Autowired
     private MockMvc mvc;
 
-    @Mock
+    @MockBean
     private PostService postService;
-
-    @InjectMocks
-    private PostController postController;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @BeforeEach
-    void setUp() {
-        mvc = MockMvcBuilders.standaloneSetup(postController)
-                .setCustomArgumentResolvers(new PageableHandlerMethodArgumentResolver())
-                .build();
-    }
-
     @Test
     @DisplayName("게시글 생성 성공")
+    @WithMockUser(username = "test@example.com")
     void createPost() throws Exception {
         // given
-        PostRequest requestDTO = new PostRequest(Category.TIP,"Test Title", "Test Content", 1L);
-        PostResponse.Summary responseDTO = new PostResponse.Summary(
-                1L, "Test Title", "Test Content", "Test Nickname", null, Category.TIP,0,0,null);
+        String email = "test@example.com";
 
-        when(postService.createPost(anyLong(), any(PostRequest.class))).thenReturn(responseDTO);
+        PostRequest requestDTO = new PostRequest(Category.TIP, "Test Title", "Test Content");
+        PostResponse.Summary responseDTO = new PostResponse.Summary(
+                1L, "Test Title", "Test Content", "Test Nickname", null, Category.TIP, 0, 0, 0);
+
+        when(postService.createPost(eq(email), any(PostRequest.class))).thenReturn(responseDTO);
 
         // when & then
         mvc.perform(post("/api/v1/posts")
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("memberId", 1L)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Test Title"))
@@ -74,15 +75,17 @@ class PostControllerTest {
 
     @Test
     @DisplayName("특정 게시글 조회")
+    @WithMockUser(username = "test@example.com")
     void getPost() throws Exception {
         // given
         PostResponse.Detail responseDTO = new PostResponse.Detail(
-                1L, "Test Title", "Test Content", "Test Nickname", Category.TIP,0,0,null,null,null);
+                1L, "Test Title", "Test Content", "Test Nickname", Category.TIP, 0, 0, null, null, null);
 
         when(postService.getPost(anyLong())).thenReturn(responseDTO);
 
         // when & then
         mvc.perform(get("/api/v1/posts/{postId}", 1L)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Test Title"))
@@ -91,19 +94,20 @@ class PostControllerTest {
 
     @Test
     @DisplayName("모든 게시글 조회")
+    @WithMockUser(username = "test@example.com")
     void getAllPost() throws Exception {
         // given
         PostResponse.Summary responseDTO = new PostResponse.Summary(
-                1L, "Test Title", "Test Content", "Test Nickname",null,Category.TIP,0,0,null);
+                1L, "Test Title", "Test Content", "Test Nickname", null, Category.TIP, 0, 0, null);
 
         Pageable pageable = PageRequest.of(0, 10);
         Page<PostResponse.Summary> responsePage = new PageImpl<>(List.of(responseDTO), pageable, 1);
 
         when(postService.getAllPost(any(Pageable.class))).thenReturn(responsePage);
 
-
         // when & then
         mvc.perform(get("/api/v1/posts")
+                        .with(csrf())
                         .param("page", "0")
                         .param("size", "10")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -111,25 +115,27 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data.content[0].title").value("Test Title"))
                 .andExpect(jsonPath("$.data.content[0].content").value("Test Content"))
                 .andExpect(jsonPath("$.data.content[0].nickname").value("Test Nickname"))
-                .andExpect(jsonPath("$.data.totalElements").value(1)) //
+                .andExpect(jsonPath("$.data.totalElements").value(1))
                 .andExpect(jsonPath("$.data.totalPages").value(1));
     }
 
-
     @Test
     @DisplayName("게시글 수정")
+    @WithMockUser(username = "test@example.com")
     void updatePost() throws Exception {
         // given
-        PostRequest requestDTO = new PostRequest(Category.TIP,"Updated Title", "Updated Content",1L);
-        PostResponse.Detail responseDTO = new PostResponse.Detail(
-                1L, "Updated Title", "Updated Content", "Test Nickname", Category.TIP,0,0, null, null,null);
+        String email = "test@example.com";
 
-        when(postService.updatePost(anyLong(), anyLong(), any(PostRequest.class))).thenReturn(responseDTO);
+        PostRequest requestDTO = new PostRequest(Category.TIP, "Updated Title", "Updated Content");
+        PostResponse.Detail responseDTO = new PostResponse.Detail(
+                1L, "Updated Title", "Updated Content", "Test Nickname", Category.TIP, 0, 0, null, null, null);
+
+        when(postService.updatePost(anyLong(), eq(email), any(PostRequest.class))).thenReturn(responseDTO);
 
         // when & then
         mvc.perform(patch("/api/v1/posts/{postId}", 1L)
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("memberId", 1L)
                         .content(objectMapper.writeValueAsString(requestDTO)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.title").value("Updated Title"))
@@ -139,12 +145,44 @@ class PostControllerTest {
 
     @Test
     @DisplayName("게시글 삭제")
+    @WithMockUser(username = "test@example.com")
     void deletePost() throws Exception {
+        // given
+        String email = "test@example.com";
+
         // when & then
         mvc.perform(delete("/api/v1/posts/{postId}", 1L)
-                        .header("memberId", 1L))
+                        .with(csrf()))
                 .andExpect(status().isOk());
 
-        verify(postService).deletePost(1L, 1L);
+        verify(postService).deletePost(1L, email);
+    }
+
+    @Test
+    @DisplayName("내가 작성한 글 조회")
+    @WithMockUser(username = "test@example.com")
+    void getMyPost() throws Exception {
+        // given
+        String email = "test@example.com";
+
+        PostResponse.Summary responseDTO = new PostResponse.Summary(
+                1L, "Test Title", "Test Content", "Test Nickname", null, Category.TIP, 0, 0, null);
+
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<PostResponse.Summary> responsePage = new PageImpl<>(List.of(responseDTO), pageable, 1);
+
+        when(postService.getMyPost(eq(email), any(Pageable.class))).thenReturn(responsePage);
+
+        // when & then
+        mvc.perform(get("/api/v1/posts/my")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.data.content[0].title").value("Test Title"))
+                .andExpect(jsonPath("$.data.content[0].content").value("Test Content"))
+                .andExpect(jsonPath("$.data.content[0].nickname").value("Test Nickname"))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
+                .andExpect(jsonPath("$.data.totalPages").value(1));
     }
 }

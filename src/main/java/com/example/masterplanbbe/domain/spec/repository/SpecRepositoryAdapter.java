@@ -1,29 +1,29 @@
 package com.example.masterplanbbe.domain.spec.repository;
 
+import com.example.masterplanbbe.common.page.CustomPage;
+import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.util.CustomPageUtils;
+import com.example.masterplanbbe.common.util.SortUtil;
 import com.example.masterplanbbe.domain.spec.dto.QSpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.QSpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
 import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLSubQuery;
+import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.LongSupplier;
 
 import static com.example.masterplanbbe.common.exception.ErrorCode.SPEC_NOT_FOUND;
 import static com.example.masterplanbbe.common.exception.GlobalException.*;
-import static com.example.masterplanbbe.domain.exam.entity.QExam.*;
+import static com.example.masterplanbbe.domain.exam.entity.QExam.exam;
 import static com.example.masterplanbbe.domain.exam.entity.QExamDetail.examDetail;
-import static com.example.masterplanbbe.domain.spec.entity.QSpec.*;
+import static com.example.masterplanbbe.domain.spec.entity.QSpec.spec;
 import static com.example.masterplanbbe.domain.specBookmark.entity.QSpecBookmark.specBookmark;
 
 @Repository
@@ -33,34 +33,31 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<SpecItemCardDto> getSpecItemCards(Pageable pageable,
-                                                  Long memberId) {
-        LocalDate today = LocalDate.now();
-
-        JPQLSubQuery<Long> closestExamIdSubquery = JPAExpressions
-                .select(exam.id)
-                .from(exam)
-                .join(exam.examDetail, examDetail)
-                .where(
-                        examDetail.spec.id.eq(spec.id)
-                                .and(exam.applyEndDate.goe(today))
-                )
-                .orderBy(exam.examStartDate.asc())
-                .limit(1);
+    public CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request,
+                                                        Long memberId) {
+        OrderSpecifier<?> orderSpecifier = request.sort() != null ?
+                SortUtil.getOrderSpecifier(request.sort(), request.isAsc()) :
+                spec.createdAt.asc();
 
         List<SpecItemCardDto> list = queryFactory
                 .select(new QSpecItemCardDto(
-                        spec,
-                        exam,
+                        spec.name,
+                        spec.category,
+                        spec.difficulty,
+                        spec.participantCount,
+                        exam.applyStartDate,
+                        exam.applyEndDate,
+                        exam.examStartDate,
                         specBookmark.isNotNull()
                 ))
                 .from(spec)
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
                 .leftJoin(exam)
-                .on(exam.id.eq(closestExamIdSubquery))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .on(exam.id.eq(spec.latestExam.id))
+                .orderBy(orderSpecifier)
+                .offset(request.getOffset())
+                .limit(request.size())
                 .fetch();
 
         LongSupplier countQuery = () -> Optional.ofNullable(
@@ -70,7 +67,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                                 .fetchOne())
                 .orElse(0L);
 
-        return PageableExecutionUtils.getPage(list, pageable, countQuery);
+        return CustomPageUtils.getPage(list, request, countQuery);
     }
 
     @Override
@@ -78,16 +75,23 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
         return queryFactory
                 .select(
                         new QSpecWithDetailsDto(
-                                spec,
-                                examDetail,
-                                specBookmark.isNotNull()
+                                spec.name,
+                                spec.issuingOrganization,
+                                spec.certificationType,
+                                specBookmark.isNotNull(),
+                                examDetail.preparation,
+                                examDetail.eligibility,
+                                examDetail.examStructure,
+                                examDetail.passingCriteria
                         )
                 )
                 .from(spec)
                 .leftJoin(specBookmark)
                 .on(specBookmark.spec.id.eq(spec.id))
+                .leftJoin(exam)
+                .on(exam.id.eq(spec.latestExam.id))
                 .leftJoin(examDetail)
-                .on(examDetail.spec.id.eq(spec.id))
+                .on(examDetail.id.eq(exam.examDetail.id))
                 .fetchOne();
     }
 

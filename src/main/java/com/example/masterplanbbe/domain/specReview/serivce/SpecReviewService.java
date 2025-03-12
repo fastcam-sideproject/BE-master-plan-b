@@ -29,13 +29,13 @@ public class SpecReviewService {
      * @param memberId
      * @return
      */
-    public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long specId, Long memberId) {
-        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberId(specId, memberId)) {
+    public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long specId, String email) {
+        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberEmail(specId, email)) {
             throw new GlobalException.BadRequestException(ErrorCode.ALREADY_CREATE_REVIEW);
         }
 
         Spec spec = specRepository.getById(specId);
-        Member member = memberRepositoryAdapter.findById(memberId);
+        Member member = memberRepositoryAdapter.findByEmail(email);
         SpecReview specReview = specReviewRequest.toEntity(member, spec);
         SpecReview saved = specReviewRepositoryAdapter.save(specReview);
 
@@ -74,10 +74,10 @@ public class SpecReviewService {
      * @param reviewId
      * @param memberId
      */
-    public void deleteReview(Long specId, Long specReviewId, Long memberId) {
+    public void deleteReview(Long specId, Long specReviewId, String email) {
         SpecReview specReview = specReviewRepositoryAdapter.findByIdAndSpecId(specReviewId, specId);
 
-        Member member = memberRepositoryAdapter.findById(memberId);
+        Member member = memberRepositoryAdapter.findByEmail(email);
 
         if (!specReview.getMember().getId().equals(member.getId())) {
             throw new GlobalException.BadRequestException(ErrorCode.NOT_DELETE_REVIEW);
@@ -94,12 +94,10 @@ public class SpecReviewService {
      * @param specId
      * @return
      */
-    public SpecReviewResponse updateReview(SpecReviewRequest specReviewRequest, Long memberId, Long specReviewId, Long specId) {
+    public SpecReviewResponse updateReview(SpecReviewRequest specReviewRequest, String email, Long specReviewId, Long specId) {
         SpecReview specReview = specReviewRepositoryAdapter.findByIdAndSpecId(specReviewId, specId);
 
-        Member member = memberRepositoryAdapter.findById(memberId);
-
-        if (!specReview.getMember().getId().equals(memberId)) {
+        if (!specReview.getMember().getEmail().equals(email)) {
             throw new GlobalException.BadRequestException(ErrorCode.NOT_MODIFIED_REVIEW);
         }
 

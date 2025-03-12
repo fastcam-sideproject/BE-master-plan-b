@@ -42,7 +42,7 @@ public class SpecReviewRepositoryAdapter implements SpecReviewRepositoryPort{
     }
 
     @Override
-    public boolean existsBySpecIdAndMemberId(Long specId, Long memberId) {
-        return specReviewRepository.existsBySpecIdAndMemberId(specId, memberId);
+    public boolean existsBySpecIdAndMemberEmail(Long specId, String email) {
+        return specReviewRepository.existsBySpecIdAndMemberEmail(specId, email);
     }
 }

@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.spec.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
@@ -40,6 +41,9 @@ public class Spec extends FullAuditEntity {
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDetail> examDetails;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    private Exam latestExam;
+
 
     @Builder
     public Spec(String name,
@@ -58,18 +62,20 @@ public class Spec extends FullAuditEntity {
         this.examDetails = examDetails != null ? examDetails : new ArrayList<>();
     }
 
-    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount, List<ExamDetail> examDetails) {
+    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount) {
         this.name = name;
         this.issuingOrganization = issuingOrganization;
         this.category = category;
         this.certificationType = certificationType;
         this.difficulty = difficulty;
         this.participantCount = participantCount;
-        this.examDetails = examDetails;
     }
 
     public void addExamDetail(ExamDetail examDetail) {
         this.examDetails.add(examDetail);
     }
 
+    public void specifyLatestExam(Exam exam) {
+        this.latestExam = exam;
+    }
 }

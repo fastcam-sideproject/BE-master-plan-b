@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "SpecReview controller api", description = "스펙후기 API")
@@ -25,10 +26,12 @@ public class SpecReviewController {
     public ResponseEntity<ApiResponse<SpecReviewResponse>> createReview(
             @PathVariable Long specId,
             @RequestBody SpecReviewRequest specReviewRequest,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specReviewService.addReview(specReviewRequest,specId,memberId)));
+                .body(ApiResponse.ok(specReviewService.addReview(specReviewRequest, specId, email)));
     }
 
     @Operation(summary = "스펙 리뷰 조회")
@@ -38,7 +41,7 @@ public class SpecReviewController {
             @PathVariable Long reviewId
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specReviewService.getReview(specId,reviewId)));
+                .body(ApiResponse.ok(specReviewService.getReview(specId, reviewId)));
     }
 
     @Operation(summary = "스펙 리뷰 전체조회")
@@ -57,10 +60,12 @@ public class SpecReviewController {
             @PathVariable Long specId,
             @PathVariable Long reviewId,
             @RequestBody SpecReviewRequest specReviewRequest,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
+        String email = authentication.getName();
+
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specReviewService.updateReview(specReviewRequest, memberId, reviewId, specId)));
+                .body(ApiResponse.ok(specReviewService.updateReview(specReviewRequest, email, reviewId, specId)));
     }
 
     @Operation(summary = "스펙 리뷰 삭제")
@@ -68,9 +73,11 @@ public class SpecReviewController {
     public ResponseEntity<ApiResponse<Void>> deleteReview(
             @PathVariable Long specId,
             @PathVariable Long reviewId,
-            @RequestHeader(value = "memberId") Long memberId
+            Authentication authentication
     ) {
-        specReviewService.deleteReview(specId, reviewId, memberId);
+        String email = authentication.getName();
+        specReviewService.deleteReview(specId, reviewId, email);
+
         return ResponseEntity.ok()
                 .body(ApiResponse.ok());
     }

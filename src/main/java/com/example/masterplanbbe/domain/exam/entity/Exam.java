@@ -18,7 +18,7 @@ public class Exam extends FullAuditEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private Double difficulty;
 
     @Column(nullable = false)

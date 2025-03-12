@@ -32,7 +32,7 @@ public class TestUtils {
         ReflectionTestUtils.setField(entity, "id", id);
     }
 
-    private static <T> T withSetup(Supplier<T> supplier, Consumer<T> setup) {
+    public static <T> T withSetup(Supplier<T> supplier, Consumer<T> setup) {
         T instance = supplier.get();
         setup.accept(instance);
         return instance;
