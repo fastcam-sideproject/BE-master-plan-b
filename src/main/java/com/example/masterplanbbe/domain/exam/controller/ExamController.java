@@ -3,6 +3,7 @@ package com.example.masterplanbbe.domain.exam.controller;
 import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.ApiResponse;
+import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
@@ -27,7 +28,7 @@ public class ExamController {
 
     @Operation(summary = "시험 목록 조회")
     @GetMapping
-    public ResponseEntity<ApiResponse<CustomPage<ExamItemCardDto>>> getAllExam(
+    public ResponseEntity<ApiResponse<PageResponse<ExamItemCardDto>>> getAllExam(
             @ModelAttribute CustomPageRequest<ExamSortOption> request,
             Authentication authentication
     ) {

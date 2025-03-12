@@ -47,7 +47,7 @@ public class SpecServiceTest {
     @Test
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void retrieve_spec_and_check_bookmark_status() {
-        Member member = createMember();
+        Member member = createExistingMember();
         CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
         CustomPage<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
         given(specRepositoryPort.getSpecItemCards(request, member.getId())).willReturn(mocked);
