@@ -45,7 +45,6 @@ public class Spec extends FullAuditEntity {
     private Exam latestExam;
 
 
-    @Builder
     public Spec(String name,
                 String issuingOrganization,
                 Category category,

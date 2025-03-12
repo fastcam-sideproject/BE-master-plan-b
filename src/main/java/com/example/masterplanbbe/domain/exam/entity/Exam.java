@@ -33,7 +33,6 @@ public class Exam extends FullAuditEntity {
     @Column(nullable = false)
     private LocalDate examStartDate;
 
-    @Builder
     public Exam(ExamDetail examDetail,
                 String name,
                 Double difficulty,

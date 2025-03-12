@@ -35,7 +35,6 @@ public class ExamDetail extends FullAuditEntity {
     @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects;
 
-    @Builder
     public ExamDetail(Spec spec,
                       String preparation,
                       String eligibility,
