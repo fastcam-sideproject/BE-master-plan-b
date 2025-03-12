@@ -12,14 +12,14 @@ import org.springframework.test.context.ActiveProfiles;
 //@ActiveProfiles("test")
 class MasterPlanBBeApplicationTests {
 
-	@TestConfiguration
-	public static class TestRedisConfig {
-
-		@Bean
-		public RedisConnectionFactory redisConnectionFactory() {
-			return Mockito.mock(RedisConnectionFactory.class);
-		}
-	}
+//	@TestConfiguration
+//	public static class TestRedisConfig {
+//
+//		@Bean
+//		public RedisConnectionFactory redisConnectionFactory() {
+//			return Mockito.mock(RedisConnectionFactory.class);
+//		}
+//	}
 
 	@Test
 	void contextLoads() {
