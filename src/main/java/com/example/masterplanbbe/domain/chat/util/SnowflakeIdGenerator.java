@@ -1,19 +1,18 @@
 package com.example.masterplanbbe.domain.chat.util;
 
-/**
- * Twitter Snowflake 기반의 ID 생성기
- * 64비트 ID를 생성하며, 시간순 정렬이 보장됨.
- */
-public class SnowflakeIdGenerator {
+import org.springframework.stereotype.Component;
 
-    // 기준 시간 (2025-01-01 00:00:00 UTC)
+import java.util.UUID;
+
+@Component
+public class SnowflakeIdGenerator {
     private final long epoch = 1735689600000L;
-    private final long workerId;
+    private final long workerId; //이후 서버 확장시 환경변수로 치환
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    public SnowflakeIdGenerator(long workerId) {
-        this.workerId = workerId;
+    public SnowflakeIdGenerator() {
+        this.workerId = Math.abs(UUID.randomUUID().getLeastSignificantBits() % 32);
     }
 
     public synchronized long nextId() {

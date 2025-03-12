@@ -3,15 +3,10 @@ package com.example.masterplanbbe;
 import com.example.masterplanbbe.common.config.MailConfig;
 import com.example.masterplanbbe.common.config.RedisConfig;
 import com.example.masterplanbbe.common.security.config.SecurityConfig;
-import com.example.masterplanbbe.common.security.exception.JwtAccessDenyHandler;
-import com.example.masterplanbbe.common.security.exception.JwtAuthenticationEntryPoint;
-import com.example.masterplanbbe.common.security.filter.CustomLoginFilter;
 import com.example.masterplanbbe.common.security.handler.CustomLogoutHandler;
-import com.example.masterplanbbe.common.security.handler.OAuth2FailureHandler;
 import com.example.masterplanbbe.common.security.handler.OAuth2SuccessHandler;
 import com.example.masterplanbbe.common.security.jwt.JwtService;
 import com.example.masterplanbbe.common.security.jwt.TokenUtils;
-import com.example.masterplanbbe.domain.chat.config.IdGeneratorConfig;
 import com.example.masterplanbbe.domain.chat.controller.ChatController;
 import com.example.masterplanbbe.domain.chat.repository.RedisChatRepository;
 import com.example.masterplanbbe.domain.chat.service.ChatBatchService;
@@ -19,22 +14,15 @@ import com.example.masterplanbbe.domain.chat.service.ChatService;
 import com.example.masterplanbbe.domain.chat.service.RedisPublisher;
 import com.example.masterplanbbe.domain.chat.service.RedisSubscriber;
 import com.example.masterplanbbe.domain.chat.util.SnowflakeIdGenerator;
-import com.example.masterplanbbe.domain.chat.util.WorkerIdAllocator;
 import com.example.masterplanbbe.domain.member.controller.DeployController;
 import com.example.masterplanbbe.domain.member.controller.MemberController;
 import com.example.masterplanbbe.domain.member.service.MemberService;
 import com.example.masterplanbbe.domain.post.service.LikePostService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -100,12 +88,6 @@ class MasterPlanBBeApplicationTests {
 
 	@MockBean
 	SnowflakeIdGenerator snowflakeIdGenerator;
-
-	@MockBean
-	WorkerIdAllocator workerIdAllocator;
-
-	@MockBean
-	IdGeneratorConfig idGeneratorConfig;
 
 	@Test
 	void contextLoads() {

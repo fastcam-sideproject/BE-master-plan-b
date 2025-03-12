@@ -11,12 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
     @Query("""
-        SELECT new com.example.masterplanbbe.domain.chat.ChatMessage(
-            cm.id, cm.specId, cm.memberId, cm.content, cm.sendAt)
-        FROM ChatMessage cm
-        WHERE cm.specId = :specId
-        AND cm.id < :lastChatId
-        ORDER BY cm.id DESC
-    """)
+                SELECT cm FROM ChatMessage cm
+                WHERE cm.specId = :specId
+                AND cm.id < :lastChatId
+                ORDER BY cm.id DESC
+            """)
     Slice<ChatMessage> findChatList(Long lastChatId, Long specId, Pageable pageable);
 }
