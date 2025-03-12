@@ -5,7 +5,6 @@ import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepository;
@@ -21,11 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.domain.exam.enums.ExamSortOption.*;
+import static com.example.masterplanbbe.domain.exam.enums.ExamSortOption.START_DATE;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExistingExamOf;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMember;
-import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createSpec;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -41,8 +39,8 @@ public class ExamRepositoryPortTest {
     @BeforeEach
     void setUp() {
         specBookmarkRepository.deleteAll();
-        examRepositoryPort.deleteAll();
         specRepository.deleteAll();
+        examRepositoryPort.deleteAll();
         memberRepository.deleteAll();
     }
 
@@ -50,23 +48,29 @@ public class ExamRepositoryPortTest {
     @DisplayName("사용자는 시험을 조회하고 스펙 북마크 여부를 확인한다.")
     void retrieve_exam_and_check_bookmark_status() {
         Member member = memberRepository.save(createMember());
-        Spec spec = createSpec();
-        Exam exam1 = createExistingExamOf(spec.getExamDetails().get(0), 1L);
-        Exam exam2 = createExistingExamOf(spec.getExamDetails().get(0), 2L);
+        Spec spec = specRepository.save(createSpec());
+        Exam exam1 = createExam(spec.getExamDetails().get(0));
+        Exam exam2 = createExam(spec.getExamDetails().get(0));
         examRepositoryPort.saveAll(List.of(exam1, exam2));
         specBookmarkRepository.save(new SpecBookmark(member, spec));
         CustomPageRequest<ExamSortOption> request = new CustomPageRequest<>(0, 25, START_DATE, true);
 
-        // TODO: implement this
+        CustomPage<ExamItemCardDto> result = examRepositoryPort.getExamItemCards(request, member.getEmail());
+
+        assertThat(result).isNotNull();
+        assertAll(
+                () -> assertThat(result.content().size()).isEqualTo(2 + 1),
+                () -> assertThat(result.content().stream().allMatch(ExamItemCardDto::isBookmarked)).isTrue(),
+                () -> assertThat(result.content()).extracting(ExamItemCardDto::name).containsAnyOf(exam1.getName(), exam2.getName())
+        );
     }
 
     @Test
     @DisplayName("사용자는 시험을 상세 조회한다.")
     void retrieve_exam_detail() {
         Member member = memberRepository.save(createMember());
-        Spec spec = createSpec();
-        Exam exam = createExistingExamOf(spec.getExamDetails().get(0), 1L);
-        examRepositoryPort.save(exam);
+        Spec spec = specRepository.save(createSpec());
+        Exam exam = examRepositoryPort.save(createExam(spec.getExamDetails().get(0)));
         specBookmarkRepository.save(new SpecBookmark(member, spec));
 
         ExamWithDetailsDto result = examRepositoryPort.getExamWithDetails(exam.getId(), member.getEmail());
