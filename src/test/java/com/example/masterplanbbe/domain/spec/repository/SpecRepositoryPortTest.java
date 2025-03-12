@@ -89,7 +89,7 @@ public class SpecRepositoryPortTest {
 
     @Test
     @DisplayName("존재하지 않는 스펙을 조회하면 예외를 발생시킨다.")
-    void throw_exception_when_exam_not_found() {
+    void throw_exception_when_spec_not_found() {
         assertThatThrownBy(() -> specRepositoryPort.getById(-1L))
                 .isInstanceOf(GlobalException.NotFoundException.class)
                 .hasMessageContaining(SPEC_NOT_FOUND.getMessage());

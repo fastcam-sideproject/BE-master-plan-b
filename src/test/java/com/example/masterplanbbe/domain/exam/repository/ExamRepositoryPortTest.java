@@ -20,12 +20,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+import static com.example.masterplanbbe.common.exception.ErrorCode.*;
+import static com.example.masterplanbbe.common.exception.GlobalException.*;
 import static com.example.masterplanbbe.domain.exam.enums.ExamSortOption.START_DATE;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
-import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExistingExamOf;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMember;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createSpec;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -86,5 +88,13 @@ public class ExamRepositoryPortTest {
                 () -> assertThat(result.examStructure()).isEqualTo(exam.getExamDetail().getExamStructure()),
                 () -> assertThat(result.passingCriteria()).isEqualTo(exam.getExamDetail().getPassingCriteria())
         );
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 시험을 조회하면 예외를 발생시킨다.")
+    void throw_exception_when_exam_not_found() {
+        assertThatThrownBy(() -> examRepositoryPort.getById(-1L))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining(EXAM_NOT_FOUND.getMessage());
     }
 }
