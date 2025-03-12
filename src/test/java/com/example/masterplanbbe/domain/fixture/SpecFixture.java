@@ -62,7 +62,7 @@ public class SpecFixture {
                 0,
                 now.minusDays(5L),
                 now.plusDays(3L),
-                now.plusDays(10L)
+                now.plusDays(8L)
         );
 
         spec.specifyLatestExam(exam);
