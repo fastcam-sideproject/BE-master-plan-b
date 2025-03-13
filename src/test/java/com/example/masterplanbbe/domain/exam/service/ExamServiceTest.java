@@ -13,6 +13,7 @@ import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
+import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,9 +56,9 @@ public class ExamServiceTest {
 
     private CustomPage<ExamItemCardDto> createMockedExamItemCardPage(Spec spec,
                                                                      Member member) {
-        Exam exam1 = spec.getLatestExam();
-        Exam exam2 = createExistingExamOf(spec.getExamDetails().get(0), 1L);
-        Exam exam3 = createExistingExamOf(spec.getExamDetails().get(0), 2L);
+        Exam exam1 = TestUtils.createExistingEntity(spec::getLatestExam, 1L);
+        Exam exam2 = createExistingExamOf(spec.getExamDetails().get(0), 2L);
+        Exam exam3 = createExistingExamOf(spec.getExamDetails().get(0), 3L);
         SpecBookmark specBookmark = new SpecBookmark(member, spec);
 
         return new CustomPage<>(0, 25, 2 + 1, List.of(
@@ -71,10 +72,13 @@ public class ExamServiceTest {
         assertThat(result).isNotNull();
         assertAll(
                 () -> assertThat(result.content().size()).isEqualTo(2 + 1),
-                () -> assertThat(result.content().stream().allMatch(ExamItemCardDto::isBookmarked)).isTrue()
+                () -> assertThat(result.content().stream().allMatch(ExamItemCardDto::isBookmarked)).isTrue(),
+                () -> assertThat(result.content()).containsExactlyInAnyOrderElementsOf(spec.getExamDetails().get(0).getExams().stream().map(exam -> new ExamItemCardDto(exam.getName(), exam.getDifficulty(), spec.getCategory(), exam.getApplyStartDate(), exam.getExamStartDate(), true)).toList())
         );
-        //TODO: 테스트 설계 및 검증 변경
     }
+    //TODO: 테스트 메서드 본문에 추상화 단계는 거쳐있지만, fixture 내용을 알고 있어야 검증문의 이해가 가능하다.
+    // 구체적으로는 spec fixture의 createSpec이 연관 객체를 함께 생성하며, examDetail이 따라서 단 한 개 제공돼있다는 점
+    // 이 규칙이 깨지는 순간, 테스트 코드는 더 이상 유효하지 않다.
 
     private Boolean isBookmarkedBy(Spec spec,
                                    SpecBookmark specBookmark) {
