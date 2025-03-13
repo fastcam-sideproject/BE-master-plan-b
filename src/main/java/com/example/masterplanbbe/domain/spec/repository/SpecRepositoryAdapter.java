@@ -43,7 +43,6 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .select(new QSpecItemCardDto(
                         spec.name,
                         spec.category,
-                        spec.difficulty,
                         spec.participantCount,
                         exam.applyStartDate,
                         exam.applyEndDate,

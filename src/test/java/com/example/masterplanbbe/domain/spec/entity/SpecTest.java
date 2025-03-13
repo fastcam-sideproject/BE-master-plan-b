@@ -22,7 +22,6 @@ public class SpecTest {
                 request.issuingOrganization(),
                 request.category(),
                 request.certificationType(),
-                request.difficulty(),
                 request.participantCount()
         );
 
@@ -31,7 +30,6 @@ public class SpecTest {
                 () -> assertThat(spec.getIssuingOrganization()).isEqualTo(request.issuingOrganization()),
                 () -> assertThat(spec.getCategory()).isEqualTo(request.category()),
                 () -> assertThat(spec.getCertificationType()).isEqualTo(request.certificationType()),
-                () -> assertThat(spec.getDifficulty()).isEqualTo(request.difficulty()),
                 () -> assertThat(spec.getParticipantCount()).isEqualTo(request.participantCount())
         );
     }

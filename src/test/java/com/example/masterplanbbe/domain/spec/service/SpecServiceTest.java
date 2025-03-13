@@ -142,7 +142,6 @@ public class SpecServiceTest {
                 () -> assertThat(result.name()).isEqualTo(request.name()),
                 () -> assertThat(result.issuingOrganization()).isEqualTo(request.issuingOrganization()),
                 () -> assertThat(result.certificationType()).isEqualTo(request.certificationType()),
-                () -> assertThat(result.difficulty()).isEqualTo(request.difficulty()),
                 () -> assertThat(result.participantCount()).isEqualTo(request.participantCount())
         );
     }

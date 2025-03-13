@@ -27,7 +27,6 @@ public class SpecFixture {
                 "ETS",
                 LANGUAGE,
                 ETC,
-                3.0,
                 100,
                 null
         );
@@ -109,7 +108,6 @@ public class SpecFixture {
                 spec.getCategory(),
                 certificationType,
                 spec.getIssuingOrganization(),
-                spec.getDifficulty(),
                 spec.getParticipantCount()
         );
     }
@@ -119,7 +117,6 @@ public class SpecFixture {
         return new SpecItemCardDto(
                 spec.getName(),
                 spec.getCategory(),
-                spec.getDifficulty(),
                 spec.getParticipantCount(),
                 spec.getLatestExam().getApplyStartDate(),
                 spec.getLatestExam().getApplyEndDate(),

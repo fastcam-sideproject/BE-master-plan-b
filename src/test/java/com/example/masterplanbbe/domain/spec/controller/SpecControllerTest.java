@@ -201,7 +201,6 @@ public class SpecControllerTest {
                             () -> assertThat(data.name()).isEqualTo(request.name()),
                             () -> assertThat(data.issuingOrganization()).isEqualTo(request.issuingOrganization()),
                             () -> assertThat(data.certificationType()).isEqualTo(request.certificationType()),
-                            () -> assertThat(data.difficulty()).isEqualTo(request.difficulty()),
                             () -> assertThat(data.participantCount()).isEqualTo(request.participantCount())
                     );
                 });
