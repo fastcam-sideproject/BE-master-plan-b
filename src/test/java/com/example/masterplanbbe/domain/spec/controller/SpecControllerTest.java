@@ -25,18 +25,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.security.Principal;
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
+import static com.example.masterplanbbe.domain.fixture.SecurityFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayName("스펙 컨트롤러 테스트")
 public class SpecControllerTest {
     @InjectMocks
     private SpecController specController;
@@ -88,7 +87,8 @@ public class SpecControllerTest {
                 .contentType(APPLICATION_JSON)
                 .characterEncoding(UTF_8)
                 .accept(APPLICATION_JSON)
-                .principal(createMockPrincipal(member)));
+                .principal(createMockPrincipal(member))
+        );
 
         resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
                 .andDo(print())
@@ -129,7 +129,9 @@ public class SpecControllerTest {
         ResultActions resultActions = mockMvc.perform(get("/api/v1/specs/{specId}", specId)
                 .contentType(APPLICATION_JSON)
                 .characterEncoding(UTF_8)
-                .accept(APPLICATION_JSON));
+                .accept(APPLICATION_JSON)
+                .principal(createMockPrincipal(member))
+        );
 
         resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
                 .andDo(print())
@@ -236,14 +238,6 @@ public class SpecControllerTest {
                     assertThat(response).isNotNull();
                     assertThat(response.getMessage()).isEqualTo("스펙 삭제 성공");
                 });
-    }
-
-    private Principal createMockPrincipal(Member member) {
-        return new UsernamePasswordAuthenticationToken(
-                member.getEmail(),
-                null,
-                List.of(new SimpleGrantedAuthority(member.getRole().getRole()))
-        );
     }
 
 }

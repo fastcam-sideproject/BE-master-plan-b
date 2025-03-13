@@ -4,7 +4,6 @@ import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.domain.member.entity.Member;
@@ -19,12 +18,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExamItemCardDto;
