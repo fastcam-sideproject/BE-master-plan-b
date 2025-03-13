@@ -6,11 +6,13 @@ import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
+import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
+import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
@@ -24,11 +26,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExistingExamOf;
+import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMember;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -134,6 +137,43 @@ public class ExamServiceTest {
     @Test
     @DisplayName("관리자는 시험을 추가한다.")
     void create_exam() {
-//        ExamCreateRequest request = createExamCreateRequest();
+        Spec spec = createExistingSpec();
+        ExamCreateRequest request = createExamCreateRequest(spec.getExamDetails().get(0));
+        given(examRepositoryPort.save(any(Exam.class))).willAnswer(TestUtils::simulateSavingEntity);
+
+        CreateExamResponse result = examService.create(request);
+
+        verify(examRepositoryPort, times(1)).save(any(Exam.class));
+        assertThat(result).isNotNull();
+        assertAll(
+                () -> assertThat(result.name()).isEqualTo(request.name()),
+                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount()),
+                () -> assertThat(result.applyStartDate()).isEqualTo(request.applyStartDate()),
+                () -> assertThat(result.applyEndDate()).isEqualTo(request.applyEndDate()),
+                () -> assertThat(result.examStartDate()).isEqualTo(request.examStartDate())
+        );
     }
+
+    @Test
+    @DisplayName("관리자는 시험을 수정한다.")
+    void update_exam() {
+        Long examId = 1L;
+        Exam exam = createExistingExamOf(createExistingSpec().getExamDetails().get(0), examId);
+        ExamUpdateRequest request = createExamUpdateRequest(exam, "시험 수정");
+        given(examRepositoryPort.getById(any(Long.class))).willReturn(
+                createUpdatedExam(() -> exam, request.name())
+        );
+
+        UpdateExamResponse result = examService.update(examId, request);
+
+        verify(examRepositoryPort, times(1)).getById(any(Long.class));
+        assertAll(
+                () -> assertThat(result.name()).isEqualTo(request.name()),
+                () -> assertThat(result.participantCount()).isEqualTo(request.participantCount()),
+                () -> assertThat(result.applyStartDate()).isEqualTo(request.applyStartDate()),
+                () -> assertThat(result.applyEndDate()).isEqualTo(request.applyEndDate()),
+                () -> assertThat(result.examStartDate()).isEqualTo(request.examStartDate())
+        );
+    }
+
 }
