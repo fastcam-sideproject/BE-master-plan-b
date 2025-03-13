@@ -33,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -176,4 +177,14 @@ public class ExamServiceTest {
         );
     }
 
+    @Test
+    @DisplayName("관리자는 시험을 삭제한다.")
+    void delete_exam() {
+        Long examId = 1L;
+        willDoNothing().given(examRepositoryPort).deleteById(any(Long.class));
+
+        examService.delete(examId);
+
+        verify(examRepositoryPort, times(1)).deleteById(any(Long.class));
+    }
 }
