@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.fixture;
 
+import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
@@ -50,6 +51,16 @@ public class ExamFixture {
     public static Exam createUpdatedExam(Supplier<Exam> examSupplier, String name) {
         return TestUtils.withSetup(examSupplier,
                 exam -> ReflectionTestUtils.setField(exam, "name", name)
+        );
+    }
+
+    public static ExamItemCardDto createExamItemCardDto(Exam exam, boolean isBookmarked) {
+        return new ExamItemCardDto(
+                exam.getName(),
+                exam.getExamDetail().getSpec().getCategory(),
+                exam.getApplyStartDate(),
+                exam.getExamStartDate(),
+                isBookmarked
         );
     }
 }
