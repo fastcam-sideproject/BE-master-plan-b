@@ -21,12 +21,12 @@ public class SpecService {
     private final SpecRepositoryPort specRepositoryPort;
 
     public PageResponse<SpecItemCardDto> getAllSpec(CustomPageRequest<SpecSortOption> request,
-                                                    Long memberId) {
-        return new PageResponse<>(specRepositoryPort.getSpecItemCards(request, memberId));
+                                                    String email) {
+        return new PageResponse<>(specRepositoryPort.getSpecItemCards(request, email));
     }
 
-    public ReadSpecResponse getSpec(Long specId) {
-        return new ReadSpecResponse(specRepositoryPort.getSpecWithDetails(specId));
+    public ReadSpecResponse getSpec(Long specId, String email) {
+        return new ReadSpecResponse(specRepositoryPort.getSpecWithDetails(specId, email));
     }
 
     @Transactional

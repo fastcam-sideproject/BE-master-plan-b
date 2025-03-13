@@ -17,6 +17,7 @@ import com.example.masterplanbbe.domain.spec.service.SpecService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.security.Principal;
 import java.util.List;
 
 import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
@@ -55,28 +60,35 @@ public class SpecControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
+    private Member member;
+
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(specController).build();
+        member = createExistingMember();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        SecurityContextHolder.clearContext();
     }
 
     @Test
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void retrieve_spec_and_check_bookmark_status() throws Exception {
-        Member member = createExistingMember();
         CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
         CustomPage<SpecItemCardDto> mockedPage = createMockedSpecItemCardPage();
-        given(specService.getAllSpec(request, member.getId())).willReturn(new PageResponse<>(mockedPage));
+        given(specService.getAllSpec(any(CustomPageRequest.class), any(String.class))).willReturn(new PageResponse<>(mockedPage));
 
         ResultActions resultActions = mockMvc.perform(get("/api/v1/specs")
                 .param("page", "0")
                 .param("size", "25")
                 .param("sortOption", (String) null)
                 .param("isAsc", "false")
-                .param("memberId", member.getId().toString())
                 .contentType(APPLICATION_JSON)
                 .characterEncoding(UTF_8)
-                .accept(APPLICATION_JSON));
+                .accept(APPLICATION_JSON)
+                .principal(createMockPrincipal(member)));
 
         resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
                 .andDo(print())
@@ -112,7 +124,7 @@ public class SpecControllerTest {
         Member member = createExistingMember();
         Long specId = 1L;
         ReadSpecResponse mockedResult = new ReadSpecResponse(createSpecWithDetailsDto(createExistingSpecFrom(specId)));
-        given(specService.getSpec(specId)).willReturn(mockedResult);
+        given(specService.getSpec(any(Long.class), any(String.class))).willReturn(mockedResult);
 
         ResultActions resultActions = mockMvc.perform(get("/api/v1/specs/{specId}", specId)
                 .contentType(APPLICATION_JSON)
@@ -225,4 +237,13 @@ public class SpecControllerTest {
                     assertThat(response.getMessage()).isEqualTo("스펙 삭제 성공");
                 });
     }
+
+    private Principal createMockPrincipal(Member member) {
+        return new UsernamePasswordAuthenticationToken(
+                member.getEmail(),
+                null,
+                List.of(new SimpleGrantedAuthority(member.getRole().getRole()))
+        );
+    }
+
 }

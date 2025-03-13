@@ -16,6 +16,7 @@ import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
 import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.utils.TestUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,21 +41,27 @@ import static org.mockito.Mockito.*;
 @DisplayName("스펙 서비스 테스트")
 public class SpecServiceTest {
     @InjectMocks
-    SpecService specService;
+    private SpecService specService;
     @Mock
-    SpecRepositoryPort specRepositoryPort;
+    private SpecRepositoryPort specRepositoryPort;
+
+    private Member member;
+
+    @BeforeEach
+    void setUp() {
+        member = createExistingMember();
+    }
 
     @Test
     @DisplayName("사용자는 스펙을 조회하고 북마크 여부를 확인한다.")
     void retrieve_spec_and_check_bookmark_status() {
-        Member member = createExistingMember();
         CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
         CustomPage<SpecItemCardDto> mocked = createMockedSpecItemCardPage(member);
-        given(specRepositoryPort.getSpecItemCards(request, member.getId())).willReturn(mocked);
+        given(specRepositoryPort.getSpecItemCards(any(CustomPageRequest.class), any(String.class))).willReturn(mocked);
 
-        PageResponse<SpecItemCardDto> result = specService.getAllSpec(request, member.getId());
+        PageResponse<SpecItemCardDto> result = specService.getAllSpec(request, member.getEmail());
 
-        verify(specRepositoryPort, times(1)).getSpecItemCards(request, member.getId());
+        verify(specRepositoryPort, times(1)).getSpecItemCards(any(CustomPageRequest.class), any(String.class));
         assertSpecItemCardPage(result);
     }
 
@@ -89,11 +96,11 @@ public class SpecServiceTest {
         Long specId = 1L;
         Spec spec = createExistingSpecFrom(specId);
         SpecWithDetailsDto mocked = createSpecWithDetailsDto(spec);
-        given(specRepositoryPort.getSpecWithDetails(spec.getId())).willReturn(mocked);
+        given(specRepositoryPort.getSpecWithDetails(any(Long.class), any(String.class))).willReturn(mocked);
 
-        ReadSpecResponse result = specService.getSpec(specId);
+        ReadSpecResponse result = specService.getSpec(specId, member.getEmail());
 
-        verify(specRepositoryPort, times(1)).getSpecWithDetails(specId);
+        verify(specRepositoryPort, times(1)).getSpecWithDetails(any(Long.class), any(String.class));
         assertAll(
                 () -> assertThat(result.name()).isEqualTo(spec.getName()),
                 () -> assertThat(result.issuingOrganization()).isEqualTo(spec.getIssuingOrganization()),

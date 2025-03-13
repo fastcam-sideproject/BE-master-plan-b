@@ -56,7 +56,7 @@ public class SpecRepositoryPortTest {
         specBookmarkRepository.save(createSpecBookmark(member, spec1));
         CustomPageRequest<SpecSortOption> request = new CustomPageRequest<>(0, 25, null, false);
 
-        CustomPage<SpecItemCardDto> result = specRepositoryPort.getSpecItemCards(request, member.getId());
+        CustomPage<SpecItemCardDto> result = specRepositoryPort.getSpecItemCards(request, member.getEmail());
 
         assertThat(result.content().size()).isEqualTo(2);
         assertAll(
@@ -70,9 +70,10 @@ public class SpecRepositoryPortTest {
     @Test
     @DisplayName("사용자는 스펙의 상세 정보를 조회할 수 있다")
     void retrieve_spec_detail() {
+        Member member = memberRepository.save(createMember());
         Spec spec = specRepositoryPort.save(createSpec());
 
-        SpecWithDetailsDto result = specRepositoryPort.getSpecWithDetails(spec.getId());
+        SpecWithDetailsDto result = specRepositoryPort.getSpecWithDetails(spec.getId(), member.getEmail());
 
         assertThat(result).isNotNull();
         assertAll(
