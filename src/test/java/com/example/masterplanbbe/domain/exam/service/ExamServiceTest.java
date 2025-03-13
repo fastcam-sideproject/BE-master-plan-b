@@ -88,16 +88,45 @@ public class ExamServiceTest {
     @Test
     @DisplayName("사용자는 시험을 상세 조회한다.")
     void retrieve_exam_detail() {
-/*
         Member member = createExistingMember();
         Spec spec = createExistingSpec();
         Exam exam = createExistingExamOf(spec.getExamDetails().get(0), 1L);
-        given(examRepositoryPort.getExamWithDetails(exam.getId(), member.getEmail())).willReturn();
+        ExamWithDetailsDto mocked = createMockedExamWithDetailsDto(exam, member);
+        given(examRepositoryPort.getExamWithDetails(exam.getId(), member.getEmail())).willReturn(mocked);
 
         ReadExamResponse result = examService.getExam(exam.getId(), member.getEmail());
 
         verify(examRepositoryPort, times(1)).getExamWithDetails(exam.getId(), member.getEmail());
-        assertExamItemCardDto(exam, result);
-*/
+        assertExamDetails(mocked, result);
+    }
+
+    private ExamWithDetailsDto createMockedExamWithDetailsDto(Exam exam, Member member) {
+        Spec spec = exam.getExamDetail().getSpec();
+        SpecBookmark specBookmark = TestUtils.createExistingEntity(() -> new SpecBookmark(member, spec), 1L);
+
+        return new ExamWithDetailsDto(
+                exam.getName(),
+                spec.getIssuingOrganization(),
+                spec.getCertificationType(),
+                isBookmarkedBy(spec, specBookmark),
+                exam.getExamDetail().getPreparation(),
+                exam.getExamDetail().getEligibility(),
+                exam.getExamDetail().getExamStructure(),
+                exam.getExamDetail().getPassingCriteria()
+        );
+    }
+
+    private void assertExamDetails(ExamWithDetailsDto dto, ReadExamResponse result) {
+        assertThat(result).isNotNull();
+        assertAll(
+                () -> assertThat(result.name()).isEqualTo(dto.name()),
+                () -> assertThat(result.issuingOrganization()).isEqualTo(dto.issuingOrganization()),
+                () -> assertThat(result.certificationType()).isEqualTo(dto.certificationType()),
+                () -> assertThat(result.isBookmarked()).isEqualTo(dto.isBookmarked()),
+                () -> assertThat(result.preparation()).isEqualTo(dto.preparation()),
+                () -> assertThat(result.eligibility()).isEqualTo(dto.eligibility()),
+                () -> assertThat(result.examStructure()).isEqualTo(dto.examStructure()),
+                () -> assertThat(result.passingCriteria()).isEqualTo(dto.passingCriteria())
+        );
     }
 }
