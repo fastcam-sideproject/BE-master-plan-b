@@ -36,7 +36,6 @@ public class ExamRepositoryAdapter implements ExamRepositoryPort, ExamRepository
         List<ExamItemCardDto> list = queryFactory
                 .select(new QExamItemCardDto(
                         exam.name,
-                        exam.examDetail.spec.difficulty,
                         exam.examDetail.spec.category,
                         exam.applyStartDate,
                         exam.examStartDate,

@@ -9,6 +9,7 @@ import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
+import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
@@ -62,9 +63,9 @@ public class ExamServiceTest {
         SpecBookmark specBookmark = new SpecBookmark(member, spec);
 
         return new CustomPage<>(0, 25, 2 + 1, List.of(
-                new ExamItemCardDto(exam1.getName(), exam1.getDifficulty(), exam1.getExamDetail().getSpec().getCategory(), exam1.getApplyStartDate(), exam1.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
-                new ExamItemCardDto(exam2.getName(), exam2.getDifficulty(), exam2.getExamDetail().getSpec().getCategory(), exam2.getApplyStartDate(), exam2.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
-                new ExamItemCardDto(exam3.getName(), exam3.getDifficulty(), exam3.getExamDetail().getSpec().getCategory(), exam3.getApplyStartDate(), exam3.getExamStartDate(), isBookmarkedBy(spec, specBookmark))
+                new ExamItemCardDto(exam1.getName(), exam1.getExamDetail().getSpec().getCategory(), exam1.getApplyStartDate(), exam1.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
+                new ExamItemCardDto(exam2.getName(), exam2.getExamDetail().getSpec().getCategory(), exam2.getApplyStartDate(), exam2.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
+                new ExamItemCardDto(exam3.getName(), exam3.getExamDetail().getSpec().getCategory(), exam3.getApplyStartDate(), exam3.getExamStartDate(), isBookmarkedBy(spec, specBookmark))
         ));
     }
 
@@ -73,7 +74,7 @@ public class ExamServiceTest {
         assertAll(
                 () -> assertThat(result.content().size()).isEqualTo(2 + 1),
                 () -> assertThat(result.content().stream().allMatch(ExamItemCardDto::isBookmarked)).isTrue(),
-                () -> assertThat(result.content()).containsExactlyInAnyOrderElementsOf(spec.getExamDetails().get(0).getExams().stream().map(exam -> new ExamItemCardDto(exam.getName(), exam.getDifficulty(), spec.getCategory(), exam.getApplyStartDate(), exam.getExamStartDate(), true)).toList())
+                () -> assertThat(result.content()).containsExactlyInAnyOrderElementsOf(spec.getExamDetails().get(0).getExams().stream().map(exam -> new ExamItemCardDto(exam.getName(), spec.getCategory(), exam.getApplyStartDate(), exam.getExamStartDate(), true)).toList())
         );
     }
     //TODO: 테스트 메서드 본문에 추상화 단계는 거쳐있지만, fixture 내용을 알고 있어야 검증문의 이해가 가능하다.
@@ -128,5 +129,11 @@ public class ExamServiceTest {
                 () -> assertThat(result.examStructure()).isEqualTo(dto.examStructure()),
                 () -> assertThat(result.passingCriteria()).isEqualTo(dto.passingCriteria())
         );
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 추가한다.")
+    void create_exam() {
+//        ExamCreateRequest request = createExamCreateRequest();
     }
 }

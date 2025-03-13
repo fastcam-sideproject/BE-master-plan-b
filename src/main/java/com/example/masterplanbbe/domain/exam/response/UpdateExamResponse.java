@@ -11,7 +11,6 @@ import java.util.Objects;
 
 public record UpdateExamResponse(
         String name,
-        Double difficulty,
         Integer participantCount,
         LocalDate applyStartDate,
         LocalDate applyEndDate,
@@ -20,7 +19,6 @@ public record UpdateExamResponse(
     public UpdateExamResponse(Exam exam) {
         this(
                 exam.getName(),
-                exam.getDifficulty(),
                 exam.getParticipantCount(),
                 exam.getApplyStartDate(),
                 exam.getApplyEndDate(),

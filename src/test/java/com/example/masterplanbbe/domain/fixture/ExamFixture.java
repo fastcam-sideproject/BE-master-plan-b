@@ -11,7 +11,6 @@ public class ExamFixture {
         return new Exam(
                 examDetail,
                 "토익 제537회",
-                4.0,
                 900,
                 LocalDate.now().minusDays(5),
                 LocalDate.now().plusDays(5),

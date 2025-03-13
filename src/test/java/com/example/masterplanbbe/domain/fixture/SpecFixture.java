@@ -58,7 +58,6 @@ public class SpecFixture {
         Exam exam = new Exam(
                 examDetail,
                 now.getYear() + "년 1회",
-                3.0,
                 0,
                 now.minusDays(5L),
                 now.plusDays(3L),

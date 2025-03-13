@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 public @QueryProjection record ExamItemCardDto (
         String name,
-        Double difficulty,
         Category category,
         LocalDate applyStartDate,
         LocalDate examStartDate,

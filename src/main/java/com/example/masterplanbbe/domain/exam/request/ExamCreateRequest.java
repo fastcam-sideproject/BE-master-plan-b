@@ -11,7 +11,6 @@ import java.util.List;
 
 public record ExamCreateRequest(
         String name,
-        Double difficulty,
         Integer participantCount,
         LocalDate applyStartDate,
         LocalDate applyEndDate,
@@ -22,7 +21,6 @@ public record ExamCreateRequest(
         return new Exam(
                 examDetail,
                 name,
-                difficulty,
                 participantCount,
                 applyStartDate,
                 applyEndDate,
