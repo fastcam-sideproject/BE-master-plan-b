@@ -5,10 +5,13 @@ import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
+import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
@@ -73,7 +76,6 @@ public class ExamControllerTest {
         member = createExistingMember();
         spec = createExistingSpec();
 
-        given(entityManager.getReference(eq(ExamDetail.class), any(Long.class))).willReturn(spec.getExamDetails().get(0));
     }
 
     @Test
@@ -123,6 +125,7 @@ public class ExamControllerTest {
     @DisplayName("관리자는 시험을 추가한다")
     void addExam() throws Exception {
         ExamCreateRequest request = createExamCreateRequest(createExistingEntity(() -> spec.getExamDetails().get(0)));
+        given(entityManager.getReference(eq(ExamDetail.class), any(Long.class))).willReturn(spec.getExamDetails().get(0));
         CreateExamResponse mockedResult = new CreateExamResponse(createExistingEntity(() -> request.toEntity(entityManager), 1L));
         given(examService.create(any(ExamCreateRequest.class))).willReturn(mockedResult);
 
@@ -140,6 +143,42 @@ public class ExamControllerTest {
                     ApiResponse<CreateExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
                     });
                     CreateExamResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(request.name()),
+                            () -> assertThat(data.participantCount()).isEqualTo(request.participantCount()),
+                            () -> assertThat(data.applyStartDate()).isEqualTo(request.applyStartDate()),
+                            () -> assertThat(data.applyEndDate()).isEqualTo(request.applyEndDate()),
+                            () -> assertThat(data.examStartDate()).isEqualTo(request.examStartDate())
+                    );
+                });
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 수정한다")
+    void updateExam() throws Exception {
+        Long examId = 1L;
+        Exam exam = createExistingExamOf(spec.getExamDetails().get(0), examId);
+        ExamUpdateRequest request = createExamUpdateRequest(exam, "수정된 이름");
+        given(examService.update(any(Long.class), any(ExamUpdateRequest.class))).willReturn(new UpdateExamResponse(
+                        createUpdatedExam(() -> exam, request.name())
+                )
+        );
+
+        ResultActions resultActions = mockMvc.perform(patch("/api/v1/exams/" + examId)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .accept(APPLICATION_JSON)
+        );
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<UpdateExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    UpdateExamResponse data = response.getData();
                     assertThat(data).isNotNull();
                     assertAll(
                             () -> assertThat(data.name()).isEqualTo(request.name()),

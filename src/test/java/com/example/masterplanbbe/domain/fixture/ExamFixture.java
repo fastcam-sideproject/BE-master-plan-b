@@ -42,9 +42,9 @@ public class ExamFixture {
         return new ExamUpdateRequest(
                 name,
                 exam.getParticipantCount(),
-                exam.getApplyStartDate().minusDays(1),
-                exam.getApplyEndDate().plusDays(1),
-                exam.getExamStartDate().minusDays(1)
+                exam.getApplyStartDate(),
+                exam.getApplyEndDate(),
+                exam.getExamStartDate()
         );
     }
 
