@@ -34,7 +34,7 @@ public class ExamFixture {
                 LocalDate.now().minusDays(7),
                 LocalDate.now().minusDays(3),
                 LocalDate.now().plusDays(2),
-                examDetail
+                examDetail.getId()
         );
     }
 

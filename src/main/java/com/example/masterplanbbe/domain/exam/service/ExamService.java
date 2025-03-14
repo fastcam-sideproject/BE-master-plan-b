@@ -11,6 +11,7 @@ import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ExamService {
     private final ExamRepositoryPort examRepositoryPort;
+    private final EntityManager entityManager;
 
     public PageResponse<ExamItemCardDto> getAllExam(CustomPageRequest<ExamSortOption> request,
                                                     String email) {
@@ -31,7 +33,7 @@ public class ExamService {
 
     @Transactional
     public CreateExamResponse create(ExamCreateRequest request) {
-        return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
+        return new CreateExamResponse(examRepositoryPort.save(request.toEntity(entityManager)));
     }
 
     @Transactional
