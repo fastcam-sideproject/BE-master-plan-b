@@ -156,7 +156,6 @@ public class ExamControllerTest {
         ));
     }
 
-    @Disabled
     @Test
     @DisplayName("관리자는 시험을 추가한다")
     void addExam() throws Exception {
