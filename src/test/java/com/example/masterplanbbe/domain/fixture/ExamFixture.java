@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.fixture;
 
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
@@ -34,7 +35,7 @@ public class ExamFixture {
                 LocalDate.now().minusDays(7),
                 LocalDate.now().minusDays(3),
                 LocalDate.now().plusDays(2),
-                examDetail
+                examDetail.getId()
         );
     }
 
@@ -42,9 +43,22 @@ public class ExamFixture {
         return new ExamUpdateRequest(
                 name,
                 exam.getParticipantCount(),
-                exam.getApplyStartDate().minusDays(1),
-                exam.getApplyEndDate().plusDays(1),
-                exam.getExamStartDate().minusDays(1)
+                exam.getApplyStartDate(),
+                exam.getApplyEndDate(),
+                exam.getExamStartDate()
+        );
+    }
+
+    public static ExamWithDetailsDto createExamWithDetailsDto(Exam exam) {
+        return new ExamWithDetailsDto(
+                exam.getName(),
+                exam.getExamDetail().getSpec().getIssuingOrganization(),
+                exam.getExamDetail().getSpec().getCertificationType(),
+                false,
+                exam.getExamDetail().getPreparation(),
+                exam.getExamDetail().getEligibility(),
+                exam.getExamDetail().getExamStructure(),
+                exam.getExamDetail().getPassingCriteria()
         );
     }
 

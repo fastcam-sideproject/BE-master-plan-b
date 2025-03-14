@@ -5,15 +5,21 @@ import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
+import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
+import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
+import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
+import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -32,10 +38,12 @@ import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMember;
 import static com.example.masterplanbbe.domain.fixture.SecurityFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
+import static com.example.masterplanbbe.utils.TestUtils.*;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.http.MediaType.*;
@@ -48,8 +56,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ExamControllerTest {
     @InjectMocks
     private ExamController examController;
+
     @Mock
     private ExamService examService;
+
+    @Mock
+    private EntityManager entityManager;
 
     private MockMvc mockMvc;
 
@@ -64,6 +76,7 @@ public class ExamControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(examController).build();
         member = createExistingMember();
         spec = createExistingSpec();
+
     }
 
     @Test
@@ -100,6 +113,41 @@ public class ExamControllerTest {
                 });
     }
 
+    @Test
+    @DisplayName("사용자는 시험을 상세 조회한다.")
+    void retrieve_exam_detail() throws Exception {
+        Long examId = 1L;
+        Exam exam = createExistingExamOf(spec.getExamDetails().get(0), examId);
+        ReadExamResponse mocked = new ReadExamResponse(createExamWithDetailsDto(exam));
+        given(examService.getExam(any(Long.class), any(String.class))).willReturn(mocked);
+
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/exams/" + examId)
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .accept(APPLICATION_JSON)
+                .principal(createMockPrincipal(member))
+        );
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<ReadExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    ReadExamResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(exam.getName()),
+                            () -> assertThat(data.issuingOrganization()).isEqualTo(exam.getExamDetail().getSpec().getIssuingOrganization()),
+                            () -> assertThat(data.certificationType()).isEqualTo(exam.getExamDetail().getSpec().getCertificationType()),
+                            () -> assertThat(data.preparation()).isEqualTo(exam.getExamDetail().getPreparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(exam.getExamDetail().getEligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(exam.getExamDetail().getExamStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(exam.getExamDetail().getPassingCriteria())
+                    );
+                });
+    }
+
     private CustomPage<ExamItemCardDto> createMockedExamItemCardPage(Spec spec,
                                                                      Member member) {
         return new CustomPage<>(0, 25, 2, List.of(
@@ -108,13 +156,12 @@ public class ExamControllerTest {
         ));
     }
 
-    @Disabled
     @Test
     @DisplayName("관리자는 시험을 추가한다")
     void addExam() throws Exception {
-/*
-        ExamCreateRequest request = createExamCreateRequest(spec.getExamDetails().get(0));
-        CreateExamResponse mockedResult = new CreateExamResponse(createExistingExamOf(spec.getExamDetails().get(0), 1L));
+        ExamCreateRequest request = createExamCreateRequest(createExistingEntity(() -> spec.getExamDetails().get(0)));
+        given(entityManager.getReference(eq(ExamDetail.class), any(Long.class))).willReturn(spec.getExamDetails().get(0));
+        CreateExamResponse mockedResult = new CreateExamResponse(createExistingEntity(() -> request.toEntity(entityManager), 1L));
         given(examService.create(any(ExamCreateRequest.class))).willReturn(mockedResult);
 
         ResultActions resultActions = mockMvc.perform(post("/api/v1/exams")
@@ -140,7 +187,42 @@ public class ExamControllerTest {
                             () -> assertThat(data.examStartDate()).isEqualTo(request.examStartDate())
                     );
                 });
-*/
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 수정한다")
+    void updateExam() throws Exception {
+        Long examId = 1L;
+        Exam exam = createExistingExamOf(spec.getExamDetails().get(0), examId);
+        ExamUpdateRequest request = createExamUpdateRequest(exam, "수정된 이름");
+        given(examService.update(any(Long.class), any(ExamUpdateRequest.class))).willReturn(new UpdateExamResponse(
+                        createUpdatedExam(() -> exam, request.name())
+                )
+        );
+
+        ResultActions resultActions = mockMvc.perform(patch("/api/v1/exams/" + examId)
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .accept(APPLICATION_JSON)
+        );
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<UpdateExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    UpdateExamResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(request.name()),
+                            () -> assertThat(data.participantCount()).isEqualTo(request.participantCount()),
+                            () -> assertThat(data.applyStartDate()).isEqualTo(request.applyStartDate()),
+                            () -> assertThat(data.applyEndDate()).isEqualTo(request.applyEndDate()),
+                            () -> assertThat(data.examStartDate()).isEqualTo(request.examStartDate())
+                    );
+                });
     }
 
     @Test

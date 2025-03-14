@@ -6,6 +6,7 @@ import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
@@ -17,6 +18,7 @@ import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.utils.TestUtils;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +31,11 @@ import java.util.List;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMember;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
+import static com.example.masterplanbbe.utils.TestUtils.createExistingEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
@@ -43,6 +47,8 @@ public class ExamServiceTest {
     private ExamService examService;
     @Mock
     private ExamRepositoryPort examRepositoryPort;
+    @Mock
+    private EntityManager entityManager;
 
     @Test
     @DisplayName("사용자는 시험을 조회하고 스펙 북마크 여부를 확인한다.")
@@ -61,7 +67,7 @@ public class ExamServiceTest {
 
     private CustomPage<ExamItemCardDto> createMockedExamItemCardPage(Spec spec,
                                                                      Member member) {
-        Exam exam1 = TestUtils.createExistingEntity(spec::getLatestExam, 1L);
+        Exam exam1 = createExistingEntity(spec::getLatestExam, 1L);
         Exam exam2 = createExistingExamOf(spec.getExamDetails().get(0), 2L);
         Exam exam3 = createExistingExamOf(spec.getExamDetails().get(0), 3L);
         SpecBookmark specBookmark = new SpecBookmark(member, spec);
@@ -107,7 +113,7 @@ public class ExamServiceTest {
 
     private ExamWithDetailsDto createMockedExamWithDetailsDto(Exam exam, Member member) {
         Spec spec = exam.getExamDetail().getSpec();
-        SpecBookmark specBookmark = TestUtils.createExistingEntity(() -> new SpecBookmark(member, spec), 1L);
+        SpecBookmark specBookmark = createExistingEntity(() -> new SpecBookmark(member, spec), 1L);
 
         return new ExamWithDetailsDto(
                 exam.getName(),
@@ -139,7 +145,8 @@ public class ExamServiceTest {
     @DisplayName("관리자는 시험을 추가한다.")
     void create_exam() {
         Spec spec = createExistingSpec();
-        ExamCreateRequest request = createExamCreateRequest(spec.getExamDetails().get(0));
+        ExamCreateRequest request = createExamCreateRequest(createExistingEntity(() -> spec.getExamDetails().get(0), 1L));
+        given(entityManager.getReference(eq(ExamDetail.class), any(Long.class))).willReturn(spec.getExamDetails().get(0));
         given(examRepositoryPort.save(any(Exam.class))).willAnswer(TestUtils::simulateSavingEntity);
 
         CreateExamResponse result = examService.create(request);
