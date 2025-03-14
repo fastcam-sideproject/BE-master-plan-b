@@ -1,6 +1,5 @@
 package com.example.masterplanbbe.domain.exam.service;
 
-import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;

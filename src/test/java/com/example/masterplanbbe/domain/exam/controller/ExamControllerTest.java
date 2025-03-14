@@ -7,7 +7,6 @@ import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
-import com.example.masterplanbbe.domain.fixture.SecurityFixture;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -29,12 +28,15 @@ import java.util.List;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExamItemCardDto;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExistingExamOf;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMember;
+import static com.example.masterplanbbe.domain.fixture.SecurityFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -77,7 +79,7 @@ public class ExamControllerTest {
                 .contentType(APPLICATION_JSON)
                 .characterEncoding(UTF_8)
                 .accept(APPLICATION_JSON)
-                .principal(SecurityFixture.createMockPrincipal(member))
+                .principal(createMockPrincipal(member))
         );
 
         resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON_VALUE))
@@ -102,5 +104,26 @@ public class ExamControllerTest {
                 createExamItemCardDto(createExistingExamOf(spec.getExamDetails().get(0), 1L), false),
                 createExamItemCardDto(createExistingExamOf(spec.getExamDetails().get(0), 2L), false)
         ));
+    }
+
+    @Test
+    @DisplayName("관리자는 시험을 삭제한다")
+    void delete_exam() throws Exception {
+        Long examId = 1L;
+        willDoNothing().given(examService).delete(examId);
+
+        ResultActions resultActions = mockMvc.perform(delete("/api/v1/exams/" + examId)
+                .characterEncoding(UTF_8)
+        );
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<Void> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    assertThat(response).isNotNull();
+                    assertThat(response.getMessage()).isEqualTo("시험 삭제 성공");
+                });
     }
 }
