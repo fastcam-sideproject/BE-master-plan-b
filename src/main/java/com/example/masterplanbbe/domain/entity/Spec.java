@@ -28,7 +28,7 @@ public class Spec extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private SpecCategory specCategory; // 삭제 예정 필드(연관된 서비스 코드들 삭제 요망)
 
-    @JoinColumn
+    @JoinColumn(name = "job_role")
     @ManyToOne
     private JobRole jobRole;
 
@@ -41,6 +41,7 @@ public class Spec extends FullAuditEntity {
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDetail> examDetails;
 
+    @JoinColumn(name = "lastest_exam")
     @OneToOne(fetch = FetchType.LAZY)
     private Exam latestExam;
 
