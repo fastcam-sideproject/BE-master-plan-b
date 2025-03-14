@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DisplayName("스펙 엔티티 테스트")
-public class SpecTest {
+public class SpecEntityTest {
     @Test
     @DisplayName("update 메서드는 스펙 엔티티의 필드를 수정한다.")
     void update_updates_spec_fields() {
@@ -22,7 +22,6 @@ public class SpecTest {
                 request.issuingOrganization(),
                 request.category(),
                 request.certificationType(),
-                request.difficulty(),
                 request.participantCount()
         );
 
@@ -31,7 +30,6 @@ public class SpecTest {
                 () -> assertThat(spec.getIssuingOrganization()).isEqualTo(request.issuingOrganization()),
                 () -> assertThat(spec.getCategory()).isEqualTo(request.category()),
                 () -> assertThat(spec.getCertificationType()).isEqualTo(request.certificationType()),
-                () -> assertThat(spec.getDifficulty()).isEqualTo(request.difficulty()),
                 () -> assertThat(spec.getParticipantCount()).isEqualTo(request.participantCount())
         );
     }

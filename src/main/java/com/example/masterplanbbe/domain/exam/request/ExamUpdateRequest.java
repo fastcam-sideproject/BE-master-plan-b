@@ -6,7 +6,6 @@ import java.time.LocalDate;
 
 public record ExamUpdateRequest(
         String name,
-        Double difficulty,
         Integer participantCount,
         LocalDate applyStartDate,
         LocalDate applyEndDate,
@@ -15,7 +14,6 @@ public record ExamUpdateRequest(
     public void update(Exam exam) {
         exam.update(
                 name,
-                difficulty,
                 participantCount,
                 applyStartDate,
                 applyEndDate,

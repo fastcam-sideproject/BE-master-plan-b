@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public @QueryProjection record SpecItemCardDto (
     String name,
     Category category,
-    Double difficulty,
     Integer participants,
     LocalDate applyStartDate,
     LocalDate applyEndDate,
