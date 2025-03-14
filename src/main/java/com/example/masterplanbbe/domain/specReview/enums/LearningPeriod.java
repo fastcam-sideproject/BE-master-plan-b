@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.specReview.enums;
 
-public enum StudyDuration {
+public enum LearningPeriod {
     한달_이내,
     일_삼개월,
     삼_육개월,

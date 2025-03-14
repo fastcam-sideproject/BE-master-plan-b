@@ -1,7 +1,5 @@
 package com.example.masterplanbbe.domain.post.service;
 
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.member.repository.MemberRepository;
 import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
 import com.example.masterplanbbe.domain.post.dto.PostResponse;
 import com.example.masterplanbbe.domain.post.entity.Post;

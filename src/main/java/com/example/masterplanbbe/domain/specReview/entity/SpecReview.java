@@ -1,7 +1,6 @@
 package com.example.masterplanbbe.domain.specReview.entity;
 
 import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.common.domain.IdAndCreatedEntity;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
@@ -40,7 +39,10 @@ public class SpecReview extends FullAuditEntity {
     private ReflectionLevel reflectionLevel;
 
     @Enumerated(EnumType.STRING)
-    private StudyDuration studyDuration;
+    private LearningPeriod learningPeriod;
+
+    @Enumerated(EnumType.STRING)
+    private DailyStudyTime dailyStudyTime;
 
     @Enumerated(EnumType.STRING)
     private LearningLevel learningLevel;
@@ -48,7 +50,11 @@ public class SpecReview extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private TimeSufficiency timeSufficiency;
 
-    private Integer viewCount;
+    @Column(nullable = false)
+    private Integer viewCount = 0;
+
+    @Column(nullable = false)
+    private Integer likeCount = 0;
 
     private String studyMethod;
 
@@ -60,10 +66,10 @@ public class SpecReview extends FullAuditEntity {
         this.difficulty = specReviewRequest.difficulty();
         this.examType = specReviewRequest.examType();
         this.reflectionLevel = specReviewRequest.reflectionLevel();
-        this.studyDuration = specReviewRequest.studyDuration();
+        this.learningPeriod = specReviewRequest.learningPeriod();
         this.learningLevel = specReviewRequest.learningLevel();
+        this.dailyStudyTime = specReviewRequest.dailyStudyTime();
         this.timeSufficiency = specReviewRequest.timeSufficiency();
-        this.viewCount = specReviewRequest.viewCount();
         this.studyMethod = specReviewRequest.studyMethod();
         this.tipTitle = specReviewRequest.tipTitle();
         this.tipDescription = specReviewRequest.tipDescription();
@@ -71,5 +77,9 @@ public class SpecReview extends FullAuditEntity {
 
     public void addViewCount() {
         this.viewCount += 1;
+    }
+
+    public void updateLikeCount(Integer likeCount) {
+        this.likeCount = likeCount;
     }
 }

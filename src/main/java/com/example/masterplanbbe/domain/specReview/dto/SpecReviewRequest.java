@@ -9,10 +9,10 @@ public record SpecReviewRequest(
         Difficulty difficulty,
         ExamType examType,
         ReflectionLevel reflectionLevel,
-        StudyDuration studyDuration,
+        LearningPeriod learningPeriod,
+        DailyStudyTime dailyStudyTime,
         LearningLevel learningLevel,
         TimeSufficiency timeSufficiency,
-        Integer viewCount,
         String studyMethod,
         String tipTitle,
         String tipDescription
@@ -21,16 +21,19 @@ public record SpecReviewRequest(
         return new SpecReview(
                 member,
                 spec,
-                difficulty,
-                examType,
-                reflectionLevel,
-                studyDuration,
-                learningLevel,
-                timeSufficiency,
-                viewCount,
-                studyMethod,
-                tipTitle,
-                tipDescription
+                difficulty(),
+                examType(),
+                reflectionLevel(),
+                learningPeriod(),
+                dailyStudyTime(),
+                learningLevel(),
+                timeSufficiency(),
+                0,
+                0,
+                studyMethod(),
+                tipTitle(),
+                tipDescription()
+
         );
     }
 }
