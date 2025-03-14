@@ -1,36 +1,39 @@
 package com.example.masterplanbbe.domain.exam.service;
 
+import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.entity.Exam;
+import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
 import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ExamService {
     private final ExamRepositoryPort examRepositoryPort;
+    private final EntityManager entityManager;
 
-    public Page<ExamItemCardDto> getAllExam(Pageable pageable,
-                                            Long memberId) {
-        return examRepositoryPort.getExamItemCards(pageable, memberId);
+    public PageResponse<ExamItemCardDto> getAllExam(CustomPageRequest<ExamSortOption> request,
+                                                    String email) {
+        return new PageResponse<>(examRepositoryPort.getExamItemCards(request, email));
     }
 
-    public ReadExamResponse getExam(Long examId) {
-        return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId));
+    public ReadExamResponse getExam(Long examId, String email) {
+        return new ReadExamResponse(examRepositoryPort.getExamWithDetails(examId, email));
     }
 
     @Transactional
     public CreateExamResponse create(ExamCreateRequest request) {
-        return new CreateExamResponse(examRepositoryPort.save(request.toEntity()));
+        return new CreateExamResponse(examRepositoryPort.save(request.toEntity(entityManager)));
     }
 
     @Transactional

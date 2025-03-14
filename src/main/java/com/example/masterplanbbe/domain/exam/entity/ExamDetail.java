@@ -29,13 +29,12 @@ public class ExamDetail extends FullAuditEntity {
     @Column(nullable = false)
     private String passingCriteria;
 
-    @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL)
     private List<Exam> exams;
 
     @OneToMany(mappedBy = "examDetail", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subject> subjects;
 
-    @Builder
     public ExamDetail(Spec spec,
                       String preparation,
                       String eligibility,

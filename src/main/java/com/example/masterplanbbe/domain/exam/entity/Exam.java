@@ -11,15 +11,12 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Exam extends FullAuditEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exam_detail_id")
     private ExamDetail examDetail;
 
     @Column(nullable = false)
     private String name;
-
-    @Column
-    private Double difficulty;
 
     @Column(nullable = false)
     private Integer participantCount;
@@ -33,10 +30,8 @@ public class Exam extends FullAuditEntity {
     @Column(nullable = false)
     private LocalDate examStartDate;
 
-    @Builder
     public Exam(ExamDetail examDetail,
                 String name,
-                Double difficulty,
                 Integer participantCount,
                 LocalDate applyStartDate,
                 LocalDate applyEndDate,
@@ -44,7 +39,6 @@ public class Exam extends FullAuditEntity {
         this.examDetail = examDetail;
         examDetail.addExam(this);
         this.name = name;
-        this.difficulty = difficulty;
         this.participantCount = participantCount;
         this.applyStartDate = applyStartDate;
         this.applyEndDate = applyEndDate;
@@ -52,13 +46,11 @@ public class Exam extends FullAuditEntity {
     }
 
     public void update(String name,
-                       Double difficulty,
                        Integer participantCount,
                        LocalDate applyStartDate,
                        LocalDate applyEndDate,
                        LocalDate examStartDate) {
         this.name = name;
-        this.difficulty = difficulty;
         this.participantCount = participantCount;
         this.applyStartDate = applyStartDate;
         this.applyEndDate = applyEndDate;

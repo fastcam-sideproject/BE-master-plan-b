@@ -22,42 +22,46 @@ import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
 
 public class SpecFixture {
     public static Spec createSpec() {
-        Spec spec = Spec.builder()
-                .name("TOEIC")
-                .issuingOrganization("ETS")
-                .category(LANGUAGE)
-                .certificationType(ETC)
-                .difficulty(3.0)
-                .participantCount(100)
-                .build();
+        Spec spec = new Spec(
+                "TOEIC",
+                "ETS",
+                LANGUAGE,
+                ETC,
+                100,
+                null
+        );
 
-        ExamDetail examDetail = ExamDetail.builder()
-                .spec(spec)
-                .preparation("준비물")
-                .eligibility("응시자격")
-                .examStructure("시험구조")
-                .passingCriteria("합격기준")
-                .build();
+        ExamDetail examDetail = new ExamDetail(
+                spec,
+                "준비물",
+                "응시자격",
+                "시험구조",
+                "합격기준",
+                null,
+                null
+        );
 
-        Subject subject1 = Subject.builder()
-                .name("LC")
-                .examDetail(examDetail)
-                .build();
-        Subject subject2 = Subject.builder()
-                .name("RC")
-                .examDetail(examDetail)
-                .build();
+        Subject subject1 = new Subject(
+                examDetail,
+                "LC",
+                "듣기 평가"
+        );
+        Subject subject2 = new Subject(
+                examDetail,
+                "RC",
+                "말하기 평가"
+        );
 
         LocalDate now = LocalDate.now();
 
-        Exam exam = Exam.builder()
-                .examDetail(examDetail)
-                .name(now.getYear() + "년 1회")
-                .applyStartDate(now.minusDays(5L))
-                .applyEndDate(now.plusDays(3L))
-                .examStartDate(now.plusDays(10L))
-                .participantCount(0)
-                .build();
+        Exam exam = new Exam(
+                examDetail,
+                now.getYear() + "년 1회",
+                0,
+                now.minusDays(5L),
+                now.plusDays(3L),
+                now.plusDays(8L)
+        );
 
         spec.specifyLatestExam(exam);
 
@@ -72,7 +76,8 @@ public class SpecFixture {
         return TestUtils.createExistingEntity(SpecFixture::createSpec, specId);
     }
 
-    public static Spec createUpdatedSpec(Supplier<Spec> specSupplier, CertificationType certificationType) {
+    public static Spec createUpdatedSpec(Supplier<Spec> specSupplier,
+                                         CertificationType certificationType) {
         return TestUtils.withSetup(
                 specSupplier,
                 spec -> ReflectionTestUtils.setField(spec, "certificationType", NATIONAL_CERTIFIED)
@@ -96,22 +101,22 @@ public class SpecFixture {
         );
     }
 
-    public static SpecUpdateRequest createSpecUpdateRequest(Spec spec, CertificationType certificationType) {
+    public static SpecUpdateRequest createSpecUpdateRequest(Spec spec,
+                                                            CertificationType certificationType) {
         return new SpecUpdateRequest(
                 spec.getName(),
                 spec.getCategory(),
                 certificationType,
                 spec.getIssuingOrganization(),
-                spec.getDifficulty(),
                 spec.getParticipantCount()
         );
     }
 
-    public static SpecItemCardDto createSpecItemCardDto(Spec spec, boolean isBookmarked) {
+    public static SpecItemCardDto createSpecItemCardDto(Spec spec,
+                                                        boolean isBookmarked) {
         return new SpecItemCardDto(
                 spec.getName(),
                 spec.getCategory(),
-                spec.getDifficulty(),
                 spec.getParticipantCount(),
                 spec.getLatestExam().getApplyStartDate(),
                 spec.getLatestExam().getApplyEndDate(),

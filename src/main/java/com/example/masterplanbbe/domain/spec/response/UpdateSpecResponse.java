@@ -14,7 +14,6 @@ public record UpdateSpecResponse(
         String issuingOrganization,
         Category category,
         CertificationType certificationType,
-        Double difficulty,
         Integer participantCount
 ) {
     public UpdateSpecResponse(Spec spec) {
@@ -24,7 +23,6 @@ public record UpdateSpecResponse(
                 spec.getIssuingOrganization(),
                 spec.getCategory(),
                 spec.getCertificationType(),
-                spec.getDifficulty(),
                 spec.getParticipantCount()
         );
     }

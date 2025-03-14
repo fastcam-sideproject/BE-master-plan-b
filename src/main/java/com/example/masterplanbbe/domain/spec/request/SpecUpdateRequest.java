@@ -10,10 +10,9 @@ public record SpecUpdateRequest(
         Category category,
         CertificationType certificationType,
         String issuingOrganization,
-        Double difficulty,
         Integer participantCount
 ) {
     public void update(Spec spec) {
-        spec.update(name, issuingOrganization, category, certificationType, difficulty, participantCount);
+        spec.update(name, issuingOrganization, category, certificationType, participantCount);
     }
 }
