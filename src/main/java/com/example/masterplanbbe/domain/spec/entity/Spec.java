@@ -7,7 +7,6 @@ import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

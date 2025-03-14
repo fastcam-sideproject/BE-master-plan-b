@@ -15,8 +15,8 @@ import com.example.masterplanbbe.domain.exam.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Exam controller api", description = "시험 API")
@@ -33,7 +33,7 @@ public class ExamController {
             Authentication authentication
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getAllExam(request, authentication.name())));
+                .body(ApiResponse.ok(examService.getAllExam(request, authentication.getName())));
     }
 
     @Operation(summary = "시험 상세 조회")
@@ -43,7 +43,7 @@ public class ExamController {
             Authentication authentication
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(examService.getExam(examId, authentication.name())));
+                .body(ApiResponse.ok(examService.getExam(examId, authentication.getName())));
     }
 
     @Operation(summary = "시험 등록")

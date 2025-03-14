@@ -2,10 +2,12 @@ package com.example.masterplanbbe.domain.exam.controller;
 
 import com.example.masterplanbbe.common.page.CustomPage;
 import com.example.masterplanbbe.common.request.CustomPageRequest;
+import com.example.masterplanbbe.common.response.ApiResponse;
 import com.example.masterplanbbe.common.response.PageResponse;
 import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
 import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
+import com.example.masterplanbbe.domain.fixture.SecurityFixture;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -74,15 +76,17 @@ public class ExamControllerTest {
                 .param("isAsc", "false")
                 .contentType(APPLICATION_JSON)
                 .characterEncoding(UTF_8)
-                .accept(APPLICATION_JSON));
+                .accept(APPLICATION_JSON)
+                .principal(SecurityFixture.createMockPrincipal(member))
+        );
 
         resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andDo(mvcResult -> {
                     String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
-                    CustomPage<ExamItemCardDto> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    ApiResponse<PageResponse<ExamItemCardDto>> response = objectMapper.readValue(responseContent, new TypeReference<>() {
                     });
-                    PageResponse<ExamItemCardDto> data = new PageResponse<>(response);
+                    PageResponse<ExamItemCardDto> data = response.getData();
                     assertThat(data).isNotNull();
                     assertAll(
                             () -> assertThat(data.content().size()).isEqualTo(2),
