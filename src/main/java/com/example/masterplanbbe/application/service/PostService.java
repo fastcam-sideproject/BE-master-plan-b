@@ -8,7 +8,7 @@ import com.example.masterplanbbe.presentation.response.PostResponse;
 import com.example.masterplanbbe.domain.entity.Post;
 import com.example.masterplanbbe.domain.repository.PostRepositoryPort;
 import com.example.masterplanbbe.domain.entity.Member;
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.domain.repository.MemberRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

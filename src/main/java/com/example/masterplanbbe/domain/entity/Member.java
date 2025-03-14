@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.entity;
 
 import com.example.masterplanbbe.domain.common.FullAuditEntity;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.presentation.request.MemberCreateRequestDTO;
 import com.example.masterplanbbe.infrastructure.security.dto.OAuth2UserDTO;
 import jakarta.persistence.*;

@@ -2,7 +2,7 @@ package com.example.masterplanbbe.infrastructure.security.handler;
 
 import com.example.masterplanbbe.presentation.response.ApiResponse;
 import com.example.masterplanbbe.domain.entity.Member;
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.infrastructure.security.dto.MemberInfoDTO;
 import com.example.masterplanbbe.infrastructure.security.jwt.JwtService;
 import com.example.masterplanbbe.infrastructure.security.user.UserDetailsImpl;

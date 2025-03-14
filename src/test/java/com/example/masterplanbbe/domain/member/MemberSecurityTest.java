@@ -11,7 +11,7 @@ import com.example.masterplanbbe.infrastructure.security.jwt.JwtService;
 import com.example.masterplanbbe.infrastructure.security.user.UserDetailsImpl;
 import com.example.masterplanbbe.presentation.controller.MemberController;
 import com.example.masterplanbbe.domain.entity.Member;
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.domain.repository.MemberRepository;
 import com.example.masterplanbbe.domain.service.MemberService;
 import org.junit.jupiter.api.BeforeEach;

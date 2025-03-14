@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.entity;
 
-import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.enums.AgeGroup;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
