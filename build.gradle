@@ -38,6 +38,7 @@ dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
 	implementation 'org.springframework.boot:spring-boot-starter-logging:3.1.0'
+	testImplementation("org.springframework.security:spring-security-test")
 
 	// https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305
 	implementation 'com.google.code.findbugs:jsr305:3.0.2'

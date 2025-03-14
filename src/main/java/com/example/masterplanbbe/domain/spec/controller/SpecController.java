@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Spec controller api", description = "스펙 API")
@@ -28,19 +29,20 @@ public class SpecController {
     @GetMapping
     public ResponseEntity<ApiResponse<PageResponse<SpecItemCardDto>>> getAllSpec(
             @ModelAttribute CustomPageRequest<SpecSortOption> request,
-            @RequestParam(name = "memberId") Long memberId
+            Authentication authentication
             ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specService.getAllSpec(request, memberId)));
+                .body(ApiResponse.ok(specService.getAllSpec(request, authentication.getName())));
     }
 
     @Operation(summary = "스펙 상세 조회")
     @GetMapping("/{specId}")
     public ResponseEntity<ApiResponse<ReadSpecResponse>> getSpec(
-            @PathVariable("specId") Long specId
+            @PathVariable("specId") Long specId,
+            Authentication authentication
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specService.getSpec(specId)));
+                .body(ApiResponse.ok(specService.getSpec(specId, authentication.getName())));
     }
 
     @Operation(summary = "스펙 등록")

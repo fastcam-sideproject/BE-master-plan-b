@@ -7,7 +7,6 @@ import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,9 +32,6 @@ public class Spec extends FullAuditEntity {
     private CertificationType certificationType;
 
     @Column(nullable = false)
-    private Double difficulty;
-
-    @Column(nullable = false)
     private Integer participantCount;
 
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -45,29 +41,25 @@ public class Spec extends FullAuditEntity {
     private Exam latestExam;
 
 
-    @Builder
     public Spec(String name,
                 String issuingOrganization,
                 Category category,
                 CertificationType certificationType,
-                Double difficulty,
                 Integer participantCount,
                 List<ExamDetail> examDetails) {
         this.name = name;
         this.issuingOrganization = issuingOrganization;
         this.category = category;
         this.certificationType = certificationType;
-        this.difficulty = difficulty;
         this.participantCount = participantCount;
         this.examDetails = examDetails != null ? examDetails : new ArrayList<>();
     }
 
-    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Double difficulty, Integer participantCount) {
+    public void update(String name, String issuingOrganization, Category category, CertificationType certificationType, Integer participantCount) {
         this.name = name;
         this.issuingOrganization = issuingOrganization;
         this.category = category;
         this.certificationType = certificationType;
-        this.difficulty = difficulty;
         this.participantCount = participantCount;
     }
 

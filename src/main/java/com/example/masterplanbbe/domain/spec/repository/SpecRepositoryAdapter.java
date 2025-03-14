@@ -34,7 +34,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
 
     @Override
     public CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request,
-                                                        Long memberId) {
+                                                        String email) {
         OrderSpecifier<?> orderSpecifier = request.sort() != null ?
                 SortUtil.getOrderSpecifier(request.sort(), request.isAsc()) :
                 spec.createdAt.asc();
@@ -43,7 +43,6 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 .select(new QSpecItemCardDto(
                         spec.name,
                         spec.category,
-                        spec.difficulty,
                         spec.participantCount,
                         exam.applyStartDate,
                         exam.applyEndDate,
@@ -52,7 +51,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 ))
                 .from(spec)
                 .leftJoin(specBookmark)
-                .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.id.eq(memberId)))
+                .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.email.eq(email)))
                 .leftJoin(exam)
                 .on(exam.id.eq(spec.latestExam.id))
                 .orderBy(orderSpecifier)
@@ -71,7 +70,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
     }
 
     @Override
-    public SpecWithDetailsDto getSpecWithDetails(Long specId) {
+    public SpecWithDetailsDto getSpecWithDetails(Long specId, String email) {
         return queryFactory
                 .select(
                         new QSpecWithDetailsDto(
@@ -87,7 +86,7 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
                 )
                 .from(spec)
                 .leftJoin(specBookmark)
-                .on(specBookmark.spec.id.eq(spec.id))
+                .on(specBookmark.spec.id.eq(spec.id).and(specBookmark.member.email.eq(email)))
                 .leftJoin(exam)
                 .on(exam.id.eq(spec.latestExam.id))
                 .leftJoin(examDetail)

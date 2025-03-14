@@ -7,6 +7,6 @@ import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
 import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
 
 public interface SpecRepositoryCustom {
-    CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request, Long memberId);
-    SpecWithDetailsDto getSpecWithDetails(Long specId);
+    CustomPage<SpecItemCardDto> getSpecItemCards(CustomPageRequest<SpecSortOption> request, String email);
+    SpecWithDetailsDto getSpecWithDetails(Long specId, String email);
 }
