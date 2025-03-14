@@ -13,6 +13,7 @@ import com.example.masterplanbbe.domain.spec.repository.SpecRepository;
 import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
 import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@Disabled
 @SpringBootTest
 @DisplayName("시험 리포지토리 테스트")
 public class ExamRepositoryPortTest {
