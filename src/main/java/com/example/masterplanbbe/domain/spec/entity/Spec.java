@@ -5,6 +5,7 @@ import com.example.masterplanbbe.domain.exam.entity.Exam;
 import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
 import com.example.masterplanbbe.domain.exam.enums.Category;
 import com.example.masterplanbbe.domain.exam.enums.CertificationType;
+import com.example.masterplanbbe.domain.jobRole.entity.JobRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,7 +27,11 @@ public class Spec extends FullAuditEntity {
     private String issuingOrganization;
 
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private Category category; // 삭제 예정 필드(연관된 서비스 코드들 삭제 요망)
+
+    @JoinColumn
+    @ManyToOne
+    private JobRole jobRole;
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
