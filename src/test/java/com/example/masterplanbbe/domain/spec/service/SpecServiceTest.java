@@ -1,20 +1,21 @@
 package com.example.masterplanbbe.domain.spec.service;
 
-import com.example.masterplanbbe.common.page.CustomPage;
-import com.example.masterplanbbe.common.request.CustomPageRequest;
-import com.example.masterplanbbe.common.response.PageResponse;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
-import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
-import com.example.masterplanbbe.domain.spec.repository.SpecRepositoryPort;
-import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
-import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
-import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
-import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
-import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
-import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
+import com.example.masterplanbbe.domain.service.SpecService;
+import com.example.masterplanbbe.infrastructure.sort.page.CustomPage;
+import com.example.masterplanbbe.presentation.request.CustomPageRequest;
+import com.example.masterplanbbe.presentation.response.PageResponse;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.application.dto.SpecItemCardDto;
+import com.example.masterplanbbe.application.dto.SpecWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.enums.SpecSortOption;
+import com.example.masterplanbbe.domain.repository.SpecRepositoryPort;
+import com.example.masterplanbbe.presentation.request.SpecCreateRequest;
+import com.example.masterplanbbe.presentation.request.SpecUpdateRequest;
+import com.example.masterplanbbe.presentation.response.CreateSpecResponse;
+import com.example.masterplanbbe.presentation.response.ReadSpecResponse;
+import com.example.masterplanbbe.presentation.response.UpdateSpecResponse;
+import com.example.masterplanbbe.domain.entity.SpecBookmark;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
+import static com.example.masterplanbbe.domain.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;

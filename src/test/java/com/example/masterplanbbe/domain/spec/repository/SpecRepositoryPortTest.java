@@ -1,17 +1,18 @@
 package com.example.masterplanbbe.domain.spec.repository;
 
 
-import com.example.masterplanbbe.common.exception.GlobalException;
-import com.example.masterplanbbe.common.page.CustomPage;
-import com.example.masterplanbbe.common.request.CustomPageRequest;
-import com.example.masterplanbbe.domain.exam.repository.ExamRepository;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.member.repository.MemberRepository;
-import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
-import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
-import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
+import com.example.masterplanbbe.domain.repository.SpecRepositoryPort;
+import com.example.masterplanbbe.infrastructure.exception.GlobalException;
+import com.example.masterplanbbe.infrastructure.sort.page.CustomPage;
+import com.example.masterplanbbe.presentation.request.CustomPageRequest;
+import com.example.masterplanbbe.domain.repository.ExamRepository;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.domain.repository.MemberRepository;
+import com.example.masterplanbbe.application.dto.SpecItemCardDto;
+import com.example.masterplanbbe.application.dto.SpecWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.enums.SpecSortOption;
+import com.example.masterplanbbe.domain.repository.SpecBookmarkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.common.exception.ErrorCode.SPEC_NOT_FOUND;
+import static com.example.masterplanbbe.infrastructure.exception.ErrorCode.SPEC_NOT_FOUND;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createSpecBookmark;

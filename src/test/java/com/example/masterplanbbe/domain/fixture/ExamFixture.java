@@ -1,11 +1,11 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
-import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
+import com.example.masterplanbbe.application.dto.ExamItemCardDto;
+import com.example.masterplanbbe.application.dto.ExamWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Exam;
+import com.example.masterplanbbe.domain.entity.ExamDetail;
+import com.example.masterplanbbe.presentation.request.ExamCreateRequest;
+import com.example.masterplanbbe.presentation.request.ExamUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -71,7 +71,7 @@ public class ExamFixture {
     public static ExamItemCardDto createExamItemCardDto(Exam exam, boolean isBookmarked) {
         return new ExamItemCardDto(
                 exam.getName(),
-                exam.getExamDetail().getSpec().getCategory(),
+                exam.getExamDetail().getSpec().getSpecCategory(),
                 exam.getApplyStartDate(),
                 exam.getExamStartDate(),
                 isBookmarked

@@ -1,22 +1,23 @@
 package com.example.masterplanbbe.domain.exam.service;
 
-import com.example.masterplanbbe.common.page.CustomPage;
-import com.example.masterplanbbe.common.request.CustomPageRequest;
-import com.example.masterplanbbe.common.response.PageResponse;
-import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
-import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
-import com.example.masterplanbbe.domain.exam.repository.ExamRepositoryPort;
-import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
-import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
-import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
-import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
+import com.example.masterplanbbe.domain.service.ExamService;
+import com.example.masterplanbbe.infrastructure.sort.page.CustomPage;
+import com.example.masterplanbbe.presentation.request.CustomPageRequest;
+import com.example.masterplanbbe.presentation.response.PageResponse;
+import com.example.masterplanbbe.application.dto.ExamItemCardDto;
+import com.example.masterplanbbe.application.dto.ExamWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Exam;
+import com.example.masterplanbbe.domain.entity.ExamDetail;
+import com.example.masterplanbbe.domain.enums.ExamSortOption;
+import com.example.masterplanbbe.domain.repository.ExamRepositoryPort;
+import com.example.masterplanbbe.presentation.request.ExamCreateRequest;
+import com.example.masterplanbbe.presentation.request.ExamUpdateRequest;
+import com.example.masterplanbbe.presentation.response.CreateExamResponse;
+import com.example.masterplanbbe.presentation.response.ReadExamResponse;
+import com.example.masterplanbbe.presentation.response.UpdateExamResponse;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.entity.SpecBookmark;
 import com.example.masterplanbbe.utils.TestUtils;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
@@ -73,9 +74,9 @@ public class ExamServiceTest {
         SpecBookmark specBookmark = new SpecBookmark(member, spec);
 
         return new CustomPage<>(0, 25, 2 + 1, List.of(
-                new ExamItemCardDto(exam1.getName(), exam1.getExamDetail().getSpec().getCategory(), exam1.getApplyStartDate(), exam1.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
-                new ExamItemCardDto(exam2.getName(), exam2.getExamDetail().getSpec().getCategory(), exam2.getApplyStartDate(), exam2.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
-                new ExamItemCardDto(exam3.getName(), exam3.getExamDetail().getSpec().getCategory(), exam3.getApplyStartDate(), exam3.getExamStartDate(), isBookmarkedBy(spec, specBookmark))
+                new ExamItemCardDto(exam1.getName(), exam1.getExamDetail().getSpec().getSpecCategory(), exam1.getApplyStartDate(), exam1.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
+                new ExamItemCardDto(exam2.getName(), exam2.getExamDetail().getSpec().getSpecCategory(), exam2.getApplyStartDate(), exam2.getExamStartDate(), isBookmarkedBy(spec, specBookmark)),
+                new ExamItemCardDto(exam3.getName(), exam3.getExamDetail().getSpec().getSpecCategory(), exam3.getApplyStartDate(), exam3.getExamStartDate(), isBookmarkedBy(spec, specBookmark))
         ));
     }
 
@@ -84,7 +85,7 @@ public class ExamServiceTest {
         assertAll(
                 () -> assertThat(result.content().size()).isEqualTo(2 + 1),
                 () -> assertThat(result.content().stream().allMatch(ExamItemCardDto::isBookmarked)).isTrue(),
-                () -> assertThat(result.content()).containsExactlyInAnyOrderElementsOf(spec.getExamDetails().get(0).getExams().stream().map(exam -> new ExamItemCardDto(exam.getName(), spec.getCategory(), exam.getApplyStartDate(), exam.getExamStartDate(), true)).toList())
+                () -> assertThat(result.content()).containsExactlyInAnyOrderElementsOf(spec.getExamDetails().get(0).getExams().stream().map(exam -> new ExamItemCardDto(exam.getName(), spec.getSpecCategory(), exam.getApplyStartDate(), exam.getExamStartDate(), true)).toList())
         );
     }
     //TODO: 테스트 메서드 본문에 추상화 단계는 거쳐있지만, fixture 내용을 알고 있어야 검증문의 이해가 가능하다.

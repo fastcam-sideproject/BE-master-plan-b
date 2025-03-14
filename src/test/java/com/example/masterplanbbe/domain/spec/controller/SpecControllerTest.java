@@ -1,19 +1,20 @@
 package com.example.masterplanbbe.domain.spec.controller;
 
-import com.example.masterplanbbe.common.page.CustomPage;
-import com.example.masterplanbbe.common.request.CustomPageRequest;
-import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.common.response.PageResponse;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.spec.enums.SpecSortOption;
-import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
-import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
-import com.example.masterplanbbe.domain.spec.response.CreateSpecResponse;
-import com.example.masterplanbbe.domain.spec.response.ReadSpecResponse;
-import com.example.masterplanbbe.domain.spec.response.UpdateSpecResponse;
-import com.example.masterplanbbe.domain.spec.service.SpecService;
+import com.example.masterplanbbe.infrastructure.sort.page.CustomPage;
+import com.example.masterplanbbe.presentation.controller.SpecController;
+import com.example.masterplanbbe.presentation.request.CustomPageRequest;
+import com.example.masterplanbbe.presentation.response.ApiResponse;
+import com.example.masterplanbbe.presentation.response.PageResponse;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.application.dto.SpecItemCardDto;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.enums.SpecSortOption;
+import com.example.masterplanbbe.presentation.request.SpecCreateRequest;
+import com.example.masterplanbbe.presentation.request.SpecUpdateRequest;
+import com.example.masterplanbbe.presentation.response.CreateSpecResponse;
+import com.example.masterplanbbe.presentation.response.ReadSpecResponse;
+import com.example.masterplanbbe.presentation.response.UpdateSpecResponse;
+import com.example.masterplanbbe.domain.service.SpecService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -32,7 +33,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
+import static com.example.masterplanbbe.domain.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SecurityFixture.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;

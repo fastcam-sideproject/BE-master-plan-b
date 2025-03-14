@@ -1,15 +1,15 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
-import com.example.masterplanbbe.domain.exam.entity.Subject;
-import com.example.masterplanbbe.domain.exam.enums.CertificationType;
-import com.example.masterplanbbe.domain.exam.request.SubjectCreateRequest;
-import com.example.masterplanbbe.domain.spec.dto.SpecItemCardDto;
-import com.example.masterplanbbe.domain.spec.dto.SpecWithDetailsDto;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.spec.request.SpecCreateRequest;
-import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
+import com.example.masterplanbbe.domain.entity.Exam;
+import com.example.masterplanbbe.domain.entity.ExamDetail;
+import com.example.masterplanbbe.domain.entity.Subject;
+import com.example.masterplanbbe.domain.enums.CertificationType;
+import com.example.masterplanbbe.presentation.request.SubjectCreateRequest;
+import com.example.masterplanbbe.application.dto.SpecItemCardDto;
+import com.example.masterplanbbe.application.dto.SpecWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.presentation.request.SpecCreateRequest;
+import com.example.masterplanbbe.presentation.request.SpecUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -17,8 +17,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.function.Supplier;
 
-import static com.example.masterplanbbe.domain.exam.enums.Category.*;
-import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
+import static com.example.masterplanbbe.domain.enums.SpecCategory.*;
+import static com.example.masterplanbbe.domain.enums.CertificationType.*;
 
 public class SpecFixture {
     public static Spec createSpec() {
@@ -105,7 +105,7 @@ public class SpecFixture {
                                                             CertificationType certificationType) {
         return new SpecUpdateRequest(
                 spec.getName(),
-                spec.getCategory(),
+                spec.getSpecCategory(),
                 certificationType,
                 spec.getIssuingOrganization(),
                 spec.getParticipantCount()
@@ -116,7 +116,7 @@ public class SpecFixture {
                                                         boolean isBookmarked) {
         return new SpecItemCardDto(
                 spec.getName(),
-                spec.getCategory(),
+                spec.getSpecCategory(),
                 spec.getParticipantCount(),
                 spec.getLatestExam().getApplyStartDate(),
                 spec.getLatestExam().getApplyEndDate(),
