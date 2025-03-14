@@ -11,6 +11,7 @@ import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
 import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
 import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
 import com.example.masterplanbbe.domain.exam.response.CreateExamResponse;
+import com.example.masterplanbbe.domain.exam.response.ReadExamResponse;
 import com.example.masterplanbbe.domain.exam.response.UpdateExamResponse;
 import com.example.masterplanbbe.domain.exam.service.ExamService;
 import com.example.masterplanbbe.domain.member.entity.Member;
@@ -108,6 +109,41 @@ public class ExamControllerTest {
                             () -> assertThat(data.content().size()).isEqualTo(2),
                             () -> assertThat(data.content().stream().allMatch(ExamItemCardDto::isBookmarked)).isFalse(),
                             () -> assertThat(data.content()).containsExactlyInAnyOrderElementsOf(mocked.content())
+                    );
+                });
+    }
+
+    @Test
+    @DisplayName("사용자는 시험을 상세 조회한다.")
+    void retrieve_exam_detail() throws Exception {
+        Long examId = 1L;
+        Exam exam = createExistingExamOf(spec.getExamDetails().get(0), examId);
+        ReadExamResponse mocked = new ReadExamResponse(createExamWithDetailsDto(exam));
+        given(examService.getExam(any(Long.class), any(String.class))).willReturn(mocked);
+
+        ResultActions resultActions = mockMvc.perform(get("/api/v1/exams/" + examId)
+                .contentType(APPLICATION_JSON)
+                .characterEncoding(UTF_8)
+                .accept(APPLICATION_JSON)
+                .principal(createMockPrincipal(member))
+        );
+
+        resultActions.andExpectAll(status().isOk(), content().contentType(APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andDo(mvcResult -> {
+                    String responseContent = mvcResult.getResponse().getContentAsString(UTF_8);
+                    ApiResponse<ReadExamResponse> response = objectMapper.readValue(responseContent, new TypeReference<>() {
+                    });
+                    ReadExamResponse data = response.getData();
+                    assertThat(data).isNotNull();
+                    assertAll(
+                            () -> assertThat(data.name()).isEqualTo(exam.getName()),
+                            () -> assertThat(data.issuingOrganization()).isEqualTo(exam.getExamDetail().getSpec().getIssuingOrganization()),
+                            () -> assertThat(data.certificationType()).isEqualTo(exam.getExamDetail().getSpec().getCertificationType()),
+                            () -> assertThat(data.preparation()).isEqualTo(exam.getExamDetail().getPreparation()),
+                            () -> assertThat(data.eligibility()).isEqualTo(exam.getExamDetail().getEligibility()),
+                            () -> assertThat(data.examStructure()).isEqualTo(exam.getExamDetail().getExamStructure()),
+                            () -> assertThat(data.passingCriteria()).isEqualTo(exam.getExamDetail().getPassingCriteria())
                     );
                 });
     }
