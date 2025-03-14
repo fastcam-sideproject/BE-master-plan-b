@@ -1,13 +1,13 @@
 package com.example.masterplanbbe.domain.post.service;
 
-import com.example.masterplanbbe.domain.fixture.MemberFixture;
-import com.example.masterplanbbe.domain.post.dto.PostRequest;
-import com.example.masterplanbbe.domain.post.dto.PostResponse;
-import com.example.masterplanbbe.domain.post.entity.Category;
-import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.domain.post.repository.PostRepositoryPort;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.member.repository.MemberRepositoryPort;
+import com.example.masterplanbbe.application.service.PostService;
+import com.example.masterplanbbe.presentation.request.PostRequest;
+import com.example.masterplanbbe.presentation.response.PostResponse;
+import com.example.masterplanbbe.domain.enums.Category;
+import com.example.masterplanbbe.domain.entity.Post;
+import com.example.masterplanbbe.domain.repository.PostRepositoryPort;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.domain.repository.MemberRepositoryPort;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalDate;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;

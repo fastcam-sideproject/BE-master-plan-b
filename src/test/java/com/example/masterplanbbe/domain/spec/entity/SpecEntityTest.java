@@ -1,10 +1,11 @@
 package com.example.masterplanbbe.domain.spec.entity;
 
-import com.example.masterplanbbe.domain.spec.request.SpecUpdateRequest;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.presentation.request.SpecUpdateRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.example.masterplanbbe.domain.exam.enums.CertificationType.*;
+import static com.example.masterplanbbe.domain.enums.CertificationType.*;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -20,7 +21,7 @@ public class SpecEntityTest {
         spec.update(
                 request.name(),
                 request.issuingOrganization(),
-                request.category(),
+                request.specCategory(),
                 request.certificationType(),
                 request.participantCount()
         );
@@ -28,7 +29,7 @@ public class SpecEntityTest {
         assertAll(
                 () -> assertThat(spec.getName()).isEqualTo(request.name()),
                 () -> assertThat(spec.getIssuingOrganization()).isEqualTo(request.issuingOrganization()),
-                () -> assertThat(spec.getCategory()).isEqualTo(request.category()),
+                () -> assertThat(spec.getSpecCategory()).isEqualTo(request.specCategory()),
                 () -> assertThat(spec.getCertificationType()).isEqualTo(request.certificationType()),
                 () -> assertThat(spec.getParticipantCount()).isEqualTo(request.participantCount())
         );

@@ -1,14 +1,15 @@
 package com.example.masterplanbbe.domain.post.service;
 
+import com.example.masterplanbbe.application.service.StoredPostService;
 import com.example.masterplanbbe.domain.fixture.MemberFixture;
-import com.example.masterplanbbe.domain.post.dto.PostResponse;
-import com.example.masterplanbbe.domain.post.entity.Category;
-import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.domain.post.entity.StoredPost;
-import com.example.masterplanbbe.domain.post.repository.PostRepositoryAdapter;
-import com.example.masterplanbbe.domain.post.repository.StoredPostRepositoryAdapter;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.member.repository.MemberRepositoryAdapter;
+import com.example.masterplanbbe.presentation.response.PostResponse;
+import com.example.masterplanbbe.domain.enums.Category;
+import com.example.masterplanbbe.domain.entity.Post;
+import com.example.masterplanbbe.domain.entity.StoredPost;
+import com.example.masterplanbbe.infrastructure.repository.PostRepositoryAdapter;
+import com.example.masterplanbbe.infrastructure.repository.StoredPostRepositoryAdapter;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.infrastructure.repository.MemberRepositoryAdapter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

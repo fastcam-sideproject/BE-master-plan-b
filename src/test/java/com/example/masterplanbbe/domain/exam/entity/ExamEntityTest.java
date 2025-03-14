@@ -1,7 +1,8 @@
 package com.example.masterplanbbe.domain.exam.entity;
 
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.entity.Exam;
+import com.example.masterplanbbe.presentation.request.ExamUpdateRequest;
+import com.example.masterplanbbe.domain.entity.Spec;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
