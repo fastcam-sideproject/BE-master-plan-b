@@ -15,11 +15,12 @@ public class Recommendation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "age_group", nullable = false)
     private AgeGroup ageGroup;
 
     @OneToOne
-    @Column(name = "spec", nullable = false)
+    @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
     @Column(name = "old_score", nullable = false)
