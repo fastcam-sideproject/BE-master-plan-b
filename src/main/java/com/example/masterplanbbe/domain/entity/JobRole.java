@@ -23,7 +23,7 @@ public class JobRole extends FullAuditEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "jobrole", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL)
     private Set<Spec> specs = new HashSet<>();
 
     @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
