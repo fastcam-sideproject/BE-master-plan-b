@@ -26,6 +26,9 @@ public class JobRole extends FullAuditEntity {
     @OneToMany(mappedBy = "jobrole", cascade = CascadeType.ALL)
     private Set<Spec> specs = new HashSet<>();
 
+    @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MemberJobRole> memberJobRoles = new HashSet<>();
+
     public void addSpec(Spec spec) {
         specs.add(spec);
         spec.setJobRole(this);
