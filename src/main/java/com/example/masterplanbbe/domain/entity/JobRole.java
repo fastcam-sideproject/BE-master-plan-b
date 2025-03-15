@@ -23,19 +23,9 @@ public class JobRole extends FullAuditEntity {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL)
-    private Set<Spec> specs = new HashSet<>();
+    @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<JobSpec> jobSpecs = new HashSet<>();
 
     @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MemberJobRole> memberJobRoles = new HashSet<>();
-
-    public void addSpec(Spec spec) {
-        specs.add(spec);
-        spec.setJobRole(this);
-    }
-
-    public void removeSpec(Spec spec) {
-        specs.remove(spec);
-        spec.setJobRole(null);
-    }
 }
