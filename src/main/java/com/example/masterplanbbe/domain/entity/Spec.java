@@ -23,7 +23,7 @@ public class Spec extends FullAuditEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String issuingOrganization;
 
     @Enumerated(EnumType.STRING)
@@ -35,7 +35,7 @@ public class Spec extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
 
-    @Column(nullable = false)
+    @Column
     private Integer participantCount;
 
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
