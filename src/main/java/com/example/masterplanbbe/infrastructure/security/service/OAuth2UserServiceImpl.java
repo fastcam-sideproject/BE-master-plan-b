@@ -4,7 +4,7 @@ import com.example.masterplanbbe.infrastructure.security.dto.KakaoResponse;
 import com.example.masterplanbbe.infrastructure.security.dto.NaverResponse;
 import com.example.masterplanbbe.infrastructure.security.dto.OAuth2Response;
 import com.example.masterplanbbe.domain.entity.Member;
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.domain.repository.MemberRepository;
 import com.example.masterplanbbe.infrastructure.security.dto.OAuth2UserDTO;
 import com.example.masterplanbbe.infrastructure.security.dto.GoogleResponse;

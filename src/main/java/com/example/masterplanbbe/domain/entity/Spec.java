@@ -7,15 +7,18 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "specs")
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class Spec extends FullAuditEntity {
     @Column(nullable = false)
     private String name;
@@ -26,9 +29,8 @@ public class Spec extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private SpecCategory specCategory; // 삭제 예정 필드(연관된 서비스 코드들 삭제 요망)
 
-    @JoinColumn
-    @ManyToOne
-    private JobRole jobRole;
+    @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<JobSpec> jobSpecs = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
@@ -39,9 +41,9 @@ public class Spec extends FullAuditEntity {
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDetail> examDetails;
 
+    @JoinColumn(name = "lastest_exam")
     @OneToOne(fetch = FetchType.LAZY)
     private Exam latestExam;
-
 
     public Spec(String name,
                 String issuingOrganization,

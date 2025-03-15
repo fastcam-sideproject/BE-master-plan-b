@@ -2,7 +2,7 @@ package com.example.masterplanbbe.infrastructure.security.jwt;
 
 import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.infrastructure.exception.CustomAuthenticationException;
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;

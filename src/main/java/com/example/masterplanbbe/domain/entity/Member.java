@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.domain.entity;
 
 import com.example.masterplanbbe.domain.common.FullAuditEntity;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.presentation.request.MemberCreateRequestDTO;
 import com.example.masterplanbbe.infrastructure.security.dto.OAuth2UserDTO;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "members")
@@ -39,6 +42,9 @@ public class Member extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private MemberRoleEnum role;
 
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MemberJobRole> memberJobRoles = new HashSet<>();
+
     // Custom Member Create
     public Member(MemberCreateRequestDTO request, String password, MemberRoleEnum role) {
         this.email = request.getEmail();
@@ -61,5 +67,16 @@ public class Member extends FullAuditEntity {
         this.isOAuth2 = true;
         this.isAgreed = false; // 이거 마이페이지에서 수정하게 해야 되려나?
         this.role = MemberRoleEnum.USER;
+    }
+
+    // add interesting job role
+    public void addJobRole(JobRole jobRole) {
+        MemberJobRole memberJobRole = new MemberJobRole(this, jobRole);
+        this.memberJobRoles.add(memberJobRole);
+    }
+
+    // remove interest job role
+    public void removeJobRole(JobRole jobRole) {
+        memberJobRoles.removeIf(mjr -> mjr.getJobRole().equals(jobRole));
     }
 }

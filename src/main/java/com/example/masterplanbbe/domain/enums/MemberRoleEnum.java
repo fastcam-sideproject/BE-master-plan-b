@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.entity;
+package com.example.masterplanbbe.domain.enums;
 
 
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.application.dto;
 
-import com.example.masterplanbbe.domain.entity.AgeGroup;
+import com.example.masterplanbbe.domain.enums.AgeGroup;
 
 public record RecommendationDTO(
         String specName,

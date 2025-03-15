@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.infrastructure.security.jwt;
 
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import lombok.Getter;
 
 import java.util.Date;

@@ -4,7 +4,7 @@ import com.example.masterplanbbe.presentation.request.MemberCreateRequestDTO;
 import com.example.masterplanbbe.domain.entity.Member;
 import com.example.masterplanbbe.utils.TestUtils;
 
-import static com.example.masterplanbbe.domain.entity.MemberRoleEnum.*;
+import static com.example.masterplanbbe.domain.enums.MemberRoleEnum.*;
 
 public class MemberFixture {
     public static Member createMember() {

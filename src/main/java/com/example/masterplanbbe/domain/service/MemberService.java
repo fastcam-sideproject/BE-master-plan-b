@@ -7,7 +7,7 @@ import com.example.masterplanbbe.presentation.request.MemberEmailSendDTO;
 import com.example.masterplanbbe.presentation.request.MemberVerificationDTO;
 import com.example.masterplanbbe.domain.entity.Member;
 import com.example.masterplanbbe.domain.repository.MemberRepository;
-import com.example.masterplanbbe.domain.entity.MemberRoleEnum;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.infrastructure.exception.DuplicateUserException;
 import com.example.masterplanbbe.presentation.request.MemberCreateRequestDTO;
 import jakarta.mail.MessagingException;

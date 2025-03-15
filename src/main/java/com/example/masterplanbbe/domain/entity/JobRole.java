@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "job_roles")
 @Getter
@@ -19,4 +22,10 @@ public class JobRole extends FullAuditEntity {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<JobSpec> jobSpecs = new HashSet<>();
+
+    @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<MemberJobRole> memberJobRoles = new HashSet<>();
 }
