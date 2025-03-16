@@ -52,7 +52,7 @@ public class StoredPostControllerTest {
                 .willReturn(response);
 
         // When
-        ResultActions result = mvc.perform(MockMvcRequestBuilders.post("/api/v1/{postId}/store", postId)
+        ResultActions result = mvc.perform(MockMvcRequestBuilders.post("/api/v1/posts/{postId}/store", postId)
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON));
 
