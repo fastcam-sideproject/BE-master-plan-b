@@ -6,11 +6,9 @@ import lombok.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Table(name = "stored_posts",
-        uniqueConstraints = {@UniqueConstraint(name = "unique_member_post", columnNames = {"post_id", "member_id"})})
+@Table(name = "stored_posts")
 public class StoredPost extends FullAuditEntity {
 
     @ManyToOne

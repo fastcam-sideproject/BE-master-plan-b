@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Post controller api", description = "게시판 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/posts")
 public class PostController {
 
     private final PostService postService;
 
     @Operation(summary = "게시글 생성")
-    @PostMapping("/posts")
+    @PostMapping("")
     public ResponseEntity<ApiResponse<PostResponse.Summary>> createPost(
             @RequestBody PostRequest postRequestDTO,
             Authentication authentication
@@ -34,7 +34,7 @@ public class PostController {
     }
 
     @Operation(summary = "특정 게시글 조회")
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/{postId}")
     public ResponseEntity<ApiResponse<PostResponse.Detail>> getPost(
             @PathVariable Long postId) {
         return ResponseEntity.ok()
@@ -42,7 +42,7 @@ public class PostController {
     }
 
     @Operation(summary = "전체 게시글 조회")
-    @GetMapping("/posts")
+    @GetMapping("")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getAllPost(
             Pageable pageable
     ) {
@@ -61,7 +61,7 @@ public class PostController {
     }
 
     @Operation(summary = "특정 게시글 수정")
-    @PatchMapping("/posts/{postId}")
+    @PatchMapping("/{postId}")
     public ResponseEntity<ApiResponse<PostResponse.Detail>> updatePost(
             @RequestBody PostRequest postRequestDTO,
             @PathVariable Long postId,
@@ -74,7 +74,7 @@ public class PostController {
     }
 
     @Operation(summary = "특정 게시글 삭제")
-    @DeleteMapping("/posts/{postId}")
+    @DeleteMapping("/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePost(
             @PathVariable Long postId,
             Authentication authentication
@@ -86,7 +86,7 @@ public class PostController {
     }
 
     @Operation(summary = "내가 작성한 글 조회")
-    @GetMapping("/posts/my")
+    @GetMapping("/my")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getMyPost(
             Authentication authentication,
             Pageable pageable
