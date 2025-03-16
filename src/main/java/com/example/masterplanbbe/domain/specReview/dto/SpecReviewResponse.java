@@ -14,6 +14,7 @@ public record SpecReviewResponse(
         LearningLevel learningLevel,
         TimeSufficiency timeSufficiency,
         Integer viewCount,
+        Integer likeCount,
         String studyMethod,
         String tipTitle,
         String tipDescription
@@ -30,6 +31,7 @@ public record SpecReviewResponse(
                 specReview.getLearningLevel(),
                 specReview.getTimeSufficiency(),
                 specReview.getViewCount(),
+                specReview.getLikeCount(),
                 specReview.getStudyMethod(),
                 specReview.getTipTitle(),
                 specReview.getTipDescription()
