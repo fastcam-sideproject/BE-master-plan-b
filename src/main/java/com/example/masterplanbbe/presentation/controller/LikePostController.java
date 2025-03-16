@@ -33,7 +33,7 @@ public class LikePostController {
     }
 
     @Operation(summary = "내가 좋아요한 게시글 조회")
-    @GetMapping("/posts/liked")
+    @GetMapping("/liked")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getLikedPosts(
             Authentication authentication,
             Pageable pageable
