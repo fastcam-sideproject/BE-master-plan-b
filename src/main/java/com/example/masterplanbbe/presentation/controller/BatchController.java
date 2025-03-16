@@ -1,5 +1,7 @@
 package com.example.masterplanbbe.presentation.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
+@Hidden
 @RestController
 @RequestMapping("/batch")
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class BatchController {
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
+    @Operation(hidden = true)
     @GetMapping
     public String test() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
