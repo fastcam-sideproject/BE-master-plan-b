@@ -148,21 +148,21 @@ public class RedisConfig {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
         container.addMessageListener(listenerAdapter, new PatternTopic("spec:*"));
-        container.setTaskExecutor(redisTaskExecutor()); // 멀티스레드 실행 설정
+//        container.setTaskExecutor(redisTaskExecutor()); // 멀티스레드 실행 설정
         return container;
     }
 
     /**
      * Redis 메시지 처리를 위한 비동기 TaskExecutor 설정
      */
-    @Bean
-    public ThreadPoolTaskExecutor redisTaskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(5);   // 기본적으로 실행할 스레드 개수
-        executor.setMaxPoolSize(10);    // 최대 스레드 개수 (CPU 과부화를 막기위해 코어 * 2)
-        executor.setQueueCapacity(50);  // 대기열 크기
-        executor.setThreadNamePrefix("RedisExecutor-");
-        executor.initialize();
-        return executor;
-    }
+//    @Bean
+//    public ThreadPoolTaskExecutor redisTaskExecutor() {
+//        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+//        executor.setCorePoolSize(5);   // 기본적으로 실행할 스레드 개수
+//        executor.setMaxPoolSize(10);    // 최대 스레드 개수 (CPU 과부화를 막기위해 코어 * 2)
+//        executor.setQueueCapacity(50);  // 대기열 크기
+//        executor.setThreadNamePrefix("RedisExecutor-");
+//        executor.initialize();
+//        return executor;
+//    }
 }

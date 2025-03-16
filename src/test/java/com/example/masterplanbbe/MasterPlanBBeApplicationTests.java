@@ -91,9 +91,6 @@ class MasterPlanBBeApplicationTests {
 	@MockBean
 	SnowflakeIdGenerator snowflakeIdGenerator;
 
-	@MockBean
-	Executor redisTaskExecutor;
-
 	@Test
 	void contextLoads() {
 	}
