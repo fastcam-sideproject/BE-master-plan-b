@@ -53,7 +53,7 @@ public class RedisConfig {
                 .clientOptions(clientoptions)
                 .commandTimeout(Duration.ofMinutes(1))
                 .shutdownTimeout(Duration.ZERO)
-//                .useSsl()
+//                .useSsl() // -> 개발 때만 잠시 닫아줘야 되나 흠...
                 .build();
 
         return new LettuceConnectionFactory(redisConfiguration, lettuceClientConfiguration);
