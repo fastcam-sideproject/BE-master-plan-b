@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "StoredPost controller api", description = "게시판 북마크 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/posts")
 public class StoredPostController {
 
     private final StoredPostService storedPostService;
@@ -33,7 +33,7 @@ public class StoredPostController {
     }
 
     @Operation(summary = "내가 저장한 게시글 확인")
-    @GetMapping("/posts/stored")
+    @GetMapping("/stored")
     public ResponseEntity<ApiResponse<Page<PostResponse.Summary>>> getStoredPost(
             Authentication authentication,
             Pageable pageable

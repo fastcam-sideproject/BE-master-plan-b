@@ -13,5 +13,7 @@ public interface StoredPostRepository extends JpaRepository<StoredPost, Long> {
 
     boolean existsByMemberAndPost(Member member, Post post);
 
+    boolean existsByMemberAndPost_Id(Member member, Long postId);
+
     Page<StoredPost> findByMemberId(Long memberId, Pageable pageable);
 }
