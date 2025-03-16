@@ -21,7 +21,7 @@ public class Recommendation {
     @Column(name = "age_group", nullable = false)
     private AgeGroup ageGroup;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
