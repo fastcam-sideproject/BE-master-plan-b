@@ -96,6 +96,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(a -> a
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers(HttpMethod.GET, "/env").permitAll()
+                .requestMatchers(HttpMethod.GET, "/batch").permitAll() // 임시 배치 테스트를 위한 개방
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
                 .permitAll()

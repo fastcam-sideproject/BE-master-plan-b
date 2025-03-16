@@ -50,7 +50,7 @@ public class JdbcBatchProcess {
     }
 
     /**
-     * 기존의 신규 추천점수를 구 추천점수로 업데이트하는 Writer
+     * 기존의 신규 추천점수를 구 추천점수로 업데이트하는 TaskLet(Reader, Process, Writer 필요 없는 작업)
      */
     @Bean
     public Tasklet updateOldScoreTasklet() {
