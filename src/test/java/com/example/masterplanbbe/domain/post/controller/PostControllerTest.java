@@ -1,21 +1,15 @@
 package com.example.masterplanbbe.domain.post.controller;
 
-import com.example.masterplanbbe.domain.post.dto.PostRequest;
-import com.example.masterplanbbe.domain.post.dto.PostResponse;
-import com.example.masterplanbbe.domain.post.entity.Category;
-import com.example.masterplanbbe.domain.post.repository.PostRepository;
-import com.example.masterplanbbe.domain.post.service.PostService;
+import com.example.masterplanbbe.presentation.request.PostRequest;
+import com.example.masterplanbbe.presentation.response.PostResponse;
+import com.example.masterplanbbe.domain.enums.Category;
+import com.example.masterplanbbe.application.service.PostService;
+import com.example.masterplanbbe.presentation.controller.PostController;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,7 +19,6 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 

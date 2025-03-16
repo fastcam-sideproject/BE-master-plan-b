@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.domain.member.entity.Member;
+import com.example.masterplanbbe.domain.entity.Member;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
