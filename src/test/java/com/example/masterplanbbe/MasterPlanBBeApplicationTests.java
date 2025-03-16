@@ -25,6 +25,8 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.concurrent.Executor;
+
 @SpringBootTest
 @ActiveProfiles("test")
 class MasterPlanBBeApplicationTests {
@@ -88,6 +90,9 @@ class MasterPlanBBeApplicationTests {
 
 	@MockBean
 	SnowflakeIdGenerator snowflakeIdGenerator;
+
+	@MockBean
+	Executor redisTaskExecutor;
 
 	@Test
 	void contextLoads() {
