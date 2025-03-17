@@ -7,15 +7,13 @@ import com.example.masterplanbbe.infrastructure.security.handler.CustomLogoutHan
 import com.example.masterplanbbe.infrastructure.security.handler.OAuth2SuccessHandler;
 import com.example.masterplanbbe.infrastructure.security.jwt.JwtService;
 import com.example.masterplanbbe.infrastructure.security.jwt.TokenUtils;
-import com.example.masterplanbbe.presentation.controller.ChatController;
+import com.example.masterplanbbe.presentation.controller.*;
 import com.example.masterplanbbe.infrastructure.repository.RedisChatRepository;
 import com.example.masterplanbbe.application.service.ChatBatchService;
 import com.example.masterplanbbe.application.service.ChatService;
 import com.example.masterplanbbe.application.service.RedisPublisher;
 import com.example.masterplanbbe.application.service.RedisSubscriber;
 import com.example.masterplanbbe.infrastructure.util.SnowflakeIdGenerator;
-import com.example.masterplanbbe.presentation.controller.DeployController;
-import com.example.masterplanbbe.presentation.controller.MemberController;
 import com.example.masterplanbbe.domain.service.MemberService;
 import com.example.masterplanbbe.application.service.LikePostService;
 import org.junit.jupiter.api.Test;
@@ -62,7 +60,10 @@ class MasterPlanBBeApplicationTests {
 	RedisSubscriber redisSubscriber;
 
 	@MockBean
-	ChatController chatController;
+	ChatRestController chatRestController;
+
+	@MockBean
+	ChatWebSocketController chatWebSocketController;
 
 	@MockBean
 	ChatService chatService;
