@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.domain.entity.ChatMessage;
+import com.example.masterplanbbe.domain.repository.ChatBatchRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Repository
 @Slf4j
 @RequiredArgsConstructor
-public class BatchChatRepository {
+public class ChatBatchRepositoryAdapter implements ChatBatchRepositoryPort {
     private static final int batchSize = 50;
 
     private final JdbcTemplate jdbcTemplate;

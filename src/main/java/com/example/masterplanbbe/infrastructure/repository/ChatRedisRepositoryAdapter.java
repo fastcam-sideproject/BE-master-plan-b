@@ -1,20 +1,22 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
+import com.example.masterplanbbe.domain.repository.ChatRedisRepositoryPort;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Set;
 
 @Slf4j
 @Repository
-public class RedisChatRepository {
+public class ChatRedisRepositoryAdapter implements ChatRedisRepositoryPort {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    public RedisChatRepository(@Qualifier("chatTemplate") RedisTemplate<String, Object> redisTemplate) {
+    public ChatRedisRepositoryAdapter(@Qualifier("chatTemplate") RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
