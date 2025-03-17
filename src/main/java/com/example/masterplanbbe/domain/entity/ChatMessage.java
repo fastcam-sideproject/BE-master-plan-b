@@ -33,12 +33,16 @@ public class ChatMessage {
     @Column(name = "send_at", nullable = false)
     private LocalDateTime sendAt;
 
+    @Column(name = "parent_id")
+    private Long parentId;
+
     @JsonCreator
     public static ChatMessage fromJson(@JsonProperty("id") Long id,
                                        @JsonProperty("specId") Long specId,
                                        @JsonProperty("memberId") Long memberId,
                                        @JsonProperty("content") String content,
-                                       @JsonProperty("sendAt") LocalDateTime sendAt) {
+                                       @JsonProperty("sendAt") LocalDateTime sendAt,
+                                       @JsonProperty("parentId") Long parentId) {
         return ChatMessage.builder()
                 .id(id)
                 .specId(specId)
@@ -53,6 +57,7 @@ public class ChatMessage {
                 dto.getSpecId(),
                 dto.getMemberId(),
                 dto.getContent(),
-                dto.getSendAt());
+                dto.getSendAt(),
+                dto.getParentId());
     }
 }
