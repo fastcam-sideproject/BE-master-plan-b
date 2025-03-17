@@ -8,5 +8,7 @@ public record ChatRequest(
         Long memberId,
         String nickname,
         String content,
-        LocalDateTime sendAt
-) {}
+        LocalDateTime sendAt,
+        String parentContent,
+        String parentNickname
+        ) {}

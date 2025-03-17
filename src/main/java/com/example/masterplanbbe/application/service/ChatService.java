@@ -1,10 +1,13 @@
 package com.example.masterplanbbe.application.service;
 
+import com.example.masterplanbbe.application.dto.ChatRedisDto;
 import com.example.masterplanbbe.domain.entity.ChatMessage;
-import com.example.masterplanbbe.application.dto.ChatMessageDTO;
+import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.domain.repository.ChatMessageRepository;
 import com.example.masterplanbbe.infrastructure.repository.RedisChatRepository;
 import com.example.masterplanbbe.infrastructure.util.SnowflakeIdGenerator;
+import com.example.masterplanbbe.presentation.request.ChatRequest;
+import com.example.masterplanbbe.presentation.response.ChatResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -39,13 +41,12 @@ public class ChatService {
     /**
      * 채팅을 Redis에 저장
      */
-    public void saveChatMessage(ChatMessageDTO message) {
+    public void saveChatMessage(ChatRequest chatRequest) {
         try {
-            long chatId = snowflakeIdGenerator.nextId();
-            message.setId(chatId);
-
-            String jsonMessage = objectMapper.writeValueAsString(message);
-            redisChatRepository.saveMessage(message.getSpecId(), jsonMessage);
+            long snowflakeId = snowflakeIdGenerator.nextId();
+            ChatRedisDto chatRedisDto = ChatRedisDto.from(snowflakeId, chatRequest);
+            String jsonMessage = objectMapper.writeValueAsString(chatRedisDto);
+            redisChatRepository.saveMessage(chatRedisDto.specId(), jsonMessage);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -53,24 +54,21 @@ public class ChatService {
 
     /**
      * 가장 최신 채팅 조회
-     *
-     * @param specId
-     * @return
      */
-    public List<ChatMessageDTO> getRecentMessages(Long specId) {
+    public List<ChatResponse> getRecentMessages(Long specId, int size) {
         try {
-            List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, -1);
-            return messages.stream()
-                    .map(msg -> {
+            List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, (size - 1));
+            return messages.stream().map(msg -> {
                         try {
-                            return objectMapper.readValue(msg, ChatMessageDTO.class);
+                            ChatRedisDto chatRedisDto = objectMapper.readValue(msg, ChatRedisDto.class);
+                            return ChatResponse.from(chatRedisDto);
                         } catch (Exception e) {
                             log.error(e.getMessage());
                             return null;
                         }
                     })
                     .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             log.error(e.getMessage());
             return List.of();
@@ -78,7 +76,7 @@ public class ChatService {
     }
 
     /**
-     * 메시지 50개 조회
+     * MySQL에서 메시지 조회
      *
      * @param lastChatId 조회 기준이 될 채팅의 ID
      * @param specId
@@ -91,26 +89,25 @@ public class ChatService {
     /**
      * 채팅 메시지 삭제 (본인 또는 관리자만 삭제 가능)
      */
-    public boolean deleteChat(Long specId, Long chatId, Long memberId, String role) {
-        boolean isDeleted = deleteFromRedis(specId, chatId, memberId, role);
-        if (!isDeleted) {
-            isDeleted = deleteFromMySQL(chatId, memberId, role);
+    public boolean deleteChat(Long specId, Long chatId, Long memberId, MemberRoleEnum role) {
+        if (deleteFromRedis(specId, chatId, memberId, role)) {
+            return true; //레디스에서 삭제 성공시 종료
         }
-        return isDeleted;
+        return deleteFromMySQL(chatId, memberId, role);
     }
 
     /**
      * Redis에서 채팅 삭제 (배치 처리 전 메시지)
      */
-    private boolean deleteFromRedis(Long specId, Long chatId, Long memberId, String role) {
+    private boolean deleteFromRedis(Long specId, Long chatId, Long memberId, MemberRoleEnum role) {
         try {
             List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, -1);
             for (String msg : messages) {
-                ChatMessageDTO chatMessage = objectMapper.readValue(msg, ChatMessageDTO.class);
-                if (chatMessage.getId().equals(chatId) &&
-                        (chatMessage.getMemberId().equals(memberId) || "ADMIN".equals(role))) {
-                    redisChatRepository.deleteMessage(specId, msg);
-                    return true;
+                ChatRedisDto chatRedisDto = objectMapper.readValue(msg, ChatRedisDto.class);
+                if (role == MemberRoleEnum.ADMIN ||
+                        chatRedisDto.id().equals(chatId) && (chatRedisDto.memberId().equals(memberId))) {
+                    Long removeCount = redisChatRepository.deleteMessage(specId, msg);
+                    return removeCount != null && removeCount != 0;
                 }
             }
         } catch (Exception e) {
@@ -122,10 +119,11 @@ public class ChatService {
     /**
      * MySQL에서 채팅 삭제 (배치 처리 후 메시지)
      */
-    private boolean deleteFromMySQL(Long chatId, Long memberId, String role) {
+    private boolean deleteFromMySQL(Long chatId, Long memberId, MemberRoleEnum role) {
         try {
             ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElse(null);
-            if (chatMessage != null && (chatMessage.getMemberId().equals(memberId) || "ADMIN".equals(role))) {
+            if (role == MemberRoleEnum.ADMIN ||
+                    chatMessage != null && (chatMessage.getMemberId().equals(memberId))) {
                 chatMessageRepository.delete(chatMessage);
                 return true;
             }

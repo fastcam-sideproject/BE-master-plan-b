@@ -1,6 +1,5 @@
 package com.example.masterplanbbe.domain.entity;
 
-import com.example.masterplanbbe.application.dto.ChatMessageDTO;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -37,18 +36,20 @@ public class ChatMessage {
     private Long parentId;
 
     @JsonCreator
-    public static ChatMessage fromJson(@JsonProperty("id") Long id,
-                                       @JsonProperty("specId") Long specId,
-                                       @JsonProperty("memberId") Long memberId,
-                                       @JsonProperty("content") String content,
-                                       @JsonProperty("sendAt") LocalDateTime sendAt,
-                                       @JsonProperty("parentId") Long parentId) {
+    public static ChatMessage fromJson(
+            @JsonProperty("id") Long id,
+            @JsonProperty("specId") Long specId,
+            @JsonProperty("memberId") Long memberId,
+            @JsonProperty("content") String content,
+            @JsonProperty("sendAt") LocalDateTime sendAt,
+            @JsonProperty("parentId") Long parentId) {
         return ChatMessage.builder()
                 .id(id)
                 .specId(specId)
                 .memberId(memberId)
                 .content(content)
                 .sendAt(sendAt)
+                .parentId(parentId)
                 .build();
     }
 

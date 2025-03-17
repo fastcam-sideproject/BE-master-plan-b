@@ -1,8 +1,8 @@
 package com.example.masterplanbbe.presentation.controller;
 
-import com.example.masterplanbbe.application.dto.ChatMessageDTO;
 import com.example.masterplanbbe.application.service.ChatService;
 import com.example.masterplanbbe.application.service.RedisPublisher;
+import com.example.masterplanbbe.presentation.request.ChatRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -15,9 +15,9 @@ public class ChatWebSocketController {
     private final ChatService chatService;
 
     @MessageMapping("/chat")
-    public void sendMessage(ChatMessageDTO message) {
-        Long specId = message.getSpecId();
-        chatService.saveChatMessage(message);
-        redisPublisher.publish("spec:" + specId, message);
+    public void sendMessage(ChatRequest chatRequest) {
+        Long specId = chatRequest.specId();
+        chatService.saveChatMessage(chatRequest);
+        redisPublisher.publish("spec:" + specId, chatRequest);
     }
 }

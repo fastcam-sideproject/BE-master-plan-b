@@ -63,8 +63,8 @@ public class RedisChatRepository {
     /**
      * 특정 채팅 메시지를 삭제
      */
-    public void deleteMessage(Long specId, String message) {
+    public Long deleteMessage(Long specId, String message) {
         String key = "spec:" + specId;
-        redisTemplate.opsForList().remove(key, 1, message);
+        return redisTemplate.opsForList().remove(key, 1, message);
     }
 }

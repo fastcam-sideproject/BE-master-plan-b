@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.application.service;
 
-import com.example.masterplanbbe.application.dto.ChatMessageDTO;
+import com.example.masterplanbbe.presentation.request.ChatRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ public class RedisPublisher {
     /**
      * 채팅 보내기
      * @param channel
-     * @param message
+     * @param chatRequest
      */
-    public void publish(String channel, ChatMessageDTO message) {
+    public void publish(String channel, ChatRequest chatRequest) {
         try {
-            String jsonMessage = objectMapper.writeValueAsString(message);
+            String jsonMessage = objectMapper.writeValueAsString(chatRequest);
             redisTemplate.convertAndSend(channel, jsonMessage);
         } catch (Exception e) {
             log.error(e.getMessage());
