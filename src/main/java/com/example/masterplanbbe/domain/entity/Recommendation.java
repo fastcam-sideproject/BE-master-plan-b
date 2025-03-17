@@ -21,6 +21,8 @@ public class Recommendation {
     @Column(name = "age_group", nullable = false)
     private AgeGroup ageGroup;
 
+    // 스펙 ID가 아니라 시험을 참조해야 되려나? 시험을 중심으로 인기있는 걸 추천하니까
+    // 연산은 시험을 기준으로 좌르륵 전부 다 하고, 추천 데이터 적재는 스펙으로?
     @ManyToOne
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
