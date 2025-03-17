@@ -25,9 +25,6 @@ public class Recommendation {
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
-    @Column(name = "old_score", nullable = false)
-    private Double oldScore;
-
-    @Column(name = "new_score", nullable = false)
-    private Double newScore;
+    @Column(name = "score", nullable = false)
+    private Double score;
 }
