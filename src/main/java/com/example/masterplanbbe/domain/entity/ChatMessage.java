@@ -52,12 +52,4 @@ public class ChatMessage {
                 .build();
     }
 
-    public static ChatMessage from(ChatMessageDTO dto) {
-        return new ChatMessage(dto.getId(),
-                dto.getSpecId(),
-                dto.getMemberId(),
-                dto.getContent(),
-                dto.getSendAt(),
-                dto.getParentId());
-    }
 }
