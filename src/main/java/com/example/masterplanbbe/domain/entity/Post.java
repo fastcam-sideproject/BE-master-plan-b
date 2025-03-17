@@ -15,6 +15,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Post extends FullAuditEntity {
 
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "exam_id")
+    private Exam exam;
+
     @Column(nullable = false)
     private String title;
 
