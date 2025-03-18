@@ -8,7 +8,7 @@ import com.example.masterplanbbe.infrastructure.security.handler.OAuth2SuccessHa
 import com.example.masterplanbbe.infrastructure.security.jwt.JwtService;
 import com.example.masterplanbbe.infrastructure.security.jwt.TokenUtils;
 import com.example.masterplanbbe.presentation.controller.*;
-import com.example.masterplanbbe.infrastructure.repository.RedisChatRepository;
+import com.example.masterplanbbe.infrastructure.repository.ChatRedisRepositoryAdapter;
 import com.example.masterplanbbe.application.service.ChatBatchService;
 import com.example.masterplanbbe.application.service.ChatService;
 import com.example.masterplanbbe.application.service.RedisPublisher;
@@ -22,8 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.concurrent.Executor;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -69,7 +67,7 @@ class MasterPlanBBeApplicationTests {
 	ChatService chatService;
 
 	@MockBean
-	RedisChatRepository redisChatRepository;
+	ChatRedisRepositoryAdapter chatRedisRepositoryAdapter;
 
 	@MockBean
 	ChatBatchService chatBatchService;

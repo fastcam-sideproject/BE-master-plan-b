@@ -4,7 +4,7 @@ import com.example.masterplanbbe.application.dto.ChatRedisDto;
 import com.example.masterplanbbe.domain.entity.ChatMessage;
 import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.domain.repository.ChatMessageRepository;
-import com.example.masterplanbbe.infrastructure.repository.RedisChatRepository;
+import com.example.masterplanbbe.infrastructure.repository.ChatRedisRepositoryAdapter;
 import com.example.masterplanbbe.infrastructure.util.SnowflakeIdGenerator;
 import com.example.masterplanbbe.presentation.request.ChatRequest;
 import com.example.masterplanbbe.presentation.response.ChatResponse;
@@ -23,17 +23,17 @@ import java.util.Objects;
 @Service
 public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
-    private final RedisChatRepository redisChatRepository;
+    private final ChatRedisRepositoryAdapter chatRedisRepositoryAdapter;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public ChatService(ChatMessageRepository chatMessageRepository,
-                       RedisChatRepository redisChatRepository,
+                       ChatRedisRepositoryAdapter chatRedisRepositoryAdapter,
                        SnowflakeIdGenerator snowflakeIdGenerator,
                        @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
         this.chatMessageRepository = chatMessageRepository;
-        this.redisChatRepository = redisChatRepository;
+        this.chatRedisRepositoryAdapter = chatRedisRepositoryAdapter;
         this.snowflakeIdGenerator = snowflakeIdGenerator;
         this.objectMapper = objectMapper;
     }
@@ -46,7 +46,7 @@ public class ChatService {
             long snowflakeId = snowflakeIdGenerator.nextId();
             ChatRedisDto chatRedisDto = ChatRedisDto.from(snowflakeId, chatRequest);
             String jsonMessage = objectMapper.writeValueAsString(chatRedisDto);
-            redisChatRepository.saveMessage(chatRedisDto.specId(), jsonMessage);
+            chatRedisRepositoryAdapter.saveMessage(chatRedisDto.specId(), jsonMessage);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -55,9 +55,9 @@ public class ChatService {
     /**
      * 가장 최신 채팅 조회
      */
-    public List<ChatResponse> getRecentMessages(Long specId, int size) {
+    public List<ChatResponse> getRecentChatsFromRedis(Long specId, int size) {
         try {
-            List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, (size - 1));
+            List<String> messages = chatRedisRepositoryAdapter.getMessagesInRange(specId, 0, (size - 1));
             return messages.stream().map(msg -> {
                         try {
                             ChatRedisDto chatRedisDto = objectMapper.readValue(msg, ChatRedisDto.class);
@@ -82,7 +82,7 @@ public class ChatService {
      * @param specId
      * @param pageable
      */
-    public Slice<ChatMessage> getChatMessage(Long lastChatId, Long specId, Pageable pageable) {
+    public Slice<ChatResponse> getChatMessage(Long lastChatId, Long specId, Pageable pageable) {
         return chatMessageRepository.findChatList(lastChatId, specId, pageable);
     }
 
@@ -101,12 +101,12 @@ public class ChatService {
      */
     private boolean deleteFromRedis(Long specId, Long chatId, Long memberId, MemberRoleEnum role) {
         try {
-            List<String> messages = redisChatRepository.getMessagesInRange(specId, 0, -1);
+            List<String> messages = chatRedisRepositoryAdapter.getMessagesInRange(specId, 0, -1);
             for (String msg : messages) {
                 ChatRedisDto chatRedisDto = objectMapper.readValue(msg, ChatRedisDto.class);
                 if (role == MemberRoleEnum.ADMIN ||
                         chatRedisDto.id().equals(chatId) && (chatRedisDto.memberId().equals(memberId))) {
-                    Long removeCount = redisChatRepository.deleteMessage(specId, msg);
+                    Long removeCount = chatRedisRepositoryAdapter.deleteMessage(specId, msg);
                     return removeCount != null && removeCount != 0;
                 }
             }
@@ -124,7 +124,9 @@ public class ChatService {
             ChatMessage chatMessage = chatMessageRepository.findById(chatId).orElse(null);
             if (role == MemberRoleEnum.ADMIN ||
                     chatMessage != null && (chatMessage.getMemberId().equals(memberId))) {
-                chatMessageRepository.delete(chatMessage);
+                if (chatMessage != null) {
+                    chatMessageRepository.delete(chatMessage);
+                }
                 return true;
             }
         } catch (Exception e) {
