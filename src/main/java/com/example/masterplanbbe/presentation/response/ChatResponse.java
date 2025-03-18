@@ -1,7 +1,6 @@
 package com.example.masterplanbbe.presentation.response;
 
 import com.example.masterplanbbe.application.dto.ChatRedisDto;
-import com.example.masterplanbbe.presentation.request.ChatRequest;
 
 import java.time.LocalDateTime;
 
