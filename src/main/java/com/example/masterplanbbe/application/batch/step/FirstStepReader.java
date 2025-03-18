@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.application.batch.step;
 
-import com.example.masterplanbbe.application.batch.dto.FirstStepDTO;
+import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
@@ -13,11 +13,11 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FirstStepReader implements ItemReader<FirstStepDTO> {
+public class FirstStepReader implements ItemReader<FirstStepReadDTO> {
 
     private final JdbcTemplate jdbcTemplate;
 
-    private List<FirstStepDTO> data;
+    private List<FirstStepReadDTO> data;
     private int index = 0;
 
     private static final String SQL = "SELECT \n" +
@@ -29,15 +29,15 @@ public class FirstStepReader implements ItemReader<FirstStepDTO> {
             "JOIN exams e ON s.latest_exam = e.id";
 
     @Override
-    public FirstStepDTO read() throws UnexpectedInputException, ParseException, NonTransientResourceException {
+    public FirstStepReadDTO read() throws UnexpectedInputException, ParseException, NonTransientResourceException {
         if (data == null) {
             data = fetchData();
         }
         return (index < data.size()) ? data.get(index++) : null;
     }
 
-    private List<FirstStepDTO> fetchData() {
-        return jdbcTemplate.query(SQL, (rs, rowNum) -> new FirstStepDTO(
+    private List<FirstStepReadDTO> fetchData() {
+        return jdbcTemplate.query(SQL, (rs, rowNum) -> new FirstStepReadDTO(
                         rs.getLong("exam_id"),
                         rs.getDate("apply_end_date").toLocalDate(),
                         rs.getDate("exam_start_date").toLocalDate(),
