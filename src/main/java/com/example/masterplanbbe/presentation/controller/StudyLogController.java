@@ -50,4 +50,14 @@ public class StudyLogController {
                 .body(ApiResponse.ok(studyLogService.findAll(year, month, userDetails.getUsername())));
     }
 
+    @Operation(summary = "학습 기록 상세 조회")
+    @GetMapping(path = "/{study-log-id}")
+    public ResponseEntity<ApiResponse<?>> findOne(
+            @PathVariable(name = "study-log-id") Long studyLogId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(studyLogService.findOne(studyLogId, userDetails.getUsername())));
+    }
+
 }
