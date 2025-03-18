@@ -47,4 +47,10 @@ public class StudyLogService {
     public List<StudyLogResponse> findAll(Integer year, Integer month, String email) {
         return studyLogRepositoryPort.findAllStudyLogByYearAndMonthAndMemberId(year, month, email);
     }
+
+    public StudyLogResponse findOne(Long studyLogId, String email) {
+        StudyLog studyLog = studyLogRepositoryPort.findByIdAndMemberId(studyLogId, email);
+
+        return StudyLogResponse.from(studyLog);
+    }
 }
