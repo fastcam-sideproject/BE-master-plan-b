@@ -44,6 +44,12 @@ public class StudyLogService {
         return StudyLogResponse.from(studyLog);
     }
 
+    @Transactional
+    public void delete(Long id, String email) {
+        StudyLog studyLog = studyLogRepositoryPort.findByIdAndMemberId(id, email);
+        studyLogRepositoryPort.delete(studyLog);
+    }
+
     public List<StudyLogResponse> findAll(Integer year, Integer month, String email) {
         return studyLogRepositoryPort.findAllStudyLogByYearAndMonthAndMemberId(year, month, email);
     }
