@@ -35,6 +35,14 @@ public class ChatMessage {
     @Column(name = "parent_id")
     private Long parentId;
 
+    @ManyToOne(fetch = FetchType.LAZY)  // 자기 참조 관계
+    @JoinColumn(name = "parent_id", insertable = false, updatable = false)
+    private ChatMessage parentMessage;  // 부모 메시지 객체 참조
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", insertable = false, updatable = false)  // ✅ 중복 매핑 방지
+    private Member member;
+
     @JsonCreator
     public static ChatMessage fromJson(
             @JsonProperty("id") Long id,
