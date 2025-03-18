@@ -1,9 +1,9 @@
 package com.example.masterplanbbe.presentation.controller;
 
-import com.example.masterplanbbe.presentation.response.ApiResponse;
+import com.example.masterplanbbe.application.service.StudyLogService;
 import com.example.masterplanbbe.infrastructure.security.user.UserDetailsImpl;
 import com.example.masterplanbbe.presentation.request.StudyLogRequest;
-import com.example.masterplanbbe.application.service.StudyLogService;
+import com.example.masterplanbbe.presentation.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +37,17 @@ public class StudyLogController {
     ) {
         return ResponseEntity.ok()
                 .body(ApiResponse.ok(studyLogService.update(studyLogRequest, studyLogId, userDetails.getUsername())));
+    }
+
+    @Operation(summary = "학습 기록 조회")
+    @GetMapping(path = "")
+    public ResponseEntity<ApiResponse<?>> findAll(
+            @RequestParam Integer year,
+            @RequestParam Integer month,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok(studyLogService.findAll(year, month, userDetails.getUsername())));
     }
 
 }
