@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class StudyLogService {
@@ -40,5 +42,9 @@ public class StudyLogService {
         studyLog.updateStudyLog(studyLogRequest, exam);
 
         return StudyLogResponse.from(studyLog);
+    }
+
+    public List<StudyLogResponse> findAll(Integer year, Integer month, String email) {
+        return studyLogRepositoryPort.findAllStudyLogByYearAndMonthAndMemberId(year, month, email);
     }
 }
