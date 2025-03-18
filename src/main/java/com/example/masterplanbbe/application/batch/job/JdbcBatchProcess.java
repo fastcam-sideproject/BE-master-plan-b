@@ -40,6 +40,7 @@ public class JdbcBatchProcess {
 
         return new JobBuilder("jdbcBatchJob", jobRepository)
                 .start(firstStep())
+                .next(secondStep())
                 .build();
     }
 
