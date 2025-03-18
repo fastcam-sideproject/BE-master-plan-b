@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.application.service;
 
-import com.example.masterplanbbe.application.dto.ChatMessageDTO;
+import com.example.masterplanbbe.application.dto.ChatRedisDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +34,8 @@ public class RedisSubscriber implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         try {
             String msgBody = new String(message.getBody());
-            ChatMessageDTO chatMessage = objectMapper.readValue(msgBody, ChatMessageDTO.class);
-            messagingTemplate.convertAndSend("/sub/chat/" + chatMessage.getSpecId(), chatMessage);
+            ChatRedisDto chatRedisDto = objectMapper.readValue(msgBody, ChatRedisDto.class);
+            messagingTemplate.convertAndSend("/sub/chat/" + chatRedisDto.specId(), chatRedisDto);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
