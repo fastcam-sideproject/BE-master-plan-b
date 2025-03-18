@@ -7,6 +7,7 @@ import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SocketOptions;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -37,6 +38,9 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.password}")
     private String password;
+
+    @Value("${spring.redis.custom-enabled:false}") // 기본값 false 설정
+    private boolean customEnabled;
 
     @Bean(name = "authConnectionFactory")
     public RedisConnectionFactory redisConnectionFactory() {
@@ -135,6 +139,7 @@ public class RedisConfig {
      * RedisSubscriber 메시지 리스너 어댑터
      */
     @Bean
+    @ConditionalOnProperty(name = "spring.redis.custom-enabled", havingValue = "true", matchIfMissing = false)
     public MessageListenerAdapter listenerAdapter(RedisSubscriber redisSubscriber) {
         return new MessageListenerAdapter(redisSubscriber, "onMessage");
     }
@@ -143,26 +148,28 @@ public class RedisConfig {
      * Redis Pub/Sub 메시지 리스너 설정
      */
     @Bean
+    @ConditionalOnProperty(name = "spring.redis.custom-enabled", havingValue = "true", matchIfMissing = false)
     public RedisMessageListenerContainer redisMessageListenerContainer(
             RedisConnectionFactory redisConnectionFactory, MessageListenerAdapter listenerAdapter) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory);
         container.addMessageListener(listenerAdapter, new PatternTopic("spec:*"));
-//        container.setTaskExecutor(redisTaskExecutor()); // 멀티스레드 실행 설정
+        container.setTaskExecutor(redisTaskExecutor()); // 멀티스레드 실행 설정
         return container;
     }
 
     /**
      * Redis 메시지 처리를 위한 비동기 TaskExecutor 설정
      */
-//    @Bean
-//    public ThreadPoolTaskExecutor redisTaskExecutor() {
-//        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-//        executor.setCorePoolSize(5);   // 기본적으로 실행할 스레드 개수
-//        executor.setMaxPoolSize(10);    // 최대 스레드 개수 (CPU 과부화를 막기위해 코어 * 2)
-//        executor.setQueueCapacity(50);  // 대기열 크기
-//        executor.setThreadNamePrefix("RedisExecutor-");
-//        executor.initialize();
-//        return executor;
-//    }
+    @Bean
+    @ConditionalOnProperty(name = "spring.redis.custom-enabled", havingValue = "true", matchIfMissing = false)
+    public ThreadPoolTaskExecutor redisTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(5);   // 기본적으로 실행할 스레드 개수
+        executor.setMaxPoolSize(10);    // 최대 스레드 개수 (CPU 과부화를 막기위해 코어 * 2)
+        executor.setQueueCapacity(50);  // 대기열 크기
+        executor.setThreadNamePrefix("RedisExecutor-");
+        executor.initialize();
+        return executor;
+    }
 }

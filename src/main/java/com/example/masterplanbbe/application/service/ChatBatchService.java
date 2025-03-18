@@ -1,8 +1,8 @@
 package com.example.masterplanbbe.application.service;
 
 import com.example.masterplanbbe.domain.entity.ChatMessage;
-import com.example.masterplanbbe.infrastructure.repository.BatchChatRepository;
-import com.example.masterplanbbe.infrastructure.repository.RedisChatRepository;
+import com.example.masterplanbbe.domain.repository.ChatBatchRepositoryPort;
+import com.example.masterplanbbe.infrastructure.repository.ChatRedisRepositoryAdapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
@@ -20,16 +20,16 @@ import java.util.List;
 public class ChatBatchService {
     private static final int MAX_MESSAGES = 2; // 채팅 메시지 제한 개수
 
-    private final RedisChatRepository redisChatRepository;
-    private final BatchChatRepository batchChatRepository;
+    private final ChatRedisRepositoryAdapter chatRedisRepositoryAdapter;
+    private final ChatBatchRepositoryPort chatBatchRepository;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public ChatBatchService(RedisChatRepository redisChatRepository,
-                            BatchChatRepository batchChatRepository,
+    public ChatBatchService(ChatRedisRepositoryAdapter chatRedisRepositoryAdapter,
+                            ChatBatchRepositoryPort chatBatchRepository,
                             @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
-        this.redisChatRepository = redisChatRepository;
-        this.batchChatRepository = batchChatRepository;
+        this.chatRedisRepositoryAdapter = chatRedisRepositoryAdapter;
+        this.chatBatchRepository = chatBatchRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -37,26 +37,26 @@ public class ChatBatchService {
     @Scheduled(fixedRate = 600_000)
     public void batchSaveChatMessages() {
         List<ChatMessage> chatMessages = new ArrayList<>();
-        List<String> chatRooms = redisChatRepository.getAllChatRooms();
+        List<String> chatRooms = chatRedisRepositoryAdapter.getAllChatRooms();
         for (String chatKey : chatRooms) {
             try {
                 String specIdStr = chatKey.replace("spec:", "");
                 Long specId = Long.parseLong(specIdStr);
 
-                if (redisChatRepository.getMessageCount(specId) > MAX_MESSAGES) {
+                if (chatRedisRepositoryAdapter.getMessageCount(specId) > MAX_MESSAGES) {
                     chatMessages.addAll(findOldMessages(specId));
                 }
             } catch (NumberFormatException e) {
                 log.error(e.getMessage());
             }
         }
-        batchChatRepository.saveAll(chatMessages);
+        chatBatchRepository.saveAll(chatMessages);
     }
 
     private List<ChatMessage> findOldMessages(Long specId) {
         List<ChatMessage> chatMessages = new ArrayList<>();
         try {
-            List<String> oldMessages = redisChatRepository.getMessagesInRange(specId, MAX_MESSAGES, -1);
+            List<String> oldMessages = chatRedisRepositoryAdapter.getMessagesInRange(specId, MAX_MESSAGES, -1);
 
             if (oldMessages != null && !oldMessages.isEmpty()) {
                 for (String jsonMessage : oldMessages) {
@@ -68,7 +68,7 @@ public class ChatBatchService {
                     }
                 }
             }
-            redisChatRepository.trimMessages(specId, MAX_MESSAGES);
+            chatRedisRepositoryAdapter.trimMessages(specId, MAX_MESSAGES);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
