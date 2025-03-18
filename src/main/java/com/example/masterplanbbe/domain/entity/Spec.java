@@ -41,7 +41,7 @@ public class Spec extends FullAuditEntity {
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDetail> examDetails;
 
-    @JoinColumn(name = "lastest_exam")
+    @JoinColumn(name = "latest_exam")
     @OneToOne(fetch = FetchType.LAZY)
     private Exam latestExam;
 

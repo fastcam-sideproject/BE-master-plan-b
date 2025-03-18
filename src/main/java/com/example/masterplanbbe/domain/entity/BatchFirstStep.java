@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FirstStep {
+public class BatchFirstStep {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
