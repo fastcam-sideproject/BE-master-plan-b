@@ -60,4 +60,16 @@ public class StudyLogController {
                 .body(ApiResponse.ok(studyLogService.findOne(studyLogId, userDetails.getUsername())));
     }
 
+    @Operation(summary = "학습 기록 삭제")
+    @DeleteMapping(path = "{study-log-id}")
+    public ResponseEntity<ApiResponse<?>> delete(
+            @PathVariable(name = "study-log-id") Long studyLogId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        studyLogService.delete(studyLogId, userDetails.getUsername());
+
+        return ResponseEntity.ok()
+                .body(ApiResponse.ok("학습 기록 삭제 완료"));
+    }
+
 }
