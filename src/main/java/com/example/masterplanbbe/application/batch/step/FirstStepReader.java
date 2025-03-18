@@ -3,15 +3,16 @@ package com.example.masterplanbbe.application.batch.step;
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
 import com.example.masterplanbbe.infrastructure.repository.ExamJdbcRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FirstStepReader implements ItemReader<FirstStepReadDTO> {
@@ -29,7 +30,12 @@ public class FirstStepReader implements ItemReader<FirstStepReadDTO> {
             int pageSize = 10;
             data = examJdbcRepository.find(pageSize, offset);
 
-            if (data.size() % pageSize == 0) return null;
+            log.info("First Reader 데이터: {}", data);
+
+            if (data.size() % pageSize == 0) {
+                log.info("null 반환");
+                return null;
+            }
 
             offset += pageSize;
             index = 0;

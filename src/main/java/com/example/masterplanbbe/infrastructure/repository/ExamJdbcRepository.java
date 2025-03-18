@@ -18,7 +18,8 @@ public class ExamJdbcRepository {
             "    e.exam_start_date, \n" +
             "    e.participant_count\n" +
             "FROM specs s\n" +
-            "JOIN exams e ON s.latest_exam = e.id";
+            "JOIN exams e ON s.latest_exam = e.id\n" +
+            "LIMIT ? OFFSET ?";
 
     private final JdbcTemplate jdbcTemplate;
 
