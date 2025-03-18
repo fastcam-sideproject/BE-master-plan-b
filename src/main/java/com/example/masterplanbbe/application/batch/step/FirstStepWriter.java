@@ -17,7 +17,7 @@ public class FirstStepWriter implements ItemWriter<FirstStepWriteDTO> {
 
     @Override
     public void write(Chunk<? extends FirstStepWriteDTO> chunk) {
-        log.info("FirstStepWriter 데이터 : {}", chunk.getItems());
+//        log.info("FirstStepWriter 데이터 : {}", chunk.getItems());
         batchFirstStepJdbcRepository.batchSave(chunk.getItems());
     }
 }

@@ -30,9 +30,9 @@ public class FirstStepReader implements ItemReader<FirstStepReadDTO> {
             int pageSize = 10;
             data = examJdbcRepository.find(pageSize, offset);
 
-            log.info("First Reader 데이터: {}", data);
+//            log.info("First Reader 데이터: {}", data);
 
-            if (data.size() % pageSize == 0) {
+            if (data.isEmpty()) {
                 log.info("null 반환");
                 return null;
             }

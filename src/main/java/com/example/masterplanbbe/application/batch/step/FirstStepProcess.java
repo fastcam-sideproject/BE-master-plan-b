@@ -19,7 +19,7 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, FirstSt
 
     @Override
     public FirstStepWriteDTO process(FirstStepReadDTO item) {
-        log.info("First Process 데이터 : {}", item);
+//        log.info("First Process 데이터 : {}", item);
         LocalDate today = LocalDate.now();
 
         double applyEndPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.applyEndDate()));

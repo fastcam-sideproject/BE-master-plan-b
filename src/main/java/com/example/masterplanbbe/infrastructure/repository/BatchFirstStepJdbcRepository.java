@@ -19,13 +19,17 @@ public class BatchFirstStepJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현
     @Transactional
     public void batchSave(List<? extends FirstStepWriteDTO> data) {
-        // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현
-        jdbcTemplate.update(DELETE_SQL);
         jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam
         });
+    }
+
+    @Transactional
+    public void deleteAll() {
+        jdbcTemplate.update(DELETE_SQL);
     }
 }
