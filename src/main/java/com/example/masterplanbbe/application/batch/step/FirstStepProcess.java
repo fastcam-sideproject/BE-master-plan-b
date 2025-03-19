@@ -14,8 +14,10 @@ import java.time.temporal.ChronoUnit;
 public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, FirstStepWriteDTO> {
 
     private static final double APPLY_COEFFICIENT = 0.2;
-    private static final double EXAM_COEFFICIENT = 0.01;
+    private static final double EXAM_START_COEFFICIENT = 0.01;
     private static final double PARTICIPANT_COEFFICIENT = 0.3;
+    private static final double LIKE_COEFFICIENT = 0.1;
+    private static final double VIEW_COEFFICIENT = 0.1;
 
     @Override
     public FirstStepWriteDTO process(FirstStepReadDTO item) {
@@ -24,11 +26,15 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, FirstSt
 
         double applyEndPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.applyEndDate()));
         double examStartPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.examStartDate()));
+        double likePoint = (double) item.likeCount();
+        double viewPoint = (double) item.viewCount();
         double participantPoint = (double) item.participantCount();
 
         Double intermediateResult = applyEndPoint * APPLY_COEFFICIENT +
-                        examStartPoint * EXAM_COEFFICIENT +
-                        participantPoint * PARTICIPANT_COEFFICIENT;
+                examStartPoint * EXAM_START_COEFFICIENT +
+                likePoint * LIKE_COEFFICIENT +
+                viewPoint * VIEW_COEFFICIENT +
+                participantPoint * PARTICIPANT_COEFFICIENT;
 
         return new FirstStepWriteDTO(item.specId(), item.examId(), intermediateResult);
     }

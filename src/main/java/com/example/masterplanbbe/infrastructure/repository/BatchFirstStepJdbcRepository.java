@@ -13,15 +13,20 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BatchFirstStepJdbcRepository {
 
-    private static final String JOIN_SQL = "SELECT \n" +
-            "    s.id AS spec_id, \n" +
-            "    e.id AS exam_id, \n" +
-            "    e.apply_end_date, \n" +
-            "    e.exam_start_date, \n" +
-            "    e.participant_count\n" +
-            "FROM specs s\n" +
-            "JOIN exams e ON s.latest_exam = e.id\n" +
-            "LIMIT ? OFFSET ?";
+    // s.latest_exam과 ep.exam_id에 별개의 인덱스를 추가해보고 EXPLAIN ANALYZE 다시 해보자
+    private static final String JOIN_SQL = """
+            SELECT\s
+                e.id AS exam_id,
+                s.id AS spec_id,
+                e.apply_end_date,\s
+                e.exam_start_date,\s
+                e.participant_count,
+                ep.like_count,
+            \tep.view_count
+            FROM specs s
+            JOIN exams e ON s.latest_exam = e.id
+            JOIN exam_posts ep ON e.id = ep.exam_id
+            LIMIT ? OFFSET ?""";
 
     private static final String DELETE_SQL =
             "TRUNCATE batch_first_steps";
@@ -37,7 +42,9 @@ public class BatchFirstStepJdbcRepository {
                 rs.getLong("exam_id"),
                 rs.getDate("apply_end_date").toLocalDate(),
                 rs.getDate("exam_start_date").toLocalDate(),
-                rs.getInt("participant_count")), pageSize, offset);
+                rs.getInt("participant_count"),
+                rs.getInt("like_count"),
+                rs.getInt("view_count")), pageSize, offset);
     }
 
     // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현

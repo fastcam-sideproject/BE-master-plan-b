@@ -57,7 +57,7 @@ public class JdbcBatchProcess {
     public Step secondStep() {
         log.info("Step 2 : 연령대 무관 필드 기반 추천점수 파라미터 연산");
 
-        return new StepBuilder("firstStep", jobRepository)
+        return new StepBuilder("secondStep", jobRepository)
                 .<FirstStepReadDTO, FirstStepWriteDTO>chunk(10, transactionManager)
                 .reader(firstStepReader)
                 .processor(firstStepProcess)
