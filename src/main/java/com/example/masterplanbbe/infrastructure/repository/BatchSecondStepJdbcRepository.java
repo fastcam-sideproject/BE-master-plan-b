@@ -21,8 +21,9 @@ public class BatchSecondStepJdbcRepository {
                 SUM(ep.view_count) AS total_view_count  -- view_count 합산
             FROM specs s
             JOIN exam_posts ep ON s.latest_exam = ep.exam_id
-            GROUP BY ep.exam_id , s.id;
-            """;
+            GROUP BY ep.exam_id , s.id
+            LIMIT ? OFFSET ?""";
+    private static final String DELETE_SQL = "TRUNCATE batch_second_steps";
     private static final String INSERT_SQL =
             "INSERT INTO batch_second_steps (intermediate_result, latest_exam_id, spec_id) VALUES (?, ?, ?)";
 
@@ -45,5 +46,10 @@ public class BatchSecondStepJdbcRepository {
             ps.setLong(2, item.examId()); // latest_exam
             ps.setLong(3, item.specId()); // spec
         });
+    }
+
+    @Transactional
+    public void deleteAll() {
+        jdbcTemplate.update(DELETE_SQL);
     }
 }

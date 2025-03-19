@@ -2,10 +2,8 @@ package com.example.masterplanbbe.application.batch.job;
 
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
 import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
-import com.example.masterplanbbe.application.batch.step.FirstStepProcess;
-import com.example.masterplanbbe.application.batch.step.FirstStepReader;
-import com.example.masterplanbbe.application.batch.step.FirstStepWriter;
-import com.example.masterplanbbe.application.batch.step.InitTasklet;
+import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
+import com.example.masterplanbbe.application.batch.step.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -31,6 +29,10 @@ public class JdbcBatchProcess {
     private final FirstStepProcess firstStepProcess;
     private final FirstStepWriter firstStepWriter;
 
+    private final SecondStepReader secondStepReader;
+    private final SecondStepProcess secondStepProcess;
+    private final SecondStepWriter secondStepWriter;
+
     @Bean
     public Job job() {
         log.info("추천 점수 연산 배치 처리 작업 실시");
@@ -38,6 +40,7 @@ public class JdbcBatchProcess {
         return new JobBuilder("jdbcBatchJob", jobRepository)
                 .start(initStep())
                 .next(fistStep())
+                .next(secondStep())
                 .build();
     }
 
@@ -66,6 +69,11 @@ public class JdbcBatchProcess {
     public Step secondStep() {
         log.info("Step 2 : 연령대 무관 그룹 합산 필드 기반 추천점수 중간 연산");
 
-        return null;
+        return new StepBuilder("secondStep", jobRepository)
+                .<SecondStepReadDTO, IntermediateStepWriteDTO>chunk(10, transactionManager)
+                .reader(secondStepReader)
+                .processor(secondStepProcess)
+                .writer(secondStepWriter)
+                .build();
     }
 }
