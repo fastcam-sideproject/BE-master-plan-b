@@ -16,8 +16,6 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, Interme
     private static final double APPLY_COEFFICIENT = 0.2;
     private static final double EXAM_START_COEFFICIENT = 0.01;
     private static final double PARTICIPANT_COEFFICIENT = 0.3;
-    private static final double LIKE_COEFFICIENT = 0.1;
-    private static final double VIEW_COEFFICIENT = 0.1;
 
     @Override
     public IntermediateStepWriteDTO process(FirstStepReadDTO item) {

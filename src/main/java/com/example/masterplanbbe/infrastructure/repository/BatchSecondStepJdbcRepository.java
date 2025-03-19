@@ -1,8 +1,12 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
+import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,4 +25,12 @@ public class BatchSecondStepJdbcRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Transactional(readOnly = true)
+    public List<SecondStepReadDTO> find(int pageSize, int offset) {
+        return jdbcTemplate.query(GROUP_JOIN_SQL, (rs, rowNum) -> new SecondStepReadDTO(
+                rs.getLong("exam_id"),
+                rs.getLong("spec_id"),
+                rs.getInt("total_like_count"),
+                rs.getInt("total_view_count")), pageSize, offset);
+    }
 }
