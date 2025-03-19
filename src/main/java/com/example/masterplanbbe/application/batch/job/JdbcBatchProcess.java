@@ -15,10 +15,7 @@ import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.PlatformTransactionManager;
-
-import javax.sql.DataSource;
 
 @Slf4j
 @Configuration
@@ -39,25 +36,25 @@ public class JdbcBatchProcess {
         log.info("추천 점수 연산 배치 처리 작업 실시");
 
         return new JobBuilder("jdbcBatchJob", jobRepository)
-                .start(firstStep())
-                .next(secondStep())
+                .start(initStep())
+                .next(fistStep())
                 .build();
     }
 
     @Bean
-    public Step firstStep() {
-        log.info("Step 1 : 모든 중간 연산 테이블 삭제");
+    public Step initStep() {
+        log.info("Step 0 : 모든 중간 연산 테이블 삭제");
 
-        return new StepBuilder("firstStep", jobRepository)
+        return new StepBuilder("initStep", jobRepository)
                 .tasklet(initTasklet, transactionManager)
                 .build();
     }
 
     @Bean
-    public Step secondStep() {
-        log.info("Step 2 : 연령대 무관 필드 기반 추천점수 파라미터 연산");
+    public Step fistStep() {
+        log.info("Step 1 : 연령대 무관 그룹 불필요 필드 기반 추천점수 중간 연산");
 
-        return new StepBuilder("secondStep", jobRepository)
+        return new StepBuilder("firstStep", jobRepository)
                 .<FirstStepReadDTO, FirstStepWriteDTO>chunk(10, transactionManager)
                 .reader(firstStepReader)
                 .processor(firstStepProcess)
@@ -66,8 +63,8 @@ public class JdbcBatchProcess {
     }
 
     @Bean
-    public Step thirdStep() {
-        log.info("Step 3 : batch_first_steps 테이블 기반 조인 작업 및 게시글 관련 연령대 기반 추천점수 책정");
+    public Step secondStep() {
+        log.info("Step 2 : 연령대 무관 그룹 합산 필드 기반 추천점수 중간 연산");
 
         return null;
     }

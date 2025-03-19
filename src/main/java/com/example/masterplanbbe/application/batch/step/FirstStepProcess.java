@@ -26,14 +26,10 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, FirstSt
 
         double applyEndPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.applyEndDate()));
         double examStartPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.examStartDate()));
-        double likePoint = (double) item.likeCount();
-        double viewPoint = (double) item.viewCount();
         double participantPoint = (double) item.participantCount();
 
         Double intermediateResult = applyEndPoint * APPLY_COEFFICIENT +
                 examStartPoint * EXAM_START_COEFFICIENT +
-                likePoint * LIKE_COEFFICIENT +
-                viewPoint * VIEW_COEFFICIENT +
                 participantPoint * PARTICIPANT_COEFFICIENT;
 
         return new FirstStepWriteDTO(item.specId(), item.examId(), intermediateResult);

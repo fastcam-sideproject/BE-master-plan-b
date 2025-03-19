@@ -20,12 +20,9 @@ public class BatchFirstStepJdbcRepository {
                 s.id AS spec_id,
                 e.apply_end_date,
                 e.exam_start_date,
-                e.participant_count,
-                ep.like_count,
-                ep.view_count
+                e.participant_count
             FROM specs s
             JOIN exams e ON s.latest_exam = e.id
-            JOIN exam_posts ep ON e.id = ep.exam_id
             LIMIT ? OFFSET ?""";
 
     private static final String DELETE_SQL =
@@ -42,9 +39,7 @@ public class BatchFirstStepJdbcRepository {
                 rs.getLong("exam_id"),
                 rs.getDate("apply_end_date").toLocalDate(),
                 rs.getDate("exam_start_date").toLocalDate(),
-                rs.getInt("participant_count"),
-                rs.getInt("like_count"),
-                rs.getInt("view_count")), pageSize, offset);
+                rs.getInt("participant_count")), pageSize, offset);
     }
 
     // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현

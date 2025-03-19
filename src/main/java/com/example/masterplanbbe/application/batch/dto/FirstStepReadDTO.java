@@ -7,7 +7,5 @@ public record FirstStepReadDTO(
         Long examId,
         LocalDate applyEndDate,
         LocalDate examStartDate,
-        Integer participantCount,
-        Integer likeCount,
-        Integer viewCount) {
+        Integer participantCount) {
 }
