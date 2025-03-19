@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
+import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
 import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,6 +23,9 @@ public class BatchSecondStepJdbcRepository {
             JOIN exam_posts ep ON s.latest_exam = ep.exam_id
             GROUP BY ep.exam_id , s.id;
             """;
+    private static final String INSERT_SQL =
+            "INSERT INTO batch_second_steps (intermediate_result, latest_exam_id, spec_id) VALUES (?, ?, ?)";
+
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -32,5 +36,14 @@ public class BatchSecondStepJdbcRepository {
                 rs.getLong("spec_id"),
                 rs.getInt("total_like_count"),
                 rs.getInt("total_view_count")), pageSize, offset);
+    }
+
+    @Transactional
+    public void batchSave(List<? extends IntermediateStepWriteDTO> data) {
+        jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
+            ps.setDouble(1, item.intermediateResult()); // intermediate_result
+            ps.setLong(2, item.examId()); // latest_exam
+            ps.setLong(3, item.specId()); // spec
+        });
     }
 }

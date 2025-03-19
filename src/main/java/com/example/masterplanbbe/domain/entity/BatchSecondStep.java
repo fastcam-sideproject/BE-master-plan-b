@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "batch_first_steps")
+@Table(name = "batch_second_steps")
 @Getter
 @Setter
 @AllArgsConstructor

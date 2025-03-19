@@ -24,9 +24,7 @@ public class BatchFirstStepJdbcRepository {
             FROM specs s
             JOIN exams e ON s.latest_exam = e.id
             LIMIT ? OFFSET ?""";
-
-    private static final String DELETE_SQL =
-            "TRUNCATE batch_first_steps";
+    private static final String DELETE_SQL = "TRUNCATE batch_first_steps";
     private static final String INSERT_SQL =
             "INSERT INTO batch_first_steps (intermediate_result, latest_exam_id, spec_id) VALUES (?, ?, ?)";
 
