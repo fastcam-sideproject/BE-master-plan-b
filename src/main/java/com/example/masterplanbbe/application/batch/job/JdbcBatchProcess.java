@@ -76,4 +76,11 @@ public class JdbcBatchProcess {
                 .writer(secondStepWriter)
                 .build();
     }
+
+    @Bean
+    public Step thirdStep() {
+        log.info("Step 3 : 연령대 기반 그룹 합산 필드 기반 추천점수 최종 연산");
+
+        return null;
+    }
 }

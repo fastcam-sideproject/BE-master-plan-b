@@ -27,7 +27,6 @@ public class BatchSecondStepJdbcRepository {
     private static final String INSERT_SQL =
             "INSERT INTO batch_second_steps (intermediate_result, latest_exam_id, spec_id) VALUES (?, ?, ?)";
 
-
     private final JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = true)
