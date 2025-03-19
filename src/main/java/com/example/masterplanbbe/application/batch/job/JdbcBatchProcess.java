@@ -64,4 +64,11 @@ public class JdbcBatchProcess {
                 .writer(firstStepWriter)
                 .build();
     }
+
+    @Bean
+    public Step thirdStep() {
+        log.info("Step 3 : batch_first_steps 테이블 기반 조인 작업 및 게시글 관련 연령대 기반 추천점수 책정");
+
+        return null;
+    }
 }

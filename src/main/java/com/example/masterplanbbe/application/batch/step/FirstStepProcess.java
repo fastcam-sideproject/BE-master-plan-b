@@ -30,6 +30,6 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, FirstSt
                         examStartPoint * EXAM_COEFFICIENT +
                         participantPoint * PARTICIPANT_COEFFICIENT;
 
-        return new FirstStepWriteDTO(item.examId(), intermediateResult);
+        return new FirstStepWriteDTO(item.specId(), item.examId(), intermediateResult);
     }
 }
