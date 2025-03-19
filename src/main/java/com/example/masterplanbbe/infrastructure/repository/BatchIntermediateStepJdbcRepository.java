@@ -39,15 +39,14 @@ public class BatchIntermediateStepJdbcRepository {
 
     private static final String DELETE_SQL = "TRUNCATE batch_calculation_steps";
 
-    private static final String INSERT_SQL = """
+    // ALTER TABLE batch_calculation_steps
+    // ADD UNIQUE KEY (latest_exam_id, spec_id);
+    private static final String UPSERT_SQL = """
             INSERT INTO batch_calculation_steps
-            (intermediate_result, latest_exam_id, spec_id) 
-            VALUES (?, ?, ?)""";
-
-    private static final String UPDATE_SQL = """
-            UPDATE batch_calculation_steps
-            SET intermediate_result = intermediate_result + ?
-            WHERE latest_exam_id = ? AND spec_id = ?""";
+            (intermediate_result, latest_exam_id, spec_id)
+            VALUES (?, ?, ?)
+            ON DUPLICATE KEY UPDATE
+            intermediate_result = VALUES(intermediate_result)""";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -73,19 +72,10 @@ public class BatchIntermediateStepJdbcRepository {
     // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현
     @Transactional
     public void batchSave(List<? extends IntermediateStepWriteDTO> data) {
-        jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
+        jdbcTemplate.batchUpdate(UPSERT_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam
             ps.setLong(3, item.specId()); // spec
-        });
-    }
-
-    @Transactional
-    public void batchUpdate(List<? extends IntermediateStepWriteDTO> data) {
-        jdbcTemplate.batchUpdate(UPDATE_SQL, data, data.size(), (ps, item) -> {
-            ps.setDouble(1, item.intermediateResult()); // intermediate_result 수정
-            ps.setLong(2, item.examId()); // latest_exam_id 조건
-            ps.setLong(3, item.specId()); // spec_id 조건
         });
     }
 

@@ -23,8 +23,6 @@ public class JdbcBatchProcess {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
-    private final InitTasklet initTasklet;
-
     private final FirstStepReader firstStepReader;
     private final FirstStepProcess firstStepProcess;
     private final FirstStepWriter firstStepWriter;
@@ -38,18 +36,9 @@ public class JdbcBatchProcess {
         log.info("추천 점수 연산 배치 처리 작업 실시");
 
         return new JobBuilder("jdbcBatchJob", jobRepository)
-                .start(initStep())
-                .next(fistStep())
+//                .start(initStep())
+                .start(fistStep())
                 .next(secondStep())
-                .build();
-    }
-
-    @Bean
-    public Step initStep() {
-        log.info("Step 0 : 모든 중간 연산 테이블 삭제");
-
-        return new StepBuilder("initStep", jobRepository)
-                .tasklet(initTasklet, transactionManager)
                 .build();
     }
 

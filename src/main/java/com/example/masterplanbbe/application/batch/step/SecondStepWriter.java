@@ -17,6 +17,6 @@ public class SecondStepWriter implements ItemWriter<IntermediateStepWriteDTO> {
 
     @Override
     public void write(Chunk<? extends IntermediateStepWriteDTO> chunk) {
-        batchIntermediateStepJdbcRepository.batchUpdate(chunk.getItems());
+        batchIntermediateStepJdbcRepository.batchSave(chunk.getItems());
     }
 }
