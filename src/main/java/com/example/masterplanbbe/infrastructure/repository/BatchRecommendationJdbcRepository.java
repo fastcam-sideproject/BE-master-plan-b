@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
-import com.example.masterplanbbe.application.batch.dto.RecommendationReadDTO;
+import com.example.masterplanbbe.application.batch.dto.ThirdStepReadDTO;
 import com.example.masterplanbbe.application.batch.dto.RecommendationWriteDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -23,21 +23,23 @@ public class BatchRecommendationJdbcRepository {
                     WHEN TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) BETWEEN 27 AND 29 THEN 'LATE_20S'
                     ELSE 'OVER_30S'
                 END AS age_group,
-                COUNT(*) AS count_sum
+                COUNT(*) * 0.1 + bss.intermediate_result AS count_sum
             FROM batch_calculation_steps bss
             JOIN exam_posts ep ON bss.latest_exam_id = ep.exam_id
             JOIN members m ON ep.member_id = m.id
             GROUP BY bss.spec_id, bss.latest_exam_id, age_group
             LIMIT ? OFFSET ?""";
+
     private static final String DELETE_SQL = "TRUNCATE recommendations;";
+
     private static final String INSERT_SQL =
             "INSERT INTO recommendations (age_group, score, spec_id) VALUES (?, ?, ?)";
 
     private final JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = true)
-    public List<RecommendationReadDTO> find(int pageSize, int offset) {
-        return jdbcTemplate.query(GROUP_SUM_SQL, (rs, rowNum) -> new RecommendationReadDTO(
+    public List<ThirdStepReadDTO> find(int pageSize, int offset) {
+        return jdbcTemplate.query(GROUP_SUM_SQL, (rs, rowNum) -> new ThirdStepReadDTO(
                 rs.getLong("spec_id"),
                 rs.getLong("exam_id"),
                 rs.getString("age_group"),
