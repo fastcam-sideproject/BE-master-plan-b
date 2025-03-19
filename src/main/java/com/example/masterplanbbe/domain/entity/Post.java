@@ -25,10 +25,10 @@ public class Post extends FullAuditEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "like_count")
     private Integer likeCount = 0;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "view_count")
     private Integer viewCount = 0;
 
     @ManyToOne
