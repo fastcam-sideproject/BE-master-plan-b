@@ -15,14 +15,14 @@ public class BatchFirstStepJdbcRepository {
 
     // s.latest_exam과 ep.exam_id에 별개의 인덱스를 추가해보고 EXPLAIN ANALYZE 다시 해보자
     private static final String JOIN_SQL = """
-            SELECT\s
+            SELECT
                 e.id AS exam_id,
                 s.id AS spec_id,
-                e.apply_end_date,\s
-                e.exam_start_date,\s
+                e.apply_end_date,
+                e.exam_start_date,
                 e.participant_count,
                 ep.like_count,
-            \tep.view_count
+                ep.view_count
             FROM specs s
             JOIN exams e ON s.latest_exam = e.id
             JOIN exam_posts ep ON e.id = ep.exam_id
