@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.FirstStepWriteDTO;
+import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -44,7 +44,7 @@ public class BatchFirstStepJdbcRepository {
 
     // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현
     @Transactional
-    public void batchSave(List<? extends FirstStepWriteDTO> data) {
+    public void batchSave(List<? extends IntermediateStepWriteDTO> data) {
         jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam

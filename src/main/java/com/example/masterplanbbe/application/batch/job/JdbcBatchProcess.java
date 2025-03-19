@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.job;
 
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.FirstStepWriteDTO;
+import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
 import com.example.masterplanbbe.application.batch.step.FirstStepProcess;
 import com.example.masterplanbbe.application.batch.step.FirstStepReader;
 import com.example.masterplanbbe.application.batch.step.FirstStepWriter;
@@ -55,7 +55,7 @@ public class JdbcBatchProcess {
         log.info("Step 1 : 연령대 무관 그룹 불필요 필드 기반 추천점수 중간 연산");
 
         return new StepBuilder("firstStep", jobRepository)
-                .<FirstStepReadDTO, FirstStepWriteDTO>chunk(10, transactionManager)
+                .<FirstStepReadDTO, IntermediateStepWriteDTO>chunk(10, transactionManager)
                 .reader(firstStepReader)
                 .processor(firstStepProcess)
                 .writer(firstStepWriter)
