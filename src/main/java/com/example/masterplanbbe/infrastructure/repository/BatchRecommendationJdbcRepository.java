@@ -48,7 +48,7 @@ public class BatchRecommendationJdbcRepository {
                 rs.getLong("spec_id"),
                 rs.getLong("exam_id"),
                 rs.getString("age_group"),
-                rs.getInt("count_sum")), pageSize, offset);
+                rs.getDouble("count_sum")), pageSize, offset);
     }
 
     @Transactional

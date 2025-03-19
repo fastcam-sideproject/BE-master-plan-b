@@ -1,8 +1,6 @@
 package com.example.masterplanbbe.application.batch.job;
 
-import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
-import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
+import com.example.masterplanbbe.application.batch.dto.*;
 import com.example.masterplanbbe.application.batch.step.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +29,10 @@ public class JdbcBatchProcess {
     private final SecondStepProcess secondStepProcess;
     private final SecondStepWriter secondStepWriter;
 
+    private final ThirdStepReader thirdStepReader;
+    private final ThirdStepProcess thirdStepProcess;
+    private final ThirdStepWriter thirdStepWriter;
+
     @Bean
     public Job job() {
         log.info("추천 점수 연산 배치 처리 작업 실시");
@@ -39,6 +41,7 @@ public class JdbcBatchProcess {
 //                .start(initStep())
                 .start(fistStep())
                 .next(secondStep())
+                .next(thirdStep())
                 .build();
     }
 
@@ -70,6 +73,11 @@ public class JdbcBatchProcess {
     public Step thirdStep() {
         log.info("Step 3 : 연령대 기반 그룹 합산 필드 기반 추천점수 최종 연산");
 
-        return null;
+        return new StepBuilder("thirdStep", jobRepository)
+                .<ThirdStepReadDTO, RecommendationWriteDTO>chunk(10, transactionManager)
+                .reader(thirdStepReader)
+                .processor(thirdStepProcess)
+                .writer(thirdStepWriter)
+                .build();
     }
 }
