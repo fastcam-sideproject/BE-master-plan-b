@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
-import com.example.masterplanbbe.infrastructure.repository.BatchSecondStepJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchIntermediateStepJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecondStepReader implements ItemReader<SecondStepReadDTO> {
 
-    private final BatchSecondStepJdbcRepository batchSecondStepJdbcRepository;
+    private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
 
     private List<SecondStepReadDTO> data;
     private int offset = 0;
@@ -28,7 +28,7 @@ public class SecondStepReader implements ItemReader<SecondStepReadDTO> {
             UnexpectedInputException, ParseException, NonTransientResourceException {
         if (data == null || index >= data.size()) {
             int pageSize = 10;
-            data = batchSecondStepJdbcRepository.find(pageSize, offset);
+            data = batchIntermediateStepJdbcRepository.findSecondView(pageSize, offset);
 
             if (data.isEmpty()) {
                 log.info("step 2 null 반환");

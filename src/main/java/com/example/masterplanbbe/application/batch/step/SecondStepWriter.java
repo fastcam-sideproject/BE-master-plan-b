@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
-import com.example.masterplanbbe.infrastructure.repository.BatchSecondStepJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchIntermediateStepJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
@@ -13,10 +13,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SecondStepWriter implements ItemWriter<IntermediateStepWriteDTO> {
 
-    private final BatchSecondStepJdbcRepository batchSecondStepJdbcRepository;
+    private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
 
     @Override
     public void write(Chunk<? extends IntermediateStepWriteDTO> chunk) {
-        batchSecondStepJdbcRepository.batchSave(chunk.getItems());
+        batchIntermediateStepJdbcRepository.batchUpdate(chunk.getItems());
     }
 }

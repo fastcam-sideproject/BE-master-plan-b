@@ -1,7 +1,6 @@
 package com.example.masterplanbbe.application.batch.step;
 
-import com.example.masterplanbbe.infrastructure.repository.BatchFirstStepJdbcRepository;
-import com.example.masterplanbbe.infrastructure.repository.BatchSecondStepJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchIntermediateStepJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
@@ -13,13 +12,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class InitTasklet implements Tasklet {
 
-    private final BatchFirstStepJdbcRepository batchFirstStepJdbcRepository;
-    private final BatchSecondStepJdbcRepository batchSecondStepJdbcRepository;
+    private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
-        batchFirstStepJdbcRepository.deleteAll();
-        batchSecondStepJdbcRepository.deleteAll();
+        batchIntermediateStepJdbcRepository.deleteAll();
         return RepeatStatus.FINISHED;
     }
 }

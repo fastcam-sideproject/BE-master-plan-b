@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "batch_second_steps")
+@Table(name = "batch_calculation_steps")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BatchSecondStep {
+public class BatchCalculationStep {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

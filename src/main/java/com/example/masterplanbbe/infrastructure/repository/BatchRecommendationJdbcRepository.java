@@ -24,7 +24,7 @@ public class BatchRecommendationJdbcRepository {
                     ELSE 'OVER_30S'
                 END AS age_group,
                 COUNT(*) AS count_sum
-            FROM batch_second_steps bss
+            FROM batch_calculation_steps bss
             JOIN exam_posts ep ON bss.latest_exam_id = ep.exam_id
             JOIN members m ON ep.member_id = m.id
             GROUP BY bss.spec_id, bss.latest_exam_id, age_group
