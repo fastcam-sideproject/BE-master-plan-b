@@ -134,4 +134,16 @@ public class ChatService {
         }
         return false;
     }
+
+    public void enterChatRoom(Long specId, Long memberId) {
+        chatRedisRepositoryAdapter.addUserToChatRoom(specId, memberId);
+    }
+
+    public void leaveChatRoom(Long specId, Long memberId) {
+        chatRedisRepositoryAdapter.removeUserFromChatRoom(specId, memberId);
+    }
+
+    public Long getChatRoomMemberCount(Long specId) {
+        return chatRedisRepositoryAdapter.getChatRoomUserCount(specId);
+    }
 }

@@ -67,6 +67,31 @@ public class ChatRedisRepositoryAdapter implements ChatRedisRepositoryPort {
      */
     public Long deleteMessage(Long specId, String message) {
         String key = "spec:" + specId;
-        return redisTemplate.opsForList().remove(key, 1, message);
+        //TTL 설정 만료에 따라 직렬화된 객체 형태의 차이로 삭제가 안될수도 있으니 개선 필요
+        return redisTemplate.opsForList().remove(key, 1, chatRedisDto);
+    }
+
+    /**
+     * 사용자가 채팅방에 입장하면 Redis Set에 추가
+     */
+    public void addUserToChatRoom(Long specId, Long memberId) {
+        String key = "spec_users:" + specId;
+        redisTemplate.opsForSet().add(key, memberId);
+    }
+
+    /**
+     * 사용자가 채팅방에서 나가면 Redis Set에서 제거
+     */
+    public void removeUserFromChatRoom(Long specId, Long memberId) {
+        String key = "spec_users:" + specId;
+        redisTemplate.opsForSet().remove(key, memberId);
+    }
+
+    /**
+     * 특정 채팅방(specId)의 현재 접속자 수 조회
+     */
+    public Long getChatRoomUserCount(Long specId) {
+        String key = "spec_users:" + specId;
+        return redisTemplate.opsForSet().size(key);
     }
 }

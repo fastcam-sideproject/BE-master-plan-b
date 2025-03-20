@@ -55,6 +55,13 @@ public class ChatRestController {
         if (!deleted) {
             //삭제 실패
         }
-        return ResponseEntity.ok().body("채팅 메시지가 성공적으로 삭제되었습니다.");
+        return ResponseEntity.ok("채팅 메시지가 성공적으로 삭제되었습니다.");
+    }
+
+    @Operation(summary = "채팅방 사용자 수 조회")
+    @GetMapping("/{specId}/users/count")
+    public ResponseEntity<Long> getUserCount(@PathVariable("specId") Long specId) {
+        Long chatRoomMemberCount = chatService.getChatRoomMemberCount(specId);
+        return ResponseEntity.ok(chatRoomMemberCount);
     }
 }

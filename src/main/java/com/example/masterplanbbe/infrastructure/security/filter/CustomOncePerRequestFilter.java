@@ -30,7 +30,14 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
 //            "/error" // 얘를 열어줘야 favicon 에러가 안 찍히는데... 시그니처랑은 상관이 없나?
 
             // Monitoring
-            "/actuator"
+            "/actuator",
+
+            // WebSocket
+            "/ws",
+            "/ws/**",
+            "/api/v1/chat/*/recent",
+            "/api/v1/chat/*",
+            "/api/v1/chat/*/users/count"
     );
 
     @Override
