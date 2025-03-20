@@ -1,7 +1,8 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
-import com.example.masterplanbbe.domain.member.entity.Member;
+
 import com.example.masterplanbbe.domain.entity.LikeSpecReview;
+import com.example.masterplanbbe.domain.entity.Member;
 import com.example.masterplanbbe.domain.entity.SpecReview;
 import com.example.masterplanbbe.domain.repository.LikeSpecReviewRepository;
 import com.example.masterplanbbe.domain.repository.LikeSpecReviewRepositoryPort;

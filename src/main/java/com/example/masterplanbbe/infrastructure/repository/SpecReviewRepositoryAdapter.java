@@ -1,11 +1,11 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
-import com.example.masterplanbbe.common.exception.ErrorCode;
-import com.example.masterplanbbe.common.exception.GlobalException;
+import com.example.masterplanbbe.domain.entity.Spec;
 import com.example.masterplanbbe.domain.repository.SpecReviewRepository;
 import com.example.masterplanbbe.domain.repository.SpecReviewRepositoryPort;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.entity.SpecReview;
+import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
+import com.example.masterplanbbe.infrastructure.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
