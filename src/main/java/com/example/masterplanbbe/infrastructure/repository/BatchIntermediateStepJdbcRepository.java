@@ -39,12 +39,15 @@ public class BatchIntermediateStepJdbcRepository {
 
     private static final String DELETE_SQL = "TRUNCATE batch_calculation_steps";
 
-    // ALTER TABLE batch_calculation_steps
-    // ADD UNIQUE KEY (latest_exam_id, spec_id);
     private static final String INSERT_SQL = """
             INSERT INTO batch_calculation_steps
             (intermediate_result, latest_exam_id, spec_id)
             VALUES (?, ?, ?)""";
+
+    private static final String UPDATE_SQL = """
+            UPDATE batch_calculation_steps
+            SET intermediate_result = intermediate_result + ?
+            WHERE latest_exam_id = ? AND spec_id = ?""";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -71,6 +74,15 @@ public class BatchIntermediateStepJdbcRepository {
     @Transactional
     public void batchSave(List<? extends IntermediateStepWriteDTO> data) {
         jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
+            ps.setDouble(1, item.intermediateResult()); // intermediate_result
+            ps.setLong(2, item.examId()); // latest_exam
+            ps.setLong(3, item.specId()); // spec
+        });
+    }
+
+    @Transactional
+    public void batchUpdate(List<? extends IntermediateStepWriteDTO> data) {
+        jdbcTemplate.batchUpdate(UPDATE_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam
             ps.setLong(3, item.specId()); // spec
