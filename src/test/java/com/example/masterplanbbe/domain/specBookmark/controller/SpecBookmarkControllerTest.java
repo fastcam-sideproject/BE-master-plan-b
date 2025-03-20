@@ -1,9 +1,9 @@
 package com.example.masterplanbbe.domain.specBookmark.controller;
 
-import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
-import com.example.masterplanbbe.domain.specBookmark.response.CreateSpecBookmarkResponse;
-import com.example.masterplanbbe.domain.specBookmark.service.SpecBookmarkService;
+import com.example.masterplanbbe.presentation.controller.SpecBookmarkController;
+import com.example.masterplanbbe.presentation.response.ApiResponse;
+import com.example.masterplanbbe.presentation.response.CreateSpecBookmarkResponse;
+import com.example.masterplanbbe.application.service.SpecBookmarkService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createExistingMemberFrom;
 import static com.example.masterplanbbe.domain.fixture.SpecBookmarkFixture.createExistingSpecBookmark;
-import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpec;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createExistingSpecFrom;
 import static java.nio.charset.StandardCharsets.*;
 import static org.assertj.core.api.Assertions.assertThat;

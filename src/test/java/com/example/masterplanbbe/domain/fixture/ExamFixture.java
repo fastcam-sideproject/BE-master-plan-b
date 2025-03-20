@@ -1,10 +1,11 @@
 package com.example.masterplanbbe.domain.fixture;
 
-import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.entity.ExamDetail;
-import com.example.masterplanbbe.domain.exam.request.ExamCreateRequest;
-import com.example.masterplanbbe.domain.exam.request.ExamUpdateRequest;
+import com.example.masterplanbbe.application.dto.ExamItemCardDto;
+import com.example.masterplanbbe.application.dto.ExamWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Exam;
+import com.example.masterplanbbe.domain.entity.ExamDetail;
+import com.example.masterplanbbe.presentation.request.ExamCreateRequest;
+import com.example.masterplanbbe.presentation.request.ExamUpdateRequest;
 import com.example.masterplanbbe.utils.TestUtils;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -34,7 +35,7 @@ public class ExamFixture {
                 LocalDate.now().minusDays(7),
                 LocalDate.now().minusDays(3),
                 LocalDate.now().plusDays(2),
-                examDetail
+                examDetail.getId()
         );
     }
 
@@ -42,9 +43,22 @@ public class ExamFixture {
         return new ExamUpdateRequest(
                 name,
                 exam.getParticipantCount(),
-                exam.getApplyStartDate().minusDays(1),
-                exam.getApplyEndDate().plusDays(1),
-                exam.getExamStartDate().minusDays(1)
+                exam.getApplyStartDate(),
+                exam.getApplyEndDate(),
+                exam.getExamStartDate()
+        );
+    }
+
+    public static ExamWithDetailsDto createExamWithDetailsDto(Exam exam) {
+        return new ExamWithDetailsDto(
+                exam.getName(),
+                exam.getExamDetail().getSpec().getIssuingOrganization(),
+                exam.getExamDetail().getSpec().getCertificationType(),
+                false,
+                exam.getExamDetail().getPreparation(),
+                exam.getExamDetail().getEligibility(),
+                exam.getExamDetail().getExamStructure(),
+                exam.getExamDetail().getPassingCriteria()
         );
     }
 
@@ -57,7 +71,7 @@ public class ExamFixture {
     public static ExamItemCardDto createExamItemCardDto(Exam exam, boolean isBookmarked) {
         return new ExamItemCardDto(
                 exam.getName(),
-                exam.getExamDetail().getSpec().getCategory(),
+                exam.getExamDetail().getSpec().getSpecCategory(),
                 exam.getApplyStartDate(),
                 exam.getExamStartDate(),
                 isBookmarked

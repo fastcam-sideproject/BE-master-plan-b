@@ -1,17 +1,18 @@
 package com.example.masterplanbbe.domain.exam.repository;
 
-import com.example.masterplanbbe.common.page.CustomPage;
-import com.example.masterplanbbe.common.request.CustomPageRequest;
-import com.example.masterplanbbe.domain.exam.dto.ExamItemCardDto;
-import com.example.masterplanbbe.domain.exam.dto.ExamWithDetailsDto;
-import com.example.masterplanbbe.domain.exam.entity.Exam;
-import com.example.masterplanbbe.domain.exam.enums.ExamSortOption;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.member.repository.MemberRepository;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.spec.repository.SpecRepository;
-import com.example.masterplanbbe.domain.specBookmark.entity.SpecBookmark;
-import com.example.masterplanbbe.domain.specBookmark.repository.SpecBookmarkRepository;
+import com.example.masterplanbbe.domain.repository.ExamRepositoryPort;
+import com.example.masterplanbbe.infrastructure.sort.page.CustomPage;
+import com.example.masterplanbbe.presentation.request.CustomPageRequest;
+import com.example.masterplanbbe.application.dto.ExamItemCardDto;
+import com.example.masterplanbbe.application.dto.ExamWithDetailsDto;
+import com.example.masterplanbbe.domain.entity.Exam;
+import com.example.masterplanbbe.domain.enums.ExamSortOption;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.domain.repository.MemberRepository;
+import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.repository.SpecRepository;
+import com.example.masterplanbbe.domain.entity.SpecBookmark;
+import com.example.masterplanbbe.domain.repository.SpecBookmarkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +22,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static com.example.masterplanbbe.common.exception.ErrorCode.*;
-import static com.example.masterplanbbe.common.exception.GlobalException.*;
-import static com.example.masterplanbbe.domain.exam.enums.ExamSortOption.START_DATE;
+import static com.example.masterplanbbe.infrastructure.exception.ErrorCode.*;
+import static com.example.masterplanbbe.infrastructure.exception.GlobalException.*;
+import static com.example.masterplanbbe.domain.enums.ExamSortOption.START_DATE;
 import static com.example.masterplanbbe.domain.fixture.ExamFixture.createExam;
 import static com.example.masterplanbbe.domain.fixture.MemberFixture.createMember;
 import static com.example.masterplanbbe.domain.fixture.SpecFixture.createSpec;
