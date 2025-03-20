@@ -1,7 +1,7 @@
-package com.example.masterplanbbe.domain.specReview.repository;
+package com.example.masterplanbbe.domain.repository;
 
 import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
+import com.example.masterplanbbe.domain.entity.SpecReview;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

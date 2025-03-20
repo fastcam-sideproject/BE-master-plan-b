@@ -1,9 +1,9 @@
-package com.example.masterplanbbe.domain.specReview.controller;
+package com.example.masterplanbbe.presentation.controller;
 
 import com.example.masterplanbbe.common.response.ApiResponse;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
-import com.example.masterplanbbe.domain.specReview.serivce.SpecReviewService;
+import com.example.masterplanbbe.presentation.request.SpecReviewRequest;
+import com.example.masterplanbbe.presentation.response.SpecReviewResponse;
+import com.example.masterplanbbe.domain.service.SpecReviewService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

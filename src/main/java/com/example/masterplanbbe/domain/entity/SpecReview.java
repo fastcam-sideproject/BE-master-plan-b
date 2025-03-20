@@ -1,10 +1,8 @@
-package com.example.masterplanbbe.domain.specReview.entity;
+package com.example.masterplanbbe.domain.entity;
 
 import com.example.masterplanbbe.domain.common.FullAuditEntity;
-import com.example.masterplanbbe.domain.entity.Member;
-import com.example.masterplanbbe.domain.entity.Spec;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
-import com.example.masterplanbbe.domain.specReview.enums.*;
+import com.example.masterplanbbe.domain.enums.*;
+import com.example.masterplanbbe.presentation.request.SpecReviewRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

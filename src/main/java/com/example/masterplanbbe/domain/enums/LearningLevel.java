@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.specReview.enums;
+package com.example.masterplanbbe.domain.enums;
 
 public enum LearningLevel {
     전공자,

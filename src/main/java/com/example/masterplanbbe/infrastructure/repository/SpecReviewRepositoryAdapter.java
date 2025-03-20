@@ -1,9 +1,11 @@
-package com.example.masterplanbbe.domain.specReview.repository;
+package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.common.exception.GlobalException;
+import com.example.masterplanbbe.domain.repository.SpecReviewRepository;
+import com.example.masterplanbbe.domain.repository.SpecReviewRepositoryPort;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
+import com.example.masterplanbbe.domain.entity.SpecReview;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class SpecReviewRepositoryAdapter implements SpecReviewRepositoryPort{
+public class SpecReviewRepositoryAdapter implements SpecReviewRepositoryPort {
 
     private final SpecReviewRepository specReviewRepository;
 

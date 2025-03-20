@@ -1,9 +1,9 @@
-package com.example.masterplanbbe.domain.specReview.repository;
+package com.example.masterplanbbe.domain.repository;
 
 import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.post.entity.LikeSpecReview;
+import com.example.masterplanbbe.domain.entity.LikeSpecReview;
 import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
+import com.example.masterplanbbe.domain.entity.SpecReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikeSpecReviewRepository extends JpaRepository<LikeSpecReview, Long> {

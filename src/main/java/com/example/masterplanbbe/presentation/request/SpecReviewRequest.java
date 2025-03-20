@@ -1,9 +1,9 @@
-package com.example.masterplanbbe.domain.specReview.dto;
+package com.example.masterplanbbe.presentation.request;
 
+import com.example.masterplanbbe.domain.enums.*;
 import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
-import com.example.masterplanbbe.domain.specReview.enums.*;
+import com.example.masterplanbbe.domain.entity.SpecReview;
 
 public record SpecReviewRequest(
         Difficulty difficulty,

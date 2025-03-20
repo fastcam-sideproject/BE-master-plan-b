@@ -1,10 +1,8 @@
-package com.example.masterplanbbe.domain.specReview.controller;
+package com.example.masterplanbbe.presentation.controller;
 
 
-import com.example.masterplanbbe.domain.post.entity.LikeSpecReview;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
-import com.example.masterplanbbe.domain.specReview.serivce.LikeSpecReviewService;
+import com.example.masterplanbbe.presentation.response.SpecReviewResponse;
+import com.example.masterplanbbe.application.service.LikeSpecReviewService;
 import com.example.masterplanbbe.presentation.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

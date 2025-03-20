@@ -1,8 +1,8 @@
-package com.example.masterplanbbe.domain.specReview.serivce;
+package com.example.masterplanbbe.application.service;
 
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
-import com.example.masterplanbbe.domain.specReview.repository.SpecReviewRepositoryPort;
+import com.example.masterplanbbe.presentation.response.SpecReviewResponse;
+import com.example.masterplanbbe.domain.entity.SpecReview;
+import com.example.masterplanbbe.domain.repository.SpecReviewRepositoryPort;
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

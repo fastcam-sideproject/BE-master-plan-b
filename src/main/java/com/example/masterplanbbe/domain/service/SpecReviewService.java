@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.specReview.serivce;
+package com.example.masterplanbbe.domain.service;
 
 import com.example.masterplanbbe.common.exception.ErrorCode;
 import com.example.masterplanbbe.common.exception.GlobalException;
@@ -6,10 +6,10 @@ import com.example.masterplanbbe.domain.member.entity.Member;
 import com.example.masterplanbbe.domain.member.repository.MemberRepositoryAdapter;
 import com.example.masterplanbbe.domain.spec.entity.Spec;
 import com.example.masterplanbbe.domain.spec.repository.SpecRepository;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
-import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
-import com.example.masterplanbbe.domain.specReview.repository.SpecReviewRepositoryAdapter;
+import com.example.masterplanbbe.presentation.request.SpecReviewRequest;
+import com.example.masterplanbbe.presentation.response.SpecReviewResponse;
+import com.example.masterplanbbe.domain.entity.SpecReview;
+import com.example.masterplanbbe.infrastructure.repository.SpecReviewRepositoryAdapter;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

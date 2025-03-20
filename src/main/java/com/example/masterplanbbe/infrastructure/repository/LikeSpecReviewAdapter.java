@@ -1,14 +1,16 @@
-package com.example.masterplanbbe.domain.specReview.repository;
+package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.post.entity.LikeSpecReview;
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
+import com.example.masterplanbbe.domain.entity.LikeSpecReview;
+import com.example.masterplanbbe.domain.entity.SpecReview;
+import com.example.masterplanbbe.domain.repository.LikeSpecReviewRepository;
+import com.example.masterplanbbe.domain.repository.LikeSpecReviewRepositoryPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @AllArgsConstructor
-public class LikeSpecReviewAdapter implements LikeSpecReviewRepositoryPort{
+public class LikeSpecReviewAdapter implements LikeSpecReviewRepositoryPort {
 
     private final LikeSpecReviewRepository likeSpecReviewRepository;
 

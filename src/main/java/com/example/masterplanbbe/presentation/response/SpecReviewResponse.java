@@ -1,7 +1,7 @@
-package com.example.masterplanbbe.domain.specReview.dto;
+package com.example.masterplanbbe.presentation.response;
 
-import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
-import com.example.masterplanbbe.domain.specReview.enums.*;
+import com.example.masterplanbbe.domain.entity.SpecReview;
+import com.example.masterplanbbe.domain.enums.*;
 
 public record SpecReviewResponse(
         Long id,
