@@ -27,33 +27,34 @@ public class ChatRestController {
     private final JwtService jwtService;
 
     @Operation(summary = "Redis에서 최신 채팅 메시지 가져오기")
-    @GetMapping("/recent")
-    public ResponseEntity<?> getRecentChatsFromRedis(@RequestParam Long specId,
-                                                     @RequestParam(defaultValue = "50") int size) {
+    @GetMapping("/{specId}/recent")
+    public ResponseEntity<List<ChatResponse>> getRecentChatsFromRedis(@PathVariable("specId") Long specId,
+                                                                      @RequestParam(name = "size", defaultValue = "50") int size) {
         List<ChatResponse> recentMessages = chatService.getRecentChatsFromRedis(specId, size);
-        return ResponseEntity.ok().body(recentMessages);
+        return ResponseEntity.ok(recentMessages);
     }
 
+
     @Operation(summary = "MySQL에서 채팅 메시지 가져오기")
-    @GetMapping
-    public ResponseEntity<?> getChatsFromMySQL(@RequestParam Long lastChatId,
-                                               @RequestParam Long specId,
-                                               @RequestParam(defaultValue = "50") @Min(1) @Max(100) int size) {
+    @GetMapping("/{specId}")
+    public ResponseEntity<Slice<ChatResponse>> getChatsFromMySQL(@PathVariable("specId") Long specId,
+                                                                 @RequestParam(name = "lastChatId") Long lastChatId,
+                                                                 @RequestParam(defaultValue = "50") @Min(1) @Max(100) int size) {
         Pageable pageable = PageRequest.of(0, size);
         Slice<ChatResponse> chatMessages = chatService.getChatMessage(lastChatId, specId, pageable);
-        return ResponseEntity.ok().body(chatMessages);
+        return ResponseEntity.ok(chatMessages);
     }
 
     @Operation(summary = "채팅 메시지 삭제하기")
-    @DeleteMapping
-    public ResponseEntity<?> deleteChat(@RequestParam Long specId,
-                                        @RequestParam Long chatId,
-                                        @RequestParam Long memberId,
-                                        @RequestHeader("Authorization") String token) {
+    @DeleteMapping("/{specId}/{chatId}")
+    public ResponseEntity<String> deleteChat(@PathVariable("specId") Long specId,
+                                             @PathVariable("chatId") Long chatId,
+                                             @RequestParam(name = "memberId") Long memberId,
+                                             @RequestHeader("Authorization") String token) {
         MemberRoleEnum role = jwtService.getRoleFromAccessToken(token);
         boolean deleted = chatService.deleteChat(specId, chatId, memberId, role);
         if (!deleted) {
-            //삭제 실패
+            return ResponseEntity.badRequest().body("삭제할 수 없는 메시지입니다.");
         }
         return ResponseEntity.ok("채팅 메시지가 성공적으로 삭제되었습니다.");
     }
