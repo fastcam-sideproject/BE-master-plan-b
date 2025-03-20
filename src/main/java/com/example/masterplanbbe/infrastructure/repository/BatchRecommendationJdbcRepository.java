@@ -32,8 +32,6 @@ public class BatchRecommendationJdbcRepository {
 
     private static final String DELETE_SQL = "TRUNCATE recommendations;";
 
-//    ALTER TABLE recommendations
-//    ADD UNIQUE KEY (age_group, spec_id);
     private static final String INSERT_SQL = """
             INSERT INTO recommendations (age_group, score, spec_id)
             VALUES (?, ?, ?)""";

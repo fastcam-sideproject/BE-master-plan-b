@@ -24,8 +24,6 @@ public class JobSpec {
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
-    public JobSpec(JobRole jobRole, Spec spec) {
-        this.jobRole = jobRole;
-        this.spec = spec;
-    }
+    @Column(name = "recommendation_score")
+    private Long recommendationScore;
 }
