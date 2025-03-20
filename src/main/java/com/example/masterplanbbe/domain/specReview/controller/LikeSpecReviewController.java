@@ -1,10 +1,11 @@
 package com.example.masterplanbbe.domain.specReview.controller;
 
-import com.example.masterplanbbe.common.response.ApiResponse;
+
 import com.example.masterplanbbe.domain.post.entity.LikeSpecReview;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
 import com.example.masterplanbbe.domain.specReview.serivce.LikeSpecReviewService;
+import com.example.masterplanbbe.presentation.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

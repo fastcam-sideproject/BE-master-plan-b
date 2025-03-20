@@ -1,20 +1,13 @@
 package com.example.masterplanbbe.domain.specReview.serivce;
 
-import com.example.masterplanbbe.domain.post.dto.PostResponse;
-import com.example.masterplanbbe.domain.post.entity.Post;
-import com.example.masterplanbbe.domain.post.repository.LikePostRepositoryPort;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewResponse;
 import com.example.masterplanbbe.domain.specReview.entity.SpecReview;
 import com.example.masterplanbbe.domain.specReview.repository.SpecReviewRepositoryPort;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
