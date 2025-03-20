@@ -30,10 +30,10 @@ public class BatchRecommendationJdbcRepository {
             GROUP BY bss.spec_id, bss.latest_exam_id, age_group
             LIMIT ? OFFSET ?""";
 
-    private static final String DELETE_SQL = "TRUNCATE recommendations;";
+    private static final String DELETE_SQL = "TRUNCATE batch_age_calculation_steps;";
 
     private static final String INSERT_SQL = """
-            INSERT INTO recommendations (age_group, score, spec_id)
+            INSERT INTO batch_age_calculation_steps (age_group, score, spec_id)
             VALUES (?, ?, ?)""";
 
     private final JdbcTemplate jdbcTemplate;

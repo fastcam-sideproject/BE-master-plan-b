@@ -1,9 +1,9 @@
 package com.example.masterplanbbe.domain.repository;
 
-import com.example.masterplanbbe.domain.entity.Recommendation;
+import com.example.masterplanbbe.domain.entity.BatchAgeCalculationStep;
 
 import java.util.List;
 
 public interface CustomRecommendationRepository {
-    List<Recommendation> findALl();
+    List<BatchAgeCalculationStep> findALl();
 }

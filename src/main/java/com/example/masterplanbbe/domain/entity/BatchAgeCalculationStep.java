@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "recommendations")
+@Table(name = "batch_age_calculation_steps")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Recommendation {
+public class BatchAgeCalculationStep {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

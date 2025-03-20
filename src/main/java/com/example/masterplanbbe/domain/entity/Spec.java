@@ -30,7 +30,7 @@ public class Spec extends FullAuditEntity {
     private SpecCategory specCategory; // 삭제 예정 필드(연관된 서비스 코드들 삭제 요망)
 
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<JobSpec> jobSpecs = new HashSet<>();
+    private Set<JobRoleSpec> jobRoleSpecs = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
