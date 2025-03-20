@@ -1,8 +1,8 @@
 package com.example.masterplanbbe.domain.specReview.entity;
 
-import com.example.masterplanbbe.common.domain.FullAuditEntity;
-import com.example.masterplanbbe.domain.member.entity.Member;
-import com.example.masterplanbbe.domain.spec.entity.Spec;
+import com.example.masterplanbbe.domain.common.FullAuditEntity;
+import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.domain.entity.Spec;
 import com.example.masterplanbbe.domain.specReview.dto.SpecReviewRequest;
 import com.example.masterplanbbe.domain.specReview.enums.*;
 import jakarta.persistence.*;
