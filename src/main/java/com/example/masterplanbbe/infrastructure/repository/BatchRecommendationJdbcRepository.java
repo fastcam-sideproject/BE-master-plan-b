@@ -34,11 +34,9 @@ public class BatchRecommendationJdbcRepository {
 
 //    ALTER TABLE recommendations
 //    ADD UNIQUE KEY (age_group, spec_id);
-    private static final String UPSERT_SQL = """
+    private static final String INSERT_SQL = """
             INSERT INTO recommendations (age_group, score, spec_id)
-            VALUES (?, ?, ?)
-            ON DUPLICATE KEY UPDATE
-            score = VALUES(score)""";
+            VALUES (?, ?, ?)""";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -53,7 +51,7 @@ public class BatchRecommendationJdbcRepository {
 
     @Transactional
     public void batchSave(List<? extends RecommendationWriteDTO> data) {
-        jdbcTemplate.batchUpdate(UPSERT_SQL, data, data.size(), (ps, item) -> {
+        jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
             ps.setString(1, item.ageGroup().getAge()); // age
             ps.setDouble(2, item.score()); // score
             ps.setLong(3, item.specId()); // spec

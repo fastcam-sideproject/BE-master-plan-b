@@ -21,6 +21,8 @@ public class JdbcBatchProcess {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
+    private final PreFirstTasklet preFirstTasklet;
+
     private final FirstStepReader firstStepReader;
     private final FirstStepProcess firstStepProcess;
     private final FirstStepWriter firstStepWriter;
@@ -38,10 +40,19 @@ public class JdbcBatchProcess {
         log.info("추천 점수 연산 배치 처리 작업 실시");
 
         return new JobBuilder("jdbcBatchJob", jobRepository)
-//                .start(initStep())
-                .start(fistStep())
+                .start(preStep())
+                .next(fistStep())
                 .next(secondStep())
                 .next(thirdStep())
+                .build();
+    }
+
+    @Bean
+    public Step preStep() {
+        log.info("Pre Step : 모든 중간 연산 및 최종 연산 테이블 비우기");
+
+        return new StepBuilder("preStep", jobRepository)
+                .tasklet(preFirstTasklet, transactionManager)
                 .build();
     }
 
