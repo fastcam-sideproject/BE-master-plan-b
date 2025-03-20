@@ -117,19 +117,32 @@ public class RedisConfig {
     /**
      * RedisTemplate 설정 (채팅 메시지 저장용)
      */
-    @Bean(name = "chatTemplate")
-    public RedisTemplate<String, Object> chatRedisTemplate(RedisConnectionFactory redisConnectionFactory,
+    @Bean(name = "chatPubSubTemplate")
+    public RedisTemplate<String, Object> chatPubSubTemplate(RedisConnectionFactory redisConnectionFactory,
                                                            @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory);
 
-        // Jackson을 이용한 직렬화 설정
+        // Object -> String 이용한 직렬화 설정
         Jackson2JsonRedisSerializer<Object> serializer = new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
-
         template.setKeySerializer(new StringRedisSerializer()); // 키 한글 깨짐 방지
         template.setValueSerializer(serializer); // 객체 직렬화 (JSON)
         template.setHashKeySerializer(new StringRedisSerializer());
         template.setHashValueSerializer(serializer);
+
+        template.afterPropertiesSet();
+        return template;
+    }
+
+    @Bean(name = "chatStringTemplate")
+    public RedisTemplate<String, String> chatStringTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory);
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new StringRedisSerializer());
 
         template.afterPropertiesSet();
         return template;
