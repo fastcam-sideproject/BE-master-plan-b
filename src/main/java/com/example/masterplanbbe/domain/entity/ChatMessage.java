@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.entity;
 
+import com.example.masterplanbbe.application.dto.ChatRedisDto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,12 +36,12 @@ public class ChatMessage {
     @Column(name = "parent_id")
     private Long parentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 자기 참조 관계
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id", insertable = false, updatable = false)
-    private ChatMessage parentMessage;  // 부모 메시지 객체 참조
+    private ChatMessage parentMessage;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", insertable = false, updatable = false)  // ✅ 중복 매핑 방지
+    @JoinColumn(name = "member_id", insertable = false, updatable = false)
     private Member member;
 
     @JsonCreator
@@ -58,6 +59,17 @@ public class ChatMessage {
                 .content(content)
                 .sendAt(sendAt)
                 .parentId(parentId)
+                .build();
+    }
+
+    public static ChatMessage from(ChatRedisDto chatRedisDto) {
+        return ChatMessage.builder()
+                .id(chatRedisDto.id())
+                .specId(chatRedisDto.specId())
+                .memberId(chatRedisDto.memberId())
+                .content(chatRedisDto.content())
+                .sendAt(chatRedisDto.sendAt())
+                .parentId(chatRedisDto.parentId())
                 .build();
     }
 

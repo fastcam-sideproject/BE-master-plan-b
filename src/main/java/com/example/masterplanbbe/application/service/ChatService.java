@@ -25,28 +25,30 @@ public class ChatService {
     private final ChatMessageRepository chatMessageRepository;
     private final ChatRedisRepositoryAdapter chatRedisRepositoryAdapter;
     private final SnowflakeIdGenerator snowflakeIdGenerator;
-    private final ObjectMapper objectMapper;
+    private final RedisPublisher redisPublisher;
 
     @Autowired
     public ChatService(ChatMessageRepository chatMessageRepository,
                        ChatRedisRepositoryAdapter chatRedisRepositoryAdapter,
                        SnowflakeIdGenerator snowflakeIdGenerator,
-                       @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
+                       RedisPublisher redisPublisher) {
         this.chatMessageRepository = chatMessageRepository;
         this.chatRedisRepositoryAdapter = chatRedisRepositoryAdapter;
         this.snowflakeIdGenerator = snowflakeIdGenerator;
-        this.objectMapper = objectMapper;
+        this.redisPublisher = redisPublisher;
     }
 
     /**
      * 채팅을 Redis에 저장
      */
-    public void saveChatMessage(ChatRequest chatRequest) {
+    public void saveAndPublishChatMessage(ChatRequest chatRequest) {
         try {
             long snowflakeId = snowflakeIdGenerator.nextId();
             ChatRedisDto chatRedisDto = ChatRedisDto.from(snowflakeId, chatRequest);
-            String jsonMessage = objectMapper.writeValueAsString(chatRedisDto);
-            chatRedisRepositoryAdapter.saveMessage(chatRedisDto.specId(), jsonMessage);
+
+            redisPublisher.publish("spec:" + chatRedisDto.specId(), chatRedisDto);
+
+            chatRedisRepositoryAdapter.saveMessage(chatRedisDto.specId(), chatRedisDto);
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -57,20 +59,12 @@ public class ChatService {
      */
     public List<ChatResponse> getRecentChatsFromRedis(Long specId, int size) {
         try {
-            List<String> messages = chatRedisRepositoryAdapter.getMessagesInRange(specId, 0, (size - 1));
-            return messages.stream().map(msg -> {
-                        try {
-                            ChatRedisDto chatRedisDto = objectMapper.readValue(msg, ChatRedisDto.class);
-                            return ChatResponse.from(chatRedisDto);
-                        } catch (Exception e) {
-                            log.error(e.getMessage());
-                            return null;
-                        }
-                    })
-                    .filter(Objects::nonNull)
+            List<ChatRedisDto> messages = chatRedisRepositoryAdapter.getMessagesInRange(specId, 0, size - 1); // 🔥 JSON 변환 없이 바로 객체 가져오기
+            return messages.stream()
+                    .map(ChatResponse::from)
                     .toList();
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Redis에서 최신 채팅 조회 중 오류 발생: {}", e.getMessage());
             return List.of();
         }
     }
@@ -101,17 +95,16 @@ public class ChatService {
      */
     private boolean deleteFromRedis(Long specId, Long chatId, Long memberId, MemberRoleEnum role) {
         try {
-            List<String> messages = chatRedisRepositoryAdapter.getMessagesInRange(specId, 0, -1);
-            for (String msg : messages) {
-                ChatRedisDto chatRedisDto = objectMapper.readValue(msg, ChatRedisDto.class);
+            List<ChatRedisDto> messages = chatRedisRepositoryAdapter.getMessagesInRange(specId, 0, -1);
+            for (ChatRedisDto chatRedisDto : messages) {
                 if (role == MemberRoleEnum.ADMIN ||
-                        chatRedisDto.id().equals(chatId) && (chatRedisDto.memberId().equals(memberId))) {
-                    Long removeCount = chatRedisRepositoryAdapter.deleteMessage(specId, msg);
-                    return removeCount != null && removeCount != 0;
+                        (chatRedisDto.id().equals(chatId) && chatRedisDto.memberId().equals(memberId))) {
+                    Long removeCount = chatRedisRepositoryAdapter.deleteMessage(specId, chatRedisDto);
+                    return removeCount != null && removeCount > 0;
                 }
             }
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Redis에서 메시지 삭제 중 오류 발생: {}", e.getMessage());
         }
         return false;
     }
@@ -133,5 +126,17 @@ public class ChatService {
             log.error(e.getMessage());
         }
         return false;
+    }
+
+    public void enterChatRoom(Long specId, Long memberId) {
+        chatRedisRepositoryAdapter.addUserToChatRoom(specId, memberId);
+    }
+
+    public void leaveChatRoom(Long specId, Long memberId) {
+        chatRedisRepositoryAdapter.removeUserFromChatRoom(specId, memberId);
+    }
+
+    public Long getChatRoomMemberCount(Long specId) {
+        return chatRedisRepositoryAdapter.getChatRoomUserCount(specId);
     }
 }
