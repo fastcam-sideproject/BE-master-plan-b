@@ -1,5 +1,6 @@
 package com.example.masterplanbbe;
 
+import com.example.masterplanbbe.application.service.*;
 import com.example.masterplanbbe.infrastructure.configuration.MailConfig;
 import com.example.masterplanbbe.infrastructure.configuration.RedisConfig;
 import com.example.masterplanbbe.infrastructure.configuration.SecurityConfig;
@@ -9,17 +10,13 @@ import com.example.masterplanbbe.infrastructure.security.jwt.JwtService;
 import com.example.masterplanbbe.infrastructure.security.jwt.TokenUtils;
 import com.example.masterplanbbe.presentation.controller.*;
 import com.example.masterplanbbe.infrastructure.repository.ChatRedisRepositoryAdapter;
-import com.example.masterplanbbe.application.service.ChatBatchService;
-import com.example.masterplanbbe.application.service.ChatService;
-import com.example.masterplanbbe.application.service.RedisPublisher;
-import com.example.masterplanbbe.application.service.RedisSubscriber;
 import com.example.masterplanbbe.infrastructure.util.SnowflakeIdGenerator;
 import com.example.masterplanbbe.domain.service.MemberService;
-import com.example.masterplanbbe.application.service.LikePostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -83,6 +80,9 @@ class MasterPlanBBeApplicationTests {
 
 	@MockBean
 	LikePostService likePostService;
+
+	@MockBean
+	LikeSpecReviewService likeSpecReviewService;
 
 	@MockBean
 	PasswordEncoder passwordEncoder;
