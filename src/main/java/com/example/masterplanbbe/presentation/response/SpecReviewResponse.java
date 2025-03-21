@@ -15,7 +15,7 @@ public record SpecReviewResponse(
         TimeSufficiency timeSufficiency,
         Integer viewCount,
         Integer likeCount,
-        String studyMethod,
+        StudyMethod studyMethod,
         String tipTitle,
         String tipDescription
 ) {
