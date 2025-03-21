@@ -11,6 +11,7 @@ public class DeployController {
     @Value("${server.env}")
     private String env;
 
+    // + ALB Health Check
     @GetMapping("/env")
     public ResponseEntity<?> env() {
         return ResponseEntity.ok(env);
