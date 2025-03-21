@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 @EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -106,6 +106,10 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/create").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/member/login").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/member/test").permitAll()
+                .requestMatchers("/ws", "/ws/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/chat/*/recent").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/chat/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/chat/*/users/count").permitAll()
                 .anyRequest().authenticated()
         );
 

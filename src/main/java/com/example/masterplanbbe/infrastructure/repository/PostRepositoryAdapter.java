@@ -35,9 +35,9 @@ public class PostRepositoryAdapter implements PostRepositoryPort {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteById(Long id) {
         Post post = findById(id);
-        postRepository.delete(post);
+        postRepository.deleteById(id);
     }
 
     @Override

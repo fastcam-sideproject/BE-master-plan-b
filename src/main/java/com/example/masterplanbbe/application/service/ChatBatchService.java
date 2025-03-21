@@ -1,14 +1,12 @@
 package com.example.masterplanbbe.application.service;
 
+import com.example.masterplanbbe.application.dto.ChatRedisDto;
 import com.example.masterplanbbe.domain.entity.ChatMessage;
 import com.example.masterplanbbe.domain.repository.ChatBatchRepositoryPort;
 import com.example.masterplanbbe.infrastructure.repository.ChatRedisRepositoryAdapter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +20,12 @@ public class ChatBatchService {
 
     private final ChatRedisRepositoryAdapter chatRedisRepositoryAdapter;
     private final ChatBatchRepositoryPort chatBatchRepository;
-    private final ObjectMapper objectMapper;
 
     @Autowired
     public ChatBatchService(ChatRedisRepositoryAdapter chatRedisRepositoryAdapter,
-                            ChatBatchRepositoryPort chatBatchRepository,
-                            @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
+                            ChatBatchRepositoryPort chatBatchRepository) {
         this.chatRedisRepositoryAdapter = chatRedisRepositoryAdapter;
         this.chatBatchRepository = chatBatchRepository;
-        this.objectMapper = objectMapper;
     }
 
     @Transactional
@@ -56,16 +51,11 @@ public class ChatBatchService {
     private List<ChatMessage> findOldMessages(Long specId) {
         List<ChatMessage> chatMessages = new ArrayList<>();
         try {
-            List<String> oldMessages = chatRedisRepositoryAdapter.getMessagesInRange(specId, MAX_MESSAGES, -1);
+            List<ChatRedisDto> oldMessages = chatRedisRepositoryAdapter.getMessagesInRange(specId, MAX_MESSAGES, -1);
 
             if (oldMessages != null && !oldMessages.isEmpty()) {
-                for (String jsonMessage : oldMessages) {
-                    try {
-                        ChatMessage chatMessage = objectMapper.readValue(jsonMessage, ChatMessage.class);
-                        chatMessages.add(chatMessage);
-                    } catch (JsonProcessingException e) {
-                        log.error(e.getMessage());
-                    }
+                for (ChatRedisDto message : oldMessages) {
+                    chatMessages.add(ChatMessage.from(message));
                 }
             }
             chatRedisRepositoryAdapter.trimMessages(specId, MAX_MESSAGES);

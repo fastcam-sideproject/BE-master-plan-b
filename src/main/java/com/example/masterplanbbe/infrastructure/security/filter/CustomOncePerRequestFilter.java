@@ -32,6 +32,13 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
             // Monitoring
             "/actuator",
 
+            // WebSocket
+            "/ws",
+            "/ws/**",
+            "/api/v1/chat/*/recent",
+            "/api/v1/chat/*",
+            "/api/v1/chat/*/users/count",
+
             // Batch
             "/batch"
     );
