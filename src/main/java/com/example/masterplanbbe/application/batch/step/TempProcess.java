@@ -40,6 +40,6 @@ public class TempProcess implements ItemProcessor<TempDTO, NonAgeCalculationWrit
                 + totalLikesPoint * LIKE_COEFFICIENT // 좋아요 수 가중치
                 + totalViewPoint * VIEW_COEFFICIENT; // 조회수 가중치
 
-        return null;
+        return new NonAgeCalculationWriteDTO(item.specId(), item.examId(), intermediateResult);
     }
 }
