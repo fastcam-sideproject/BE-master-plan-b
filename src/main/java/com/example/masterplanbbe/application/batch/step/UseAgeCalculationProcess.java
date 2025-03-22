@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class ThirdStepProcess implements ItemProcessor<ThirdStepReadDTO, UseAgeCalculationWriteDTO> {
+public class UseAgeCalculationProcess implements ItemProcessor<ThirdStepReadDTO, UseAgeCalculationWriteDTO> {
 
     @Override
     public UseAgeCalculationWriteDTO process(ThirdStepReadDTO item) {

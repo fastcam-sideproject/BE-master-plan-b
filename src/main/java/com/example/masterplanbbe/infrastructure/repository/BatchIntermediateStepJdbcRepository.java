@@ -1,8 +1,6 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
-import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
 import com.example.masterplanbbe.application.batch.dto.NonAgeCalculationWriteDTO;
-import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
 import com.example.masterplanbbe.application.batch.dto.PreCalculationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

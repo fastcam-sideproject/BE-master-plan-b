@@ -15,7 +15,7 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ThirdStepReader implements ItemReader<ThirdStepReadDTO> {
+public class UseAgeCalculationReader implements ItemReader<ThirdStepReadDTO> {
 
     private final BatchRecommendationJdbcRepository batchRecommendationJdbcRepository;
 
