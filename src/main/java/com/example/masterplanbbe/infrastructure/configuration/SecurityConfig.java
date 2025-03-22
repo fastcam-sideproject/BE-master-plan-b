@@ -95,6 +95,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(a -> a
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 요청 허용(CORS 이슈 극복)
                 .requestMatchers(HttpMethod.GET, "/env").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
                 .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**")
