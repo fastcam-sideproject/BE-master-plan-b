@@ -2,7 +2,7 @@ package com.example.masterplanbbe.application.batch.dto;
 
 import java.time.LocalDate;
 
-public record TempDTO(
+public record PreCalculationDTO(
         Long examId,
         Long specId,
         LocalDate applyEndDate,

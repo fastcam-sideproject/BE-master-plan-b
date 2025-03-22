@@ -3,7 +3,7 @@ package com.example.masterplanbbe.infrastructure.repository;
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
 import com.example.masterplanbbe.application.batch.dto.NonAgeCalculationWriteDTO;
 import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.TempDTO;
+import com.example.masterplanbbe.application.batch.dto.PreCalculationDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -98,8 +98,8 @@ public class BatchIntermediateStepJdbcRepository {
     }
 
     @Transactional(readOnly = true)
-    public List<TempDTO> findView(int pageSize, int offset) {
-        return jdbcTemplate.query(SUB_QUERY_JOIN_SQL, (rs, rowNum) -> new TempDTO(
+    public List<PreCalculationDTO> findView(int pageSize, int offset) {
+        return jdbcTemplate.query(SUB_QUERY_JOIN_SQL, (rs, rowNum) -> new PreCalculationDTO(
                 rs.getLong("exam_id"),
                 rs.getLong("spec_id"),
                 rs.getDate("apply_end_date").toLocalDate(),

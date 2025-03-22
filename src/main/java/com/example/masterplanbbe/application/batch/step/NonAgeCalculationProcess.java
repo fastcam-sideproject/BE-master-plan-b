@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.NonAgeCalculationWriteDTO;
-import com.example.masterplanbbe.application.batch.dto.TempDTO;
+import com.example.masterplanbbe.application.batch.dto.PreCalculationDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @Component
-public class TempProcess implements ItemProcessor<TempDTO, NonAgeCalculationWriteDTO> {
+public class NonAgeCalculationProcess implements ItemProcessor<PreCalculationDTO, NonAgeCalculationWriteDTO> {
 
     private static final double APPLY_COEFFICIENT = 0.5;
     private static final double EXAM_START_COEFFICIENT = 0.3;
@@ -20,7 +20,7 @@ public class TempProcess implements ItemProcessor<TempDTO, NonAgeCalculationWrit
     private static final double VIEW_COEFFICIENT = 0.1;
 
     @Override
-    public NonAgeCalculationWriteDTO process(TempDTO item) throws Exception {
+    public NonAgeCalculationWriteDTO process(PreCalculationDTO item) throws Exception {
         LocalDate today = LocalDate.now();
 
         // 날짜가 가까울수록 높은 점수를 부여하는 역수 방식

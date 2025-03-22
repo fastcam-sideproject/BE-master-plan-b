@@ -8,21 +8,16 @@ import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FirstStepWriter implements ItemWriter<NonAgeCalculationWriteDTO> {
+public class NonAgeCalculationWriter implements ItemWriter<NonAgeCalculationWriteDTO> {
 
     private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
 
     @Override
     public void write(Chunk<? extends NonAgeCalculationWriteDTO> chunk) {
-//        log.info("FirstStepWriter 데이터 : {}", chunk.getItems());
-        batchIntermediateStepJdbcRepository.batchSave(chunk.getItems());
+        log.info("2번쨰 최종 저장: {}", chunk.getItems().size());
+        batchIntermediateStepJdbcRepository.batchUpdate(chunk.getItems());
     }
 }

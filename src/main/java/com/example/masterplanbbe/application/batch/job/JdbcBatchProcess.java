@@ -23,13 +23,10 @@ public class JdbcBatchProcess {
 
     private final PreFirstTasklet preFirstTasklet;
 
-    private final FirstStepReader firstStepReader;
-    private final FirstStepProcess firstStepProcess;
-    private final FirstStepWriter firstStepWriter;
-
-    private final SecondStepReader secondStepReader;
-    private final SecondStepProcess secondStepProcess;
-    private final SecondStepWriter secondStepWriter;
+    // 여기가 최종 확정
+    private final NonAgeCalculationReader nonAgeCalculationReader;
+    private final NonAgeCalculationProcess nonAgeCalculationProcess;
+    private final NonAgeCalculationWriter nonAgeCalculationWriter;
 
     private final ThirdStepReader thirdStepReader;
     private final ThirdStepProcess thirdStepProcess;
@@ -41,8 +38,7 @@ public class JdbcBatchProcess {
 
         return new JobBuilder("jdbcBatchJob", jobRepository)
                 .start(preStep())
-                .next(fistStep())
-                .next(secondStep())
+                .next(nonAgeCalculationStep())
                 .next(thirdStep())
                 .build();
     }
@@ -57,26 +53,14 @@ public class JdbcBatchProcess {
     }
 
     @Bean
-    public Step fistStep() {
-        log.info("Step 1 : 연령대 무관 그룹 불필요 필드 기반 추천점수 중간 연산");
+    public Step nonAgeCalculationStep() {
+        log.info("Step 1 : 연령대 무관 추천점수 중간 연산");
 
-        return new StepBuilder("firstStep", jobRepository)
-                .<FirstStepReadDTO, NonAgeCalculationWriteDTO>chunk(10, transactionManager)
-                .reader(firstStepReader)
-                .processor(firstStepProcess)
-                .writer(firstStepWriter)
-                .build();
-    }
-
-    @Bean
-    public Step secondStep() {
-        log.info("Step 2 : 연령대 무관 그룹 합산 필드 기반 추천점수 중간 연산");
-
-        return new StepBuilder("secondStep", jobRepository)
-                .<SecondStepReadDTO, NonAgeCalculationWriteDTO>chunk(10, transactionManager)
-                .reader(secondStepReader)
-                .processor(secondStepProcess)
-                .writer(secondStepWriter)
+        return new StepBuilder("nonAgeCalculation", jobRepository)
+                .<PreCalculationDTO, NonAgeCalculationWriteDTO>chunk(10, transactionManager)
+                .reader(nonAgeCalculationReader)
+                .processor(nonAgeCalculationProcess)
+                .writer(nonAgeCalculationWriter)
                 .build();
     }
 

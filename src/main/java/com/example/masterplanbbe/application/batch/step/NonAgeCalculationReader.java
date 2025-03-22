@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.application.batch.step;
 
-import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
+import com.example.masterplanbbe.application.batch.dto.PreCalculationDTO;
 import com.example.masterplanbbe.infrastructure.repository.BatchIntermediateStepJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,20 +15,20 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FirstStepReader implements ItemReader<FirstStepReadDTO> {
+public class NonAgeCalculationReader implements ItemReader<PreCalculationDTO> {
 
     private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
 
-    private List<FirstStepReadDTO> data;
+    private List<PreCalculationDTO> data;
     private int offset = 0;
     private int index = 0;
 
     @Override
-    public FirstStepReadDTO read() throws
+    public PreCalculationDTO read() throws
             UnexpectedInputException, ParseException, NonTransientResourceException {
         if (data == null || index >= data.size()) {
             int pageSize = 10;
-            data = batchIntermediateStepJdbcRepository.findFirstView(pageSize, offset);
+            data = batchIntermediateStepJdbcRepository.findView(pageSize, offset);
 
             if (data.isEmpty()) {
                 log.info("step 1 null 반환");
