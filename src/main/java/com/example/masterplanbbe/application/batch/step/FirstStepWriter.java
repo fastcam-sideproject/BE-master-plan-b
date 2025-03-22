@@ -23,14 +23,6 @@ public class FirstStepWriter implements ItemWriter<NonAgeCalculationWriteDTO> {
     @Override
     public void write(Chunk<? extends NonAgeCalculationWriteDTO> chunk) {
 //        log.info("FirstStepWriter 데이터 : {}", chunk.getItems());
-        PriorityQueue<NonAgeCalculationWriteDTO> sortedQueue =
-                new PriorityQueue<>(Comparator
-                        .comparing(NonAgeCalculationWriteDTO::intermediateResult,
-                                Comparator.reverseOrder()));
-
-        sortedQueue.addAll(chunk.getItems());
-
-        List<NonAgeCalculationWriteDTO> sortedList = new ArrayList<>(sortedQueue);
-        batchIntermediateStepJdbcRepository.batchSave(sortedList);
+        batchIntermediateStepJdbcRepository.batchSave(chunk.getItems());
     }
 }
