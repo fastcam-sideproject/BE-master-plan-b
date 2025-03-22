@@ -1,6 +1,6 @@
 package com.example.masterplanbbe.application.batch.step;
 
-import com.example.masterplanbbe.application.batch.dto.ThirdStepReadDTO;
+import com.example.masterplanbbe.application.batch.dto.GroupAgeReadDTO;
 import com.example.masterplanbbe.infrastructure.repository.BatchRecommendationJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,16 +15,16 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UseAgeCalculationReader implements ItemReader<ThirdStepReadDTO> {
+public class UseAgeCalculationReader implements ItemReader<GroupAgeReadDTO> {
 
     private final BatchRecommendationJdbcRepository batchRecommendationJdbcRepository;
 
-    private List<ThirdStepReadDTO> data;
+    private List<GroupAgeReadDTO> data;
     private int offset = 0;
     private int index = 0;
 
     @Override
-    public ThirdStepReadDTO read() throws
+    public GroupAgeReadDTO read() throws
             UnexpectedInputException, ParseException, NonTransientResourceException {
         if (data == null || index >= data.size()) {
             int pageSize = 10;

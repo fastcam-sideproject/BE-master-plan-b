@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.UseAgeCalculationWriteDTO;
-import com.example.masterplanbbe.application.batch.dto.ThirdStepReadDTO;
+import com.example.masterplanbbe.application.batch.dto.GroupAgeReadDTO;
 import com.example.masterplanbbe.domain.enums.AgeGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class UseAgeCalculationProcess implements ItemProcessor<ThirdStepReadDTO, UseAgeCalculationWriteDTO> {
+public class UseAgeCalculationProcess implements ItemProcessor<GroupAgeReadDTO, UseAgeCalculationWriteDTO> {
 
     @Override
-    public UseAgeCalculationWriteDTO process(ThirdStepReadDTO item) {
+    public UseAgeCalculationWriteDTO process(GroupAgeReadDTO item) {
         AgeGroup ageGroup = AgeGroup.EARLY_20S;
 
         if (item.ageGroup().equalsIgnoreCase("LATE_20S")) {
@@ -23,6 +23,6 @@ public class UseAgeCalculationProcess implements ItemProcessor<ThirdStepReadDTO,
             ageGroup = AgeGroup.OVER_30S;
         }
 
-        return new UseAgeCalculationWriteDTO(ageGroup, item.countSum(), item.specId());
+        return new UseAgeCalculationWriteDTO(ageGroup, item.countSum(), item.specId(), item.specName());
     }
 }

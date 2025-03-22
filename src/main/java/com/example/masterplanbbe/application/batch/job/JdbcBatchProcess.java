@@ -69,7 +69,7 @@ public class JdbcBatchProcess {
         log.info("Step 2 : 연령대 기반 그룹 합산 필드 기반 추천점수 최종 연산");
 
         return new StepBuilder("useAgeCalculation", jobRepository)
-                .<ThirdStepReadDTO, UseAgeCalculationWriteDTO>chunk(10, transactionManager)
+                .<GroupAgeReadDTO, UseAgeCalculationWriteDTO>chunk(10, transactionManager)
                 .reader(useAgeCalculationReader)
                 .processor(useAgeCalculationProcess)
                 .writer(useAgeCalculationWriter)

@@ -27,6 +27,9 @@ public class BatchAgeCalculationStep {
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
+    @Column(name = "spec_name")
+    private String specName;
+
     @Column(name = "score", nullable = false)
     private Double score;
 }

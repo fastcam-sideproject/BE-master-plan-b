@@ -40,6 +40,7 @@ public class NonAgeCalculationProcess implements ItemProcessor<PreCalculationDTO
                 + totalLikesPoint * LIKE_COEFFICIENT // 좋아요 수 가중치
                 + totalViewPoint * VIEW_COEFFICIENT; // 조회수 가중치
 
-        return new NonAgeCalculationWriteDTO(item.specId(), item.examId(), intermediateResult);
+        return new NonAgeCalculationWriteDTO(
+                item.specId(), item.specName(), item.examId(), intermediateResult);
     }
 }
