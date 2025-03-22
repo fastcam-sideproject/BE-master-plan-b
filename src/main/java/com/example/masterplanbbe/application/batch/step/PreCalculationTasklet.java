@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PreFirstTasklet implements Tasklet {
+public class PreCalculationTasklet implements Tasklet {
 
     private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
     private final BatchRecommendationJdbcRepository batchRecommendationJdbcRepository;

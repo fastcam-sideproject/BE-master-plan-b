@@ -21,7 +21,7 @@ public class JdbcBatchProcess {
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
 
-    private final PreFirstTasklet preFirstTasklet;
+    private final PreCalculationTasklet preCalculationTasklet;
 
     // 여기가 최종 확정
     private final NonAgeCalculationReader nonAgeCalculationReader;
@@ -48,7 +48,7 @@ public class JdbcBatchProcess {
         log.info("Pre Step : 모든 중간 연산 및 최종 연산 테이블 비우기");
 
         return new StepBuilder("preCalculation", jobRepository)
-                .tasklet(preFirstTasklet, transactionManager)
+                .tasklet(preCalculationTasklet, transactionManager)
                 .build();
     }
 
