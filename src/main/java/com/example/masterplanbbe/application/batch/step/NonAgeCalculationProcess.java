@@ -41,6 +41,6 @@ public class NonAgeCalculationProcess implements ItemProcessor<PreCalculationDTO
                 + totalViewPoint * VIEW_COEFFICIENT; // 조회수 가중치
 
         return new NonAgeCalculationWriteDTO(
-                item.specId(), item.specName(), item.examId(), intermediateResult);
+                item.specId(), item.examId(), intermediateResult);
     }
 }

@@ -23,6 +23,6 @@ public class UseAgeCalculationProcess implements ItemProcessor<GroupAgeReadDTO, 
             ageGroup = AgeGroup.OVER_30S;
         }
 
-        return new UseAgeCalculationWriteDTO(ageGroup, item.countSum(), item.specId(), item.specName());
+        return new UseAgeCalculationWriteDTO(ageGroup, item.countSum(), item.specId());
     }
 }

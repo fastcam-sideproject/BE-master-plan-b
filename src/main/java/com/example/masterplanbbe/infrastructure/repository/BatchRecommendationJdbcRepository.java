@@ -16,7 +16,6 @@ public class BatchRecommendationJdbcRepository {
     private static final String GROUP_SUM_SQL = """
             SELECT
                 bss.spec_id AS spec_id,
-                bss.spec_name AS spec_name,
                 bss.latest_exam_id AS exam_id,
                 CASE
                     WHEN TIMESTAMPDIFF(YEAR, m.birthdate, CURDATE()) <= 23 THEN 'EARLY_20S'
@@ -34,8 +33,8 @@ public class BatchRecommendationJdbcRepository {
     private static final String DELETE_SQL = "TRUNCATE batch_age_calculation_steps;";
 
     private static final String INSERT_SQL = """
-            INSERT INTO batch_age_calculation_steps (age_group, score, spec_id, spec_name)
-            VALUES (?, ?, ?, ?)""";
+            INSERT INTO batch_age_calculation_steps (age_group, score, spec_id)
+            VALUES (?, ?, ?)""";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -43,7 +42,6 @@ public class BatchRecommendationJdbcRepository {
     public List<GroupAgeReadDTO> find(int pageSize, int offset) {
         return jdbcTemplate.query(GROUP_SUM_SQL, (rs, rowNum) -> new GroupAgeReadDTO(
                 rs.getLong("spec_id"),
-                rs.getString("spec_name"),
                 rs.getLong("exam_id"),
                 rs.getString("age_group"),
                 rs.getDouble("count_sum")), pageSize, offset);
@@ -55,7 +53,6 @@ public class BatchRecommendationJdbcRepository {
             ps.setString(1, item.ageGroup().getAge()); // age
             ps.setDouble(2, item.score()); // score
             ps.setLong(3, item.specId()); // spec
-            ps.setString(4, item.specName());
         });
     }
 
