@@ -61,6 +61,9 @@ class MasterPlanBBeApplicationTests {
 	ChatWebSocketController chatWebSocketController;
 
 	@MockBean
+	StatisticsService statisticsService;
+
+	@MockBean
 	ChatService chatService;
 
 	@MockBean
