@@ -13,9 +13,9 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, NonAgeCalculationWriteDTO> {
 
-    private static final double APPLY_COEFFICIENT = 0.2;
-    private static final double EXAM_START_COEFFICIENT = 0.01;
-    private static final double PARTICIPANT_COEFFICIENT = 0.3;
+    private static final double APPLY_COEFFICIENT = 0.5;
+    private static final double EXAM_START_COEFFICIENT = 0.3;
+    private static final double PARTICIPANT_COEFFICIENT = 0.2;
 
     @Override
     public NonAgeCalculationWriteDTO process(FirstStepReadDTO item) {
@@ -29,10 +29,9 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, NonAgeC
         double participantPoint = Math.log(1 + item.participantCount());
 
         // 가중치 조정
-        Double intermediateResult =
-                applyEndPoint * 0.5    // 지원 마감일 가중치 증가
-                        + examStartPoint * 0.3   // 시험 시작일 가중치
-                        + participantPoint * 0.2; // 참여자 가중치
+        Double intermediateResult = applyEndPoint * APPLY_COEFFICIENT // 지원 마감일 가중치 증가
+                        + examStartPoint * EXAM_START_COEFFICIENT // 시험 시작일 가중치
+                        + participantPoint * PARTICIPANT_COEFFICIENT; // 참여자 가중치
 
         return new NonAgeCalculationWriteDTO(item.specId(), item.examId(), intermediateResult);
     }
