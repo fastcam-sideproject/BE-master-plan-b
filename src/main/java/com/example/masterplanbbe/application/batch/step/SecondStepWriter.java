@@ -17,6 +17,7 @@ public class SecondStepWriter implements ItemWriter<NonAgeCalculationWriteDTO> {
 
     @Override
     public void write(Chunk<? extends NonAgeCalculationWriteDTO> chunk) {
+        log.info("2번쨰 최종 저장: {}", chunk.getItems().size());
         batchIntermediateStepJdbcRepository.batchUpdate(chunk.getItems());
     }
 }

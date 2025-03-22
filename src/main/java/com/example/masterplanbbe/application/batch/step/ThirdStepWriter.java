@@ -27,13 +27,18 @@ public class ThirdStepWriter implements ItemWriter<UseAgeCalculationWriteDTO> {
         // 데이터가 점차 많아지고, 신속성의 필요가 덜 중요시되고 안정성 입장에서
         // 스트림 정렬 메소드보다 우선순위 큐가 더 나을 것 같음
         // 우선순위 큐 기반 score 기준 내림차순 정렬
+        log.info("3번째 청크 사이즈: {}", chunk.getItems().size());
+
         PriorityQueue<UseAgeCalculationWriteDTO> queue =
                 new PriorityQueue<>(Comparator
                         .comparing(UseAgeCalculationWriteDTO::score, Comparator.reverseOrder()));
 
         List<UseAgeCalculationWriteDTO> batchList = new ArrayList<>();
 
+        log.info("초기 큐 사이즈: {}", queue.size());
+
         while (!queue.isEmpty()) {
+            log.info("잔여 큐 사이즈: {}", queue.size());
             batchList.add(queue.poll());
 
             // 일정 크기(BATCH_SIZE) 이상이면 batch 저장 후 리스트 초기화
@@ -45,6 +50,7 @@ public class ThirdStepWriter implements ItemWriter<UseAgeCalculationWriteDTO> {
 
         // 남은 데이터 저장
         if (!batchList.isEmpty()) {
+            log.info("최종 리스트 사이즈: {}", batchList.size());
             batchRecommendationJdbcRepository.batchSave(batchList);
         }
     }
