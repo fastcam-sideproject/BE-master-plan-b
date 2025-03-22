@@ -6,5 +6,4 @@ public enum LearningPeriod {
     삼_육개월,
     육_십이개월,
     십이개월_이상
-
 }

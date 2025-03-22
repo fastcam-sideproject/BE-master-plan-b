@@ -95,6 +95,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(a -> a
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // preflight 요청 허용(CORS 이슈 극복)
                 .requestMatchers(HttpMethod.GET, "/env").permitAll()
                 .requestMatchers(HttpMethod.GET, "/batch").permitAll() // 임시 배치 테스트를 위한 개방
                 .requestMatchers("/actuator/**").permitAll()
@@ -132,7 +133,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Collections.singletonList(clientUrl));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
