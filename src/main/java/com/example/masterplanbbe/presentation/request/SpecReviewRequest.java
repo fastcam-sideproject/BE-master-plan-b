@@ -14,7 +14,7 @@ public record SpecReviewRequest(
         DailyStudyTime dailyStudyTime,
         LearningLevel learningLevel,
         TimeSufficiency timeSufficiency,
-        String studyMethod,
+        StudyMethod studyMethod,
         String tipTitle,
         String tipDescription
 ) {
@@ -29,9 +29,9 @@ public record SpecReviewRequest(
                 dailyStudyTime(),
                 learningLevel(),
                 timeSufficiency(),
-                0,
-                0,
                 studyMethod(),
+                0,
+                0,
                 tipTitle(),
                 tipDescription()
 

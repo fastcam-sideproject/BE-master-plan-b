@@ -48,13 +48,14 @@ public class SpecReview extends FullAuditEntity {
     @Enumerated(EnumType.STRING)
     private TimeSufficiency timeSufficiency;
 
+    @Enumerated(EnumType.STRING)
+    private StudyMethod studyMethod;
+
     @Column(nullable = false)
     private Integer viewCount = 0;
 
     @Column(nullable = false)
     private Integer likeCount = 0;
-
-    private String studyMethod;
 
     private String tipTitle;
 
