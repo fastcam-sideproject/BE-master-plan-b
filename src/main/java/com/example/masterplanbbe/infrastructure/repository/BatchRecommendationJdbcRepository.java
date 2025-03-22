@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.application.batch.dto.ThirdStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.RecommendationWriteDTO;
+import com.example.masterplanbbe.application.batch.dto.UseAgeCalculationWriteDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -48,7 +48,7 @@ public class BatchRecommendationJdbcRepository {
     }
 
     @Transactional
-    public void batchSave(List<? extends RecommendationWriteDTO> data) {
+    public void batchSave(List<? extends UseAgeCalculationWriteDTO> data) {
         jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
             ps.setString(1, item.ageGroup().getAge()); // age
             ps.setDouble(2, item.score()); // score

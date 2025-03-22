@@ -61,7 +61,7 @@ public class JdbcBatchProcess {
         log.info("Step 1 : 연령대 무관 그룹 불필요 필드 기반 추천점수 중간 연산");
 
         return new StepBuilder("firstStep", jobRepository)
-                .<FirstStepReadDTO, IntermediateStepWriteDTO>chunk(10, transactionManager)
+                .<FirstStepReadDTO, NonAgeCalculationWriteDTO>chunk(10, transactionManager)
                 .reader(firstStepReader)
                 .processor(firstStepProcess)
                 .writer(firstStepWriter)
@@ -73,7 +73,7 @@ public class JdbcBatchProcess {
         log.info("Step 2 : 연령대 무관 그룹 합산 필드 기반 추천점수 중간 연산");
 
         return new StepBuilder("secondStep", jobRepository)
-                .<SecondStepReadDTO, IntermediateStepWriteDTO>chunk(10, transactionManager)
+                .<SecondStepReadDTO, NonAgeCalculationWriteDTO>chunk(10, transactionManager)
                 .reader(secondStepReader)
                 .processor(secondStepProcess)
                 .writer(secondStepWriter)
@@ -85,7 +85,7 @@ public class JdbcBatchProcess {
         log.info("Step 3 : 연령대 기반 그룹 합산 필드 기반 추천점수 최종 연산");
 
         return new StepBuilder("thirdStep", jobRepository)
-                .<ThirdStepReadDTO, RecommendationWriteDTO>chunk(10, transactionManager)
+                .<ThirdStepReadDTO, UseAgeCalculationWriteDTO>chunk(10, transactionManager)
                 .reader(thirdStepReader)
                 .processor(thirdStepProcess)
                 .writer(thirdStepWriter)

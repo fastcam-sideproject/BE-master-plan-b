@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
+import com.example.masterplanbbe.application.batch.dto.NonAgeCalculationWriteDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
@@ -11,14 +11,14 @@ import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @Component
-public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, IntermediateStepWriteDTO> {
+public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, NonAgeCalculationWriteDTO> {
 
     private static final double APPLY_COEFFICIENT = 0.2;
     private static final double EXAM_START_COEFFICIENT = 0.01;
     private static final double PARTICIPANT_COEFFICIENT = 0.3;
 
     @Override
-    public IntermediateStepWriteDTO process(FirstStepReadDTO item) {
+    public NonAgeCalculationWriteDTO process(FirstStepReadDTO item) {
 //        log.info("First Process 데이터 : {}", item);
         LocalDate today = LocalDate.now();
 
@@ -30,6 +30,6 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, Interme
                 examStartPoint * EXAM_START_COEFFICIENT +
                 participantPoint * PARTICIPANT_COEFFICIENT;
 
-        return new IntermediateStepWriteDTO(item.specId(), item.examId(), intermediateResult);
+        return new NonAgeCalculationWriteDTO(item.specId(), item.examId(), intermediateResult);
     }
 }

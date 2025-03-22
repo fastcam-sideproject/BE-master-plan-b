@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.application.batch.dto.FirstStepReadDTO;
-import com.example.masterplanbbe.application.batch.dto.IntermediateStepWriteDTO;
+import com.example.masterplanbbe.application.batch.dto.NonAgeCalculationWriteDTO;
 import com.example.masterplanbbe.application.batch.dto.SecondStepReadDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -72,7 +72,7 @@ public class BatchIntermediateStepJdbcRepository {
 
     // 일괄 DELETE 후, INSERT 로 덮어쓰기 방식 구현
     @Transactional
-    public void batchSave(List<? extends IntermediateStepWriteDTO> data) {
+    public void batchSave(List<? extends NonAgeCalculationWriteDTO> data) {
         jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam
@@ -81,7 +81,7 @@ public class BatchIntermediateStepJdbcRepository {
     }
 
     @Transactional
-    public void batchUpdate(List<? extends IntermediateStepWriteDTO> data) {
+    public void batchUpdate(List<? extends NonAgeCalculationWriteDTO> data) {
         jdbcTemplate.batchUpdate(UPDATE_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam
