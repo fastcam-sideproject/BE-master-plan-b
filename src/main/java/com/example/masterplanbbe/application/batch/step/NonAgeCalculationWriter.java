@@ -17,7 +17,7 @@ public class NonAgeCalculationWriter implements ItemWriter<NonAgeCalculationWrit
 
     @Override
     public void write(Chunk<? extends NonAgeCalculationWriteDTO> chunk) {
-        log.info("2번쨰 최종 저장: {}", chunk.getItems().size());
-        batchIntermediateStepJdbcRepository.batchUpdate(chunk.getItems());
+        log.info("연령대 미포함 연산 최종 저장: {}", chunk.getItems().size());
+        batchIntermediateStepJdbcRepository.batchSave(chunk.getItems());
     }
 }

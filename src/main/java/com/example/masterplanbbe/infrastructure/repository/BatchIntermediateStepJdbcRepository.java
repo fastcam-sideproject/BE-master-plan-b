@@ -79,25 +79,6 @@ public class BatchIntermediateStepJdbcRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Transactional(readOnly = true)
-    public List<FirstStepReadDTO> findFirstView(int pageSize, int offset) {
-        return jdbcTemplate.query(JOIN_SQL, (rs, rowNum) -> new FirstStepReadDTO(
-                rs.getLong("spec_id"),
-                rs.getLong("exam_id"),
-                rs.getDate("apply_end_date").toLocalDate(),
-                rs.getDate("exam_start_date").toLocalDate(),
-                rs.getInt("participant_count")), pageSize, offset);
-    }
-
-    @Transactional(readOnly = true)
-    public List<SecondStepReadDTO> findSecondView(int pageSize, int offset) {
-        return jdbcTemplate.query(GROUP_JOIN_SQL, (rs, rowNum) -> new SecondStepReadDTO(
-                rs.getLong("exam_id"),
-                rs.getLong("spec_id"),
-                rs.getInt("total_like_count"),
-                rs.getInt("total_view_count")), pageSize, offset);
-    }
-
-    @Transactional(readOnly = true)
     public List<PreCalculationDTO> findView(int pageSize, int offset) {
         return jdbcTemplate.query(SUB_QUERY_JOIN_SQL, (rs, rowNum) -> new PreCalculationDTO(
                 rs.getLong("exam_id"),
@@ -113,15 +94,6 @@ public class BatchIntermediateStepJdbcRepository {
     @Transactional
     public void batchSave(List<? extends NonAgeCalculationWriteDTO> data) {
         jdbcTemplate.batchUpdate(INSERT_SQL, data, data.size(), (ps, item) -> {
-            ps.setDouble(1, item.intermediateResult()); // intermediate_result
-            ps.setLong(2, item.examId()); // latest_exam
-            ps.setLong(3, item.specId()); // spec
-        });
-    }
-
-    @Transactional
-    public void batchUpdate(List<? extends NonAgeCalculationWriteDTO> data) {
-        jdbcTemplate.batchUpdate(UPDATE_SQL, data, data.size(), (ps, item) -> {
             ps.setDouble(1, item.intermediateResult()); // intermediate_result
             ps.setLong(2, item.examId()); // latest_exam
             ps.setLong(3, item.specId()); // spec
