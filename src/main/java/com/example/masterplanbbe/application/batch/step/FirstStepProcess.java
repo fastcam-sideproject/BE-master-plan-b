@@ -19,16 +19,20 @@ public class FirstStepProcess implements ItemProcessor<FirstStepReadDTO, NonAgeC
 
     @Override
     public NonAgeCalculationWriteDTO process(FirstStepReadDTO item) {
-//        log.info("First Process 데이터 : {}", item);
         LocalDate today = LocalDate.now();
 
-        double applyEndPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.applyEndDate()));
-        double examStartPoint = (double) Math.max(0, ChronoUnit.DAYS.between(today, item.examStartDate()));
-        double participantPoint = (double) item.participantCount();
+        // 날짜가 가까울수록 높은 점수를 부여하는 역수 방식
+        double applyEndPoint = 1.0 / (1 + ChronoUnit.DAYS.between(today, item.applyEndDate()));
+        double examStartPoint = 1.0 / (1 + ChronoUnit.DAYS.between(today, item.examStartDate()));
 
-        Double intermediateResult = applyEndPoint * APPLY_COEFFICIENT +
-                examStartPoint * EXAM_START_COEFFICIENT +
-                participantPoint * PARTICIPANT_COEFFICIENT;
+        // 참여자 수를 반영하되, 로그 스케일로 증가폭 조절
+        double participantPoint = Math.log(1 + item.participantCount());
+
+        // 가중치 조정
+        Double intermediateResult =
+                applyEndPoint * 0.5    // 지원 마감일 가중치 증가
+                        + examStartPoint * 0.3   // 시험 시작일 가중치
+                        + participantPoint * 0.2; // 참여자 가중치
 
         return new NonAgeCalculationWriteDTO(item.specId(), item.examId(), intermediateResult);
     }
