@@ -1,7 +1,9 @@
 package com.example.masterplanbbe.application.batch.dto;
 
-public record JoinJobRoleReadDTO(
-        String ageGroup,
+import com.example.masterplanbbe.domain.enums.AgeGroup;
+
+public record FinalCalculationWriteDTO(
+        AgeGroup ageGroup,
         Double score,
         Long specId,
         String jobRoleName,
