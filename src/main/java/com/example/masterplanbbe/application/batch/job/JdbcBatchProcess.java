@@ -32,6 +32,10 @@ public class JdbcBatchProcess {
     private final UseAgeCalculationProcess useAgeCalculationProcess;
     private final UseAgeCalculationWriter useAgeCalculationWriter;
 
+    private final FinalCalculationReader finalCalculationReader;
+    private final FinalCalculationProcess finalCalculationProcess;
+    private final FinalCalculationWriter finalCalculationWriter;
+
     @Bean
     public Job job() {
         log.info("추천 점수 연산 배치 처리 작업 실시");
@@ -40,6 +44,7 @@ public class JdbcBatchProcess {
                 .start(preCalculation())
                 .next(nonAgeCalculationStep())
                 .next(UseAgeCalculationStep())
+                .next(finalCalculationStep())
                 .build();
     }
 
@@ -79,4 +84,15 @@ public class JdbcBatchProcess {
     // 직업별 상위 4개 사전 추출 스텝 추가...?
     // Redis에 넣기?
     // Redis -> 캐싱, 일단 SQL에서 최대한 짜내보기
+    @Bean
+    public Step finalCalculationStep() {
+        log.info("Step 3 : 최종 추천 연산");
+
+        return new StepBuilder("finalCalculation", jobRepository)
+                .<FinalJoinReadDTO, FinalCalculationWriteDTO>chunk(10, transactionManager)
+                .reader(finalCalculationReader)
+                .processor(finalCalculationProcess)
+                .writer(finalCalculationWriter)
+                .build();
+    }
 }
