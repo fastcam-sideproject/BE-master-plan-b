@@ -1,17 +1,12 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.UseAgeCalculationWriteDTO;
-import com.example.masterplanbbe.infrastructure.repository.BatchRecommendationJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchUseAgeCalculationJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.PriorityQueue;
 
 @Slf4j
 @Component
@@ -20,10 +15,10 @@ public class UseAgeCalculationWriter implements ItemWriter<UseAgeCalculationWrit
 
     private static final int BATCH_SIZE = 30;
 
-    private final BatchRecommendationJdbcRepository batchRecommendationJdbcRepository;
+    private final BatchUseAgeCalculationJdbcRepository batchUseAgeCalculationJdbcRepository;
 
     @Override
     public void write(Chunk<? extends UseAgeCalculationWriteDTO> chunk) {
-        batchRecommendationJdbcRepository.batchSave(chunk.getItems());
+        batchUseAgeCalculationJdbcRepository.batchSave(chunk.getItems());
     }
 }

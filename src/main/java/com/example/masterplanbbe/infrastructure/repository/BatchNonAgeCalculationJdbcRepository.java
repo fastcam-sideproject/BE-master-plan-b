@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class BatchIntermediateStepJdbcRepository {
+public class BatchNonAgeCalculationJdbcRepository {
 
     // s.latest_exam과 ep.exam_id에 별개의 인덱스를 추가해보고 EXPLAIN ANALYZE 다시 해보자
     private static final String JOIN_SQL = """

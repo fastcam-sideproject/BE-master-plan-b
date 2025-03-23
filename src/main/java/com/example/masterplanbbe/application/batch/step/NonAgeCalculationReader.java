@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.PreCalculationDTO;
-import com.example.masterplanbbe.infrastructure.repository.BatchIntermediateStepJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchNonAgeCalculationJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NonAgeCalculationReader implements ItemReader<PreCalculationDTO> {
 
-    private final BatchIntermediateStepJdbcRepository batchIntermediateStepJdbcRepository;
+    private final BatchNonAgeCalculationJdbcRepository batchNonAgeCalculationJdbcRepository;
 
     private List<PreCalculationDTO> data;
     private int offset = 0;
@@ -28,7 +28,7 @@ public class NonAgeCalculationReader implements ItemReader<PreCalculationDTO> {
             UnexpectedInputException, ParseException, NonTransientResourceException {
         if (data == null || index >= data.size()) {
             int pageSize = 10;
-            data = batchIntermediateStepJdbcRepository.findView(pageSize, offset);
+            data = batchNonAgeCalculationJdbcRepository.findView(pageSize, offset);
 
             if (data.isEmpty()) {
                 log.info("step 1 null 반환");

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class BatchRecommendationJdbcRepository {
+public class BatchUseAgeCalculationJdbcRepository {
 
     private static final String GROUP_SUM_SQL = """
             SELECT

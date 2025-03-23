@@ -75,4 +75,8 @@ public class JdbcBatchProcess {
                 .writer(useAgeCalculationWriter)
                 .build();
     }
+
+    // 직업별 상위 4개 사전 추출 스텝 추가...?
+    // Redis에 넣기?
+    // Redis -> 캐싱, 일단 SQL에서 최대한 짜내보기
 }

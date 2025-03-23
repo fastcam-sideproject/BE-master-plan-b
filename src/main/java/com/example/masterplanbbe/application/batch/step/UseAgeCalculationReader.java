@@ -1,7 +1,7 @@
 package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.application.batch.dto.GroupAgeReadDTO;
-import com.example.masterplanbbe.infrastructure.repository.BatchRecommendationJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchUseAgeCalculationJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UseAgeCalculationReader implements ItemReader<GroupAgeReadDTO> {
 
-    private final BatchRecommendationJdbcRepository batchRecommendationJdbcRepository;
+    private final BatchUseAgeCalculationJdbcRepository batchUseAgeCalculationJdbcRepository;
 
     private List<GroupAgeReadDTO> data;
     private int offset = 0;
@@ -28,7 +28,7 @@ public class UseAgeCalculationReader implements ItemReader<GroupAgeReadDTO> {
             UnexpectedInputException, ParseException, NonTransientResourceException {
         if (data == null || index >= data.size()) {
             int pageSize = 10;
-            data = batchRecommendationJdbcRepository.find(pageSize, offset);
+            data = batchUseAgeCalculationJdbcRepository.find(pageSize, offset);
 
             if (data.isEmpty()) {
                 log.info("step 3 null 반환");
