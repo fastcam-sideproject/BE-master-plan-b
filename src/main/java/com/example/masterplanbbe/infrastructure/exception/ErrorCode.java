@@ -63,7 +63,7 @@ public enum ErrorCode {
     // StudyLog
     NOT_FOUND_STUDY_LOG(400, "SL001", "학습 기록을 찾을 수 없습니다."),
 
-    //
+    // SpecReview
     NOT_FOUND_REVIEW(400,"SR001" ,"리뷰를 찾을 수 없습니다." ),
     NOT_DELETE_REVIEW(400,"SR002" ,"리뷰를 삭제할 수 없습니다." ),
     ALREADY_CREATE_REVIEW(400,"SR003" ,"이미 리뷰를 작성하였습니다." ),
