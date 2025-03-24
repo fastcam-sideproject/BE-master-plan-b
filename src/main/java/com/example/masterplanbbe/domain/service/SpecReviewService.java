@@ -2,18 +2,15 @@ package com.example.masterplanbbe.domain.service;
 
 import com.example.masterplanbbe.domain.entity.Member;
 import com.example.masterplanbbe.domain.entity.MemberSpec;
-import com.example.masterplanbbe.domain.entity.Spec;
-import com.example.masterplanbbe.domain.repository.MemberSpecRepository;
+import com.example.masterplanbbe.domain.entity.SpecReview;
 import com.example.masterplanbbe.domain.repository.SpecRepository;
 import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.infrastructure.exception.GlobalException;
 import com.example.masterplanbbe.infrastructure.repository.MemberRepositoryAdapter;
 import com.example.masterplanbbe.infrastructure.repository.MemberSpecRepositoryAdapter;
-import com.example.masterplanbbe.infrastructure.repository.SpecRepositoryAdapter;
+import com.example.masterplanbbe.infrastructure.repository.SpecReviewRepositoryAdapter;
 import com.example.masterplanbbe.presentation.request.SpecReviewRequest;
 import com.example.masterplanbbe.presentation.response.SpecReviewResponse;
-import com.example.masterplanbbe.domain.entity.SpecReview;
-import com.example.masterplanbbe.infrastructure.repository.SpecReviewRepositoryAdapter;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,7 +21,6 @@ import org.springframework.stereotype.Service;
 public class SpecReviewService {
     private final SpecReviewRepositoryAdapter specReviewRepositoryAdapter;
     private final MemberSpecRepositoryAdapter memberSpecRepositoryAdapter;
-    private final SpecRepository specRepository;
     private final MemberRepositoryAdapter memberRepositoryAdapter;
 
     /**

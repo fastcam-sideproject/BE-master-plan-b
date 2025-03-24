@@ -60,10 +60,8 @@ public class SpecReviewController {
             @RequestBody SpecReviewRequest specReviewRequest,
             Authentication authentication
     ) {
-        String email = authentication.getName();
-
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specReviewService.updateReview(specReviewRequest, email, reviewId, specId)));
+                .body(ApiResponse.ok(specReviewService.updateReview(specReviewRequest, authentication.getName(), reviewId, specId)));
     }
 
     @Operation(summary = "스펙 리뷰 삭제")
@@ -73,8 +71,7 @@ public class SpecReviewController {
             @PathVariable Long reviewId,
             Authentication authentication
     ) {
-        String email = authentication.getName();
-        specReviewService.deleteReview(specId, reviewId, email);
+        specReviewService.deleteReview(specId, reviewId, authentication.getName());
 
         return ResponseEntity.ok()
                 .body(ApiResponse.ok());
