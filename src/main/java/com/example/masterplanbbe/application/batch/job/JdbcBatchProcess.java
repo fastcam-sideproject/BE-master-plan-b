@@ -36,6 +36,8 @@ public class JdbcBatchProcess {
     private final FinalCalculationProcess finalCalculationProcess;
     private final FinalCalculationWriter finalCalculationWriter;
 
+    private final SortingRankTasklet sortingRankTasklet;
+
     @Bean
     public Job job() {
         log.info("추천 점수 연산 배치 처리 작업 실시");
@@ -45,6 +47,7 @@ public class JdbcBatchProcess {
                 .next(nonAgeCalculationStep())
                 .next(UseAgeCalculationStep())
                 .next(finalCalculationStep())
+                .next(sortRanking())
                 .build();
     }
 
@@ -86,13 +89,22 @@ public class JdbcBatchProcess {
     // Redis -> 캐싱, 일단 SQL에서 최대한 짜내보기
     @Bean
     public Step finalCalculationStep() {
-        log.info("Step 3 : 최종 추천 연산");
+        log.info("Step 3 : 스펙별 직무 및 카테고리 조인 처리");
 
         return new StepBuilder("finalCalculation", jobRepository)
                 .<FinalJoinReadDTO, FinalCalculationWriteDTO>chunk(10, transactionManager)
                 .reader(finalCalculationReader)
                 .processor(finalCalculationProcess)
                 .writer(finalCalculationWriter)
+                .build();
+    }
+
+    @Bean
+    public Step sortRanking() {
+        log.info("Step 4 : 최종 추천점수 기반 랭킹 정렬");
+
+        return new StepBuilder("sortRanking", jobRepository)
+                .tasklet(sortingRankTasklet, transactionManager)
                 .build();
     }
 }
