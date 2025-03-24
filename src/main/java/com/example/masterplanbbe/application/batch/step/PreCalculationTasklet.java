@@ -2,6 +2,7 @@ package com.example.masterplanbbe.application.batch.step;
 
 import com.example.masterplanbbe.infrastructure.repository.BatchFinalCalculationJdbcRepository;
 import com.example.masterplanbbe.infrastructure.repository.BatchNonAgeCalculationJdbcRepository;
+import com.example.masterplanbbe.infrastructure.repository.BatchSortingRankJdbcRepository;
 import com.example.masterplanbbe.infrastructure.repository.BatchUseAgeCalculationJdbcRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.StepContribution;
@@ -17,12 +18,14 @@ public class PreCalculationTasklet implements Tasklet {
     private final BatchNonAgeCalculationJdbcRepository batchNonAgeCalculationJdbcRepository;
     private final BatchUseAgeCalculationJdbcRepository batchUseAgeCalculationJdbcRepository;
     private final BatchFinalCalculationJdbcRepository batchFinalCalculationJdbcRepository;
+    private final BatchSortingRankJdbcRepository batchSortingRankJdbcRepository;
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) {
         batchNonAgeCalculationJdbcRepository.deleteAll();
         batchUseAgeCalculationJdbcRepository.deleteAll();
         batchFinalCalculationJdbcRepository.deleteAll();
+        batchSortingRankJdbcRepository.deleteAll();
         return RepeatStatus.FINISHED;
     }
 }

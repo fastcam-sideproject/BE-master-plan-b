@@ -34,4 +34,7 @@ public class Recommendation {
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @Column(name = "rank_main")
+    private Integer rankMain;
 }
