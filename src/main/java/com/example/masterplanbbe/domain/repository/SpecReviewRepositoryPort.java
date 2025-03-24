@@ -12,9 +12,9 @@ public interface SpecReviewRepositoryPort{
 
     SpecReview save(SpecReview specReview);
 
-    Page<SpecReview> findBySpec(Spec spec, Pageable pageable);
-
     SpecReview findByIdAndSpecId(Long id, Long specId);
 
     boolean existsBySpecIdAndMemberEmail(Long specId, String email);
+
+    Page<SpecReview> findBySpecId(Long specId, Pageable pageable);
 }

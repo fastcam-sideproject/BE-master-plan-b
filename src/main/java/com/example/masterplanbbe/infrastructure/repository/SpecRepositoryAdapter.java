@@ -122,4 +122,9 @@ public class SpecRepositoryAdapter implements SpecRepositoryPort, SpecRepository
         specRepository.deleteAll();
     }
 
+    @Override
+    public Spec findByName(String name) {
+        return specRepository.findByName(name);
+    }
+
 }

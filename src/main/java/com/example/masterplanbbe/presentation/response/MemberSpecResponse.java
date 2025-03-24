@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.presentation.response;
 
 import com.example.masterplanbbe.domain.entity.MemberSpec;
+import com.example.masterplanbbe.domain.entity.Spec;
 
 import java.time.LocalDateTime;
 
@@ -12,14 +13,14 @@ public record MemberSpecResponse(
         LocalDateTime achievementDate,
         LocalDateTime expiredDate
         ) {
-    public static MemberSpecResponse from(MemberSpec spec) {
+    public static MemberSpecResponse from(MemberSpec memberSpec) {
         return new MemberSpecResponse(
-                spec.getSpec().getName(),
-                spec.getSpec().getIssuingOrganization(),
-                spec.getScore(),
-                spec.getSpecNumber(),
-                spec.getAchievementDate(),
-                spec.getExpiredDate()
+                memberSpec.getSpec().getName(),
+                memberSpec.getSpec().getIssuingOrganization(),
+                memberSpec.getScore(),
+                memberSpec.getSpecNumber(),
+                memberSpec.getAchievementDate(),
+                memberSpec.getExpiredDate()
         );
     }
 }

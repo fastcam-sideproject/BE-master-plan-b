@@ -41,7 +41,7 @@ public class MemberSpecController {
     }
 
     @Operation(summary = "자격증 삭제")
-    @PostMapping("/{specId}")
+    @DeleteMapping("/{specId}")
     public ResponseEntity<ApiResponse<Void>> deleteMemberSpec(
             Authentication authentication,
             @PathVariable Long specId
@@ -52,7 +52,7 @@ public class MemberSpecController {
     }
 
     @Operation(summary = "자격증 수정")
-    @PostMapping("/{specId}")
+    @PatchMapping("/{specId}")
     public ResponseEntity<ApiResponse<MemberSpecResponse>> modifiedMemberSpec(
             @RequestBody MemberSpecRequest memberSpecRequest,
             @PathVariable Long specId,

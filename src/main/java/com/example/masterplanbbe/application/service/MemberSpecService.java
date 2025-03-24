@@ -2,8 +2,10 @@ package com.example.masterplanbbe.application.service;
 
 import com.example.masterplanbbe.domain.entity.Member;
 import com.example.masterplanbbe.domain.entity.MemberSpec;
+import com.example.masterplanbbe.domain.entity.Spec;
 import com.example.masterplanbbe.domain.repository.MemberRepositoryPort;
 import com.example.masterplanbbe.domain.repository.MemberSpecRepositoryPort;
+import com.example.masterplanbbe.domain.repository.SpecRepositoryPort;
 import com.example.masterplanbbe.presentation.request.MemberSpecRequest;
 import com.example.masterplanbbe.presentation.response.MemberSpecResponse;
 import jakarta.transaction.Transactional;
@@ -17,12 +19,15 @@ import java.util.List;
 public class MemberSpecService {
 
     private final MemberSpecRepositoryPort memberSpecRepositoryPort;
+    private final SpecRepositoryPort specRepositoryPort;
     private final MemberRepositoryPort memberRepositoryPort;
 
     @Transactional
     public MemberSpecResponse createMemberSpec(String email, MemberSpecRequest memberSpecRequest) {
         Member member = memberRepositoryPort.findByEmail(email);
-        MemberSpec memberSpec = memberSpecRequest.toEntity(member);
+        Spec spec = specRepositoryPort.findByName(memberSpecRequest.specName());
+        MemberSpec memberSpec = MemberSpec.create(member, spec, memberSpecRequest);
+
         memberSpecRepositoryPort.save(memberSpec);
 
         return MemberSpecResponse.from(memberSpec);

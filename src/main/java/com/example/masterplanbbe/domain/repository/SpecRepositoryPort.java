@@ -8,4 +8,6 @@ public interface SpecRepositoryPort extends SpecRepositoryCustom {
     void saveAll(Iterable<Spec> specs);
     void deleteById(Long specId);
     void deleteAll();
+
+    Spec findByName(String name);
 }

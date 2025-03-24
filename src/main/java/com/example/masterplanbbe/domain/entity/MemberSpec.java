@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 public class MemberSpec extends FullAuditEntity {
 
     @ManyToOne
-    private Member member;
+    private Spec spec;
 
-    @Column(nullable = false)
-    private String specName;
+    @ManyToOne
+    private Member member;
 
     @Column(nullable = false)
     private Long score;
@@ -42,7 +42,17 @@ public class MemberSpec extends FullAuditEntity {
         this.achievementDate = memberSpecRequest.achievementDate();
         this.expiredDate = memberSpecRequest.expiredDate();
         this.specNumber = memberSpecRequest.specNumber();
-        this.specName = memberSpecRequest.specName();
+    }
+
+    public static MemberSpec create(Member member, Spec spec, MemberSpecRequest request) {
+        return new MemberSpec(
+                spec,
+                member,
+                request.score(),
+                request.specNumber(),
+                request.achievementDate(),
+                request.expiredDate()
+        );
     }
 
 

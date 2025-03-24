@@ -13,12 +13,11 @@ import java.util.List;
 
 public interface SpecReviewRepository extends JpaRepository<SpecReview, Long> {
 
-    Page<SpecReview> findBySpec(Spec spec, Pageable pageable);
+    boolean existsByMemberSpecIdAndMemberEmail(Long specId, String email);
 
-    SpecReview findByIdAndSpecId(Long id, Long specId);
+    @Query("SELECT sr FROM SpecReview sr WHERE sr.memberSpec.spec.id = :specId")
+    Page<SpecReview> findBySpecId(@Param("specId") Long specId, Pageable pageable);
 
-    boolean existsBySpecIdAndMemberId(Long specId, Long memberId);
-
-    boolean existsBySpecIdAndMemberEmail(Long specId, String email);
-
+    @Query("SELECT sr FROM SpecReview sr WHERE sr.id = :id AND sr.memberSpec.spec.id = :specId")
+    SpecReview findByIdAndSpecId(@Param("id") Long id, @Param("specId") Long specId);
 }

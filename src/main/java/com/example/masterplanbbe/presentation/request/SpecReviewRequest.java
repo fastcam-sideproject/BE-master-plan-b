@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.presentation.request;
 
 import com.example.masterplanbbe.domain.entity.Member;
+import com.example.masterplanbbe.domain.entity.MemberSpec;
 import com.example.masterplanbbe.domain.entity.Spec;
 import com.example.masterplanbbe.domain.enums.*;
 
@@ -18,10 +19,10 @@ public record SpecReviewRequest(
         String tipTitle,
         String tipDescription
 ) {
-    public SpecReview toEntity(Member member, Spec spec) {
+    public SpecReview toEntity(Member member, MemberSpec memberSpec) {
         return new SpecReview(
                 member,
-                spec,
+                memberSpec,
                 difficulty(),
                 examType(),
                 reflectionLevel(),
