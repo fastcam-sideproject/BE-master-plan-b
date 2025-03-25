@@ -64,6 +64,9 @@ class MasterPlanBBeApplicationTests {
 	StatisticsService statisticsService;
 
 	@MockBean
+	MemberSpecService memberSpecService;
+
+	@MockBean
 	ChatService chatService;
 
 	@MockBean
