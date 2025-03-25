@@ -24,6 +24,6 @@ public class FinalCalculationProcess implements ItemProcessor<FinalJoinReadDTO, 
         }
 
         return new FinalCalculationWriteDTO(
-                ageGroup, item.score(), item.specId(), item.jobRoleName(), item.categoryId());
+                ageGroup, item.score(), item.specId(), item.jobRoleId(), item.categoryId());
     }
 }

@@ -18,7 +18,7 @@ public class BatchFinalCalculationJdbcRepository {
                 bacs.age_group,
                 bacs.score,
                 bacs.spec_id,
-                jr.job_role_name,
+                jr.id AS job_role_id,
                 jr.category_id
             FROM batch_age_calculation_steps bacs
             JOIN job_role_specs jrs ON bacs.spec_id = jrs.spec_id
@@ -30,7 +30,7 @@ public class BatchFinalCalculationJdbcRepository {
 
     private static final String INSERT_SQL = """
             INSERT INTO batch_final_calculation_steps
-            (age_group, score, spec_id, job_role_name, category_id)
+            (age_group, score, spec_id, job_role_id, category_id)
             VALUES (?, ?, ?, ?, ?)""";
 
     private final JdbcTemplate jdbcTemplate;
@@ -41,7 +41,7 @@ public class BatchFinalCalculationJdbcRepository {
                 rs.getString("age_group"),
                 rs.getDouble("score"),
                 rs.getLong("spec_id"),
-                rs.getString("job_role_name"),
+                rs.getLong("job_role_id"),
                 rs.getLong("category_id")), pageSize, offset);
     }
 
@@ -51,7 +51,7 @@ public class BatchFinalCalculationJdbcRepository {
             ps.setString(1, item.ageGroup().getAge());
             ps.setDouble(2, item.score());
             ps.setLong(3, item.specId());
-            ps.setString(4, item.jobRoleName());
+            ps.setLong(4, item.jobRoleId());
             ps.setLong(5, item.categoryId());}
         );
     }

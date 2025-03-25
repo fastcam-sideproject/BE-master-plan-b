@@ -6,7 +6,7 @@ public record FinalCalculationWriteDTO(
         AgeGroup ageGroup,
         Double score,
         Long specId,
-        String jobRoleName,
+        Long jobRoleId,
         Long categoryId
 ) {
 }

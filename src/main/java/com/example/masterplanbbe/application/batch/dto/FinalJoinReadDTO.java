@@ -4,7 +4,7 @@ public record FinalJoinReadDTO(
         String ageGroup,
         Double score,
         Long specId,
-        String jobRoleName,
+        Long jobRoleId,
         Long categoryId
 ) {
 }

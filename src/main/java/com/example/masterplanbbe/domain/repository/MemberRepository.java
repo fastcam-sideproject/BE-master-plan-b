@@ -30,8 +30,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("""
         SELECT DISTINCT m
         FROM Member m
-        LEFT JOIN FETCH m.memberJobRoles
+        LEFT JOIN FETCH m.memberJobRoles mjr
+        LEFT JOIN FETCH mjr.jobRole jr
+        LEFT JOIN FETCH jr.category
         WHERE m.email = :email
     """)
-    Optional<Member> findByEmailWithJobRoles(@Param("email") String email);
+    Optional<Member> findByEmailWithJobRoles(String email);
 }

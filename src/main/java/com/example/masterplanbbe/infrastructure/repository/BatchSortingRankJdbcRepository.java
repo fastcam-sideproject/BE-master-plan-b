@@ -16,14 +16,14 @@ public class BatchSortingRankJdbcRepository {
                 age_group,
                 score,
                 spec_id,
-                job_role_name,
+                job_role_id,
                 category_id,
-                ROW_NUMBER() OVER (PARTITION BY age_group, job_role_name ORDER BY score DESC) AS rank_main
+                ROW_NUMBER() OVER (PARTITION BY age_group, job_role_id ORDER BY score DESC) AS rank_main
             FROM batch_final_calculation_steps;
             """;
 
     private static final String INSERT_SQL = """
-            INSERT INTO recommendations (age_group, score, spec_id, job_role_name, category_id, rank_main)
+            INSERT INTO recommendations (age_group, score, spec_id, job_role_id, category_id, rank_main)
             VALUES (?, ?, ?, ?, ?, ?);
             """;
 
@@ -38,13 +38,13 @@ public class BatchSortingRankJdbcRepository {
                 rs.getString("age_group"),
                 rs.getDouble("score"),
                 rs.getLong("spec_id"),
-                rs.getString("job_role_name"),
+                rs.getLong("job_role_id"),
                 rs.getLong("category_id"),
                 rs.getInt("rank_main")
         ));
 
         List<Object[]> batchArgs = rankedSpecs.stream()
-                .map(spec -> new Object[]{spec.ageGroup(), spec.score(), spec.specId(), spec.jobRoleName(), spec.categoryId(), spec.rankMain()})
+                .map(spec -> new Object[]{spec.ageGroup(), spec.score(), spec.specId(), spec.jobRoleId(), spec.categoryId(), spec.rankMain()})
                 .toList();
 
         jdbcTemplate.batchUpdate(INSERT_SQL, batchArgs);
@@ -55,6 +55,6 @@ public class BatchSortingRankJdbcRepository {
         jdbcTemplate.update(DELETE_SQL);
     }
 
-    private record RankedSpec(String ageGroup, double score, long specId, String jobRoleName, long categoryId, int rankMain) {
+    private record RankedSpec(String ageGroup, double score, long specId, long jobRoleId, long categoryId, int rankMain) {
     }
 }

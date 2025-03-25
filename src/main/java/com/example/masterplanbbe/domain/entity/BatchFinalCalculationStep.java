@@ -28,8 +28,9 @@ public class BatchFinalCalculationStep {
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
-    @Column(name = "job_role_name", nullable = false)
-    private String jobRoleName;
+    @ManyToOne
+    @JoinColumn(name = "job_role_id", nullable = false)
+    private JobRole jobRole;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
