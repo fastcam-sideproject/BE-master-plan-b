@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.enums.ExamType;
 import com.example.masterplanbbe.domain.repository.SpecReviewRepository;
 import com.example.masterplanbbe.domain.repository.SpecReviewRepositoryPort;
 import com.example.masterplanbbe.domain.entity.SpecReview;
@@ -46,5 +47,10 @@ public class SpecReviewRepositoryAdapter implements SpecReviewRepositoryPort {
     @Override
     public Page<SpecReview> findBySpecId(Long specId, Pageable pageable) {
         return specReviewRepository.findBySpecId(specId, pageable);
+    }
+
+    @Override
+    public boolean existsBySpecIdAndMemberEmailAndExamType(Long memberSpecId, String email, ExamType examType) {
+        return specReviewRepository.existsByMemberSpecIdAndMemberEmailAndExamType(memberSpecId, email, examType);
     }
 }

@@ -22,6 +22,12 @@ public class MemberSpecService {
     private final SpecRepositoryPort specRepositoryPort;
     private final MemberRepositoryPort memberRepositoryPort;
 
+    /**
+     * 자격증 등록
+     * @param email
+     * @param memberSpecRequest
+     * @return
+     */
     @Transactional
     public MemberSpecResponse createMemberSpec(String email, MemberSpecRequest memberSpecRequest) {
         Member member = memberRepositoryPort.findByEmail(email);
@@ -33,6 +39,11 @@ public class MemberSpecService {
         return MemberSpecResponse.from(memberSpec);
     }
 
+    /**
+     * 내 자격증 조회
+     * @param email
+     * @return
+     */
     public List<MemberSpecResponse> getMemberSpecList(String email) {
         Member member = memberRepositoryPort.findByEmail(email);
         List<MemberSpec> memberSpecs = memberSpecRepositoryPort.findAllByMember(member);
@@ -40,6 +51,13 @@ public class MemberSpecService {
         return memberSpecs.stream().map(MemberSpecResponse::from).toList();
     }
 
+    /**
+     * 자격증 수정
+     * @param email
+     * @param memberSpecId
+     * @param memberSpecRequest
+     * @return
+     */
     @Transactional
     public MemberSpecResponse updateMemberSpec(String email, Long memberSpecId, MemberSpecRequest memberSpecRequest) {
         Member member = memberRepositoryPort.findByEmail(email);
@@ -51,6 +69,11 @@ public class MemberSpecService {
         return MemberSpecResponse.from(memberSpec);
     }
 
+    /**
+     * 자격증 삭제
+     * @param email
+     * @param memberSpecId
+     */
     public void deleteMemberSpec(String email, Long memberSpecId) {
         Member member = memberRepositoryPort.findByEmail(email);
         MemberSpec memberSpec = memberSpecRepositoryPort.findById(memberSpecId);

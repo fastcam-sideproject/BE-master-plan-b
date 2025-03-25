@@ -6,6 +6,7 @@ import com.example.masterplanbbe.domain.entity.Spec;
 import java.time.LocalDateTime;
 
 public record MemberSpecResponse(
+        Long id,
         String specName,
         String institution,
         Long score,
@@ -15,6 +16,7 @@ public record MemberSpecResponse(
         ) {
     public static MemberSpecResponse from(MemberSpec memberSpec) {
         return new MemberSpecResponse(
+                memberSpec.getId(),
                 memberSpec.getSpec().getName(),
                 memberSpec.getSpec().getIssuingOrganization(),
                 memberSpec.getScore(),

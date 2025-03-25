@@ -1,6 +1,5 @@
 package com.example.masterplanbbe.domain.repository;
 
-import com.example.masterplanbbe.domain.entity.Spec;
 import com.example.masterplanbbe.domain.entity.SpecReview;
 import com.example.masterplanbbe.domain.enums.ExamType;
 import org.springframework.data.domain.Page;
@@ -8,8 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.List;
 
 public interface SpecReviewRepository extends JpaRepository<SpecReview, Long> {
 
@@ -20,4 +17,6 @@ public interface SpecReviewRepository extends JpaRepository<SpecReview, Long> {
 
     @Query("SELECT sr FROM SpecReview sr WHERE sr.id = :id AND sr.memberSpec.spec.id = :specId")
     SpecReview findByIdAndSpecId(@Param("id") Long id, @Param("specId") Long specId);
+
+    boolean existsByMemberSpecIdAndMemberEmailAndExamType(Long memberSpecId, String email, ExamType examType);
 }

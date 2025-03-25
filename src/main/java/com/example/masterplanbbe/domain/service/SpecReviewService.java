@@ -31,7 +31,7 @@ public class SpecReviewService {
      * @return
      */
     public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long memberSpecId, String email) {
-        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberEmail(memberSpecId, email)) {
+        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberEmailAndExamType(memberSpecId, email, specReviewRequest.examType())) {
             throw new GlobalException.BadRequestException(ErrorCode.ALREADY_CREATE_REVIEW);
         }
 
