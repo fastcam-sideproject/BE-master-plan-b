@@ -41,25 +41,25 @@ public class MemberSpecController {
     }
 
     @Operation(summary = "자격증 삭제")
-    @DeleteMapping("/{specId}")
+    @DeleteMapping("/{memberSpecId}")
     public ResponseEntity<ApiResponse<Void>> deleteMemberSpec(
             Authentication authentication,
-            @PathVariable Long specId
+            @PathVariable Long memberSpecId
     ) {
-        memberSpecService.deleteMemberSpec(authentication.getName(), specId);
+        memberSpecService.deleteMemberSpec(authentication.getName(), memberSpecId);
 
         return ResponseEntity.ok().body(ApiResponse.ok());
     }
 
     @Operation(summary = "자격증 수정")
-    @PatchMapping("/{specId}")
+    @PatchMapping("/{memberSpecId}")
     public ResponseEntity<ApiResponse<MemberSpecResponse>> modifiedMemberSpec(
             @RequestBody MemberSpecRequest memberSpecRequest,
-            @PathVariable Long specId,
+            @PathVariable Long memberSpecId,
             Authentication authentication
     ) {
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(memberSpecService.updateMemberSpec(authentication.getName(), specId, memberSpecRequest)));
+                .body(ApiResponse.ok(memberSpecService.updateMemberSpec(authentication.getName(), memberSpecId, memberSpecRequest)));
     }
 
 }
