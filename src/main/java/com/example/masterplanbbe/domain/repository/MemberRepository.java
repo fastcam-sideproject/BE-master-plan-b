@@ -23,4 +23,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     );
 
     Optional<Member> findByEmail(String email);
+
+    @Query("SELECT m FROM Member m JOIN FETCH m.memberJobRoles")
+    List<Member> findAllWithJobRoles();
+
+    @Query("SELECT m FROM Member m JOIN FETCH m.memberJobRoles WHERE m.email = :email")
+    Optional<Member> findByEmailWithJobRoles(@Param("email") String email);
 }
