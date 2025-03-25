@@ -12,21 +12,26 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Query(
-            value = " select id, user_id, email, name, nickname, password, phone_number, birthday,  " +
-                    " profile_image_url, create_time, modified_time " +
-                    " from users where = :id",
-            nativeQuery = true
-    )
-    List<Member> find(
-            @Param("id") Long id
-    );
+//    @Query(
+//            value = " select id, user_id, email, name, nickname, password, phone_number, birthday,  " +
+//                    " profile_image_url, create_time, modified_time " +
+//                    " from users where = :id",
+//            nativeQuery = true
+//    )
+//    List<Member> find(
+//            @Param("id") Long id
+//    );
 
     Optional<Member> findByEmail(String email);
 
     @Query("SELECT m FROM Member m JOIN FETCH m.memberJobRoles")
     List<Member> findAllWithJobRoles();
 
-    @Query("SELECT m FROM Member m JOIN FETCH m.memberJobRoles WHERE m.email = :email")
+    @Query("""
+        SELECT DISTINCT m
+        FROM Member m
+        LEFT JOIN FETCH m.memberJobRoles
+        WHERE m.email = :email
+    """)
     Optional<Member> findByEmailWithJobRoles(@Param("email") String email);
 }

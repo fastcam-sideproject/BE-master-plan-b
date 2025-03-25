@@ -2,6 +2,7 @@ package com.example.masterplanbbe.presentation.controller;
 
 import com.example.masterplanbbe.application.service.SortRecommendationService;
 import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.presentation.response.RecommendationResponseDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,8 +22,9 @@ public class RecommendationController {
     private final SortRecommendationService sortRecommendationService;
 
     @GetMapping
-    public List<Spec> getRecommendations(
+    public List<RecommendationResponseDTO> getRecommendations(
             @AuthenticationPrincipal UserDetails userDetails) {
-        return sortRecommendationService.findSpecRecommendations(userDetails.getUsername());
+        List<Spec> specRecommendations = sortRecommendationService.findSpecRecommendations(userDetails.getUsername());
+        return specRecommendations.stream().map(RecommendationResponseDTO::from).toList();
     }
 }
