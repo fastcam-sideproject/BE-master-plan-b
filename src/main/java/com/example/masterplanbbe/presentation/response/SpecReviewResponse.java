@@ -6,7 +6,7 @@ import com.example.masterplanbbe.domain.enums.*;
 public record SpecReviewResponse(
         Long id,
         Long memberId,
-        Long specId,
+        Long memberSpecId,
         Difficulty difficulty,
         ExamType examType,
         ReflectionLevel reflectionLevel,
@@ -23,7 +23,7 @@ public record SpecReviewResponse(
         return new SpecReviewResponse(
                 specReview.getId(),
                 specReview.getMember().getId(),
-                specReview.getSpec().getId(),
+                specReview.getMemberSpec().getId(),
                 specReview.getDifficulty(),
                 specReview.getExamType(),
                 specReview.getReflectionLevel(),

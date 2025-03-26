@@ -1,15 +1,16 @@
 package com.example.masterplanbbe.domain.service;
 
 import com.example.masterplanbbe.domain.entity.Member;
-import com.example.masterplanbbe.domain.entity.Spec;
+import com.example.masterplanbbe.domain.entity.MemberSpec;
+import com.example.masterplanbbe.domain.entity.SpecReview;
 import com.example.masterplanbbe.domain.repository.SpecRepository;
 import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.infrastructure.exception.GlobalException;
 import com.example.masterplanbbe.infrastructure.repository.MemberRepositoryAdapter;
+import com.example.masterplanbbe.infrastructure.repository.MemberSpecRepositoryAdapter;
+import com.example.masterplanbbe.infrastructure.repository.SpecReviewRepositoryAdapter;
 import com.example.masterplanbbe.presentation.request.SpecReviewRequest;
 import com.example.masterplanbbe.presentation.response.SpecReviewResponse;
-import com.example.masterplanbbe.domain.entity.SpecReview;
-import com.example.masterplanbbe.infrastructure.repository.SpecReviewRepositoryAdapter;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,24 +20,24 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class SpecReviewService {
     private final SpecReviewRepositoryAdapter specReviewRepositoryAdapter;
-    private final SpecRepository specRepository;
+    private final MemberSpecRepositoryAdapter memberSpecRepositoryAdapter;
     private final MemberRepositoryAdapter memberRepositoryAdapter;
 
     /**
      * 리뷰 작성하기
      * @param specReviewRequest
-     * @param specId
+     * @param memberSpecId
      * @param memberId
      * @return
      */
-    public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long specId, String email) {
-        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberEmail(specId, email)) {
+    public SpecReviewResponse addReview(SpecReviewRequest specReviewRequest,Long memberSpecId, String email) {
+        if (specReviewRepositoryAdapter.existsBySpecIdAndMemberEmailAndExamType(memberSpecId, email, specReviewRequest.examType())) {
             throw new GlobalException.BadRequestException(ErrorCode.ALREADY_CREATE_REVIEW);
         }
 
-        Spec spec = specRepository.getById(specId);
+        MemberSpec memberSpec = memberSpecRepositoryAdapter.findById(memberSpecId);
         Member member = memberRepositoryAdapter.findByEmail(email);
-        SpecReview specReview = specReviewRequest.toEntity(member, spec);
+        SpecReview specReview = specReviewRequest.toEntity(member, memberSpec);
         SpecReview saved = specReviewRepositoryAdapter.save(specReview);
 
         return SpecReviewResponse.from(saved);
@@ -44,7 +45,7 @@ public class SpecReviewService {
 
     /**
      * 리뷰 단일 확인
-     * @param specId
+     * @param memberSpecId
      * @param specReviewId
      * @return
      */
@@ -62,15 +63,14 @@ public class SpecReviewService {
      * @return
      */
     public Page<SpecReviewResponse> getAllReview(Long specId, Pageable pageable) {
-        Spec spec = specRepository.getById(specId);
-        Page<SpecReview> reviewPage = specReviewRepositoryAdapter.findBySpec(spec, pageable);
+        Page<SpecReview> reviewPage = specReviewRepositoryAdapter.findBySpecId(specId, pageable);
 
         return reviewPage.map(SpecReviewResponse::from);
     }
 
     /**
      * 리뷰 삭제
-     * @param specId
+     * @param memberSpecId
      * @param reviewId
      * @param memberId
      */

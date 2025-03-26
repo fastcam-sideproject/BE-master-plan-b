@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Table(
         name = "reviews",
         uniqueConstraints = {
-                @UniqueConstraint(name = "UK_spec_review_member", columnNames = { "spec_id", "member_id" })
+                @UniqueConstraint(name = "UK_spec_review_member_exam_type", columnNames = { "member_spec_id", "member_id", "exam_type" })
         })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,8 +24,8 @@ public class SpecReview extends FullAuditEntity {
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "spec_id", nullable = false)
-    private Spec spec;
+    @JoinColumn(name = "member_spec_id", nullable = false)
+    private MemberSpec memberSpec;
 
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;

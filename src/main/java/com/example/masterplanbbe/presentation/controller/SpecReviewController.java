@@ -16,26 +16,24 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "SpecReview controller api", description = "스펙후기 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/specs/{specId}/reviews")
+@RequestMapping("api/v1/specs")
 public class SpecReviewController {
 
     private final SpecReviewService specReviewService;
 
     @Operation(summary = "스펙 리뷰 생성")
-    @PostMapping("")
+    @PostMapping("/{memberSpecId}/reviews")
     public ResponseEntity<ApiResponse<SpecReviewResponse>> createReview(
-            @PathVariable Long specId,
+            @PathVariable Long memberSpecId,
             @RequestBody SpecReviewRequest specReviewRequest,
             Authentication authentication
     ) {
-        String email = authentication.getName();
-
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specReviewService.addReview(specReviewRequest, specId, email)));
+                .body(ApiResponse.ok(specReviewService.addReview(specReviewRequest, memberSpecId, authentication.getName())));
     }
 
     @Operation(summary = "스펙 리뷰 조회")
-    @GetMapping("/{reviewId}")
+    @GetMapping("/{specId}/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<SpecReviewResponse>> getReview(
             @PathVariable Long specId,
             @PathVariable Long reviewId
@@ -45,7 +43,7 @@ public class SpecReviewController {
     }
 
     @Operation(summary = "스펙 리뷰 전체조회")
-    @GetMapping("")
+    @GetMapping("/{specId}/reviews")
     public ResponseEntity<ApiResponse<Page<SpecReviewResponse>>> getAllReview(
         @PathVariable Long specId,
         Pageable pageable
@@ -55,28 +53,25 @@ public class SpecReviewController {
     }
 
     @Operation(summary = "스펙 리뷰 수정")
-    @PatchMapping("/{reviewId}")
+    @PatchMapping("/{specId}/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<SpecReviewResponse>> updateReview(
             @PathVariable Long specId,
             @PathVariable Long reviewId,
             @RequestBody SpecReviewRequest specReviewRequest,
             Authentication authentication
     ) {
-        String email = authentication.getName();
-
         return ResponseEntity.ok()
-                .body(ApiResponse.ok(specReviewService.updateReview(specReviewRequest, email, reviewId, specId)));
+                .body(ApiResponse.ok(specReviewService.updateReview(specReviewRequest, authentication.getName(), reviewId, specId)));
     }
 
     @Operation(summary = "스펙 리뷰 삭제")
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/{specId}/reviews/{reviewId}")
     public ResponseEntity<ApiResponse<Void>> deleteReview(
             @PathVariable Long specId,
             @PathVariable Long reviewId,
             Authentication authentication
     ) {
-        String email = authentication.getName();
-        specReviewService.deleteReview(specId, reviewId, email);
+        specReviewService.deleteReview(specId, reviewId, authentication.getName());
 
         return ResponseEntity.ok()
                 .body(ApiResponse.ok());
