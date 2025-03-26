@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.presentation.controller;
 
+import com.example.masterplanbbe.presentation.request.AgeUpdateRequest;
 import com.example.masterplanbbe.presentation.response.ApiResponse;
 import com.example.masterplanbbe.presentation.request.MemberEmailSendDTO;
 import com.example.masterplanbbe.presentation.request.MemberVerificationDTO;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Member controller api", description = "회원 API")
@@ -38,6 +41,16 @@ public class MemberController {
     public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequestDTO request) {
         memberService.createMember(request);
         return ApiResponse.ok("회원가입이 완료됐습니다.");
+    }
+
+    @Operation(summary = "연령대 업데이트")
+    @PostMapping("/update-age")
+    public ApiResponse<?> updateAge(
+            @RequestBody AgeUpdateRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        memberService.updateMemberAge(userDetails.getUsername(), request);
+        return ApiResponse.ok("생년월일이 등록됐습니다");
     }
 
     @GetMapping("/test")
