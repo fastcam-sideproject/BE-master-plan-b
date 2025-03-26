@@ -3,15 +3,14 @@ package com.example.masterplanbbe.domain.service;
 
 import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.infrastructure.exception.GlobalException;
-import com.example.masterplanbbe.presentation.request.MemberEmailSendDTO;
-import com.example.masterplanbbe.presentation.request.MemberVerificationDTO;
+import com.example.masterplanbbe.presentation.request.*;
 import com.example.masterplanbbe.domain.entity.Member;
 import com.example.masterplanbbe.domain.repository.MemberRepository;
 import com.example.masterplanbbe.domain.enums.MemberRoleEnum;
 import com.example.masterplanbbe.infrastructure.exception.DuplicateUserException;
-import com.example.masterplanbbe.presentation.request.MemberCreateRequestDTO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,5 +117,11 @@ public class MemberService {
         String password = passwordEncoder.encode(request.getPassword());
         Member member = new Member(request, password, role);
         memberRepository.save(member);
+    }
+
+    public void updateMemberAge(String email, AgeUpdateRequest request) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                EntityNotFoundException::new);
+        member.updateAge(request.birthDate());
     }
 }

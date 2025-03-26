@@ -81,4 +81,9 @@ public class Member extends FullAuditEntity {
     public void removeJobRole(JobRole jobRole) {
         memberJobRoles.removeIf(mjr -> mjr.getJobRole().equals(jobRole));
     }
+
+    // 연령대 업데이트
+    public void updateAge(LocalDate localDate) {
+        this.birthdate = localDate;
+    }
 }

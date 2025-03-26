@@ -8,6 +8,7 @@ import com.example.masterplanbbe.domain.repository.RecommendationRepository;
 import com.example.masterplanbbe.domain.repository.RecommendationRepositoryCustom;
 import com.example.masterplanbbe.infrastructure.repository.RecommendationRepositoryAdapter;
 import com.example.masterplanbbe.presentation.response.RecommendationResponseDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,28 +26,23 @@ public class SortRecommendationService {
     private static final int RECOMMENDATION_COUNT = 6;
 
     private final MemberRepository memberRepository;
-    private final RecommendationRepository recommendationRepository;
-    private final RecommendationRepositoryAdapter recommendationSpecRepository;
-
     private final RecommendationRepositoryCustom recommendationRepositoryCustom;
 
     public List<RecommendationSpecDTO> findSpecRecommendations(String email) {
         log.info("이메일: {}", email);
 
         Member member = memberRepository.findMemberWithJobRoles(email)
-                .orElseThrow(() -> new RuntimeException("회원 정보를 찾을 수 없습니다."));
+                .orElseThrow(EntityNotFoundException::new);
 
         AgeGroup ageGroup = AgeGroup.getAgeGroup(member.getBirthdate());
         List<JobRole> jobRoles = member.getMemberJobRoles().stream()
                 .map(MemberJobRole::getJobRole)
                 .toList();
-        log.info("관심 직무들: {}", jobRoles.stream().map(JobRole::getJobRoleName).toList());
+
         List<Category> categories = jobRoles.stream()
                 .map(JobRole::getCategory)
                 .distinct()
                 .toList();
-        log.info("직무들의 카테고리: {}", categories.stream().map(Category::getCategoryName).toList());
-
         List<RecommendationSpecDTO> recommendationSpecs = new ArrayList<>();
 
         // 관심 직무가 있는지 없는지?
