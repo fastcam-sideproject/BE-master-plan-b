@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.domain.member;
 
+import com.example.masterplanbbe.application.service.UpdateJobRoleService;
 import com.example.masterplanbbe.infrastructure.configuration.SecurityConfig;
 import com.example.masterplanbbe.infrastructure.exception.JwtAccessDenyHandler;
 import com.example.masterplanbbe.infrastructure.exception.JwtAuthenticationEntryPoint;
@@ -37,6 +38,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@DisplayName("커스텀 스프링 시큐리티 필터 JWT 파싱 플로우 테스트")
 @ExtendWith(SpringExtension.class)
 @Import(SecurityConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
@@ -81,6 +83,9 @@ public class MemberSecurityTest {
 
     @MockBean
     private MemberRepository memberRepository;
+
+    @MockBean
+    private UpdateJobRoleService updateJobRoleService;
 
     @BeforeEach
     void setUp() {}
