@@ -37,10 +37,10 @@ public abstract class CustomOncePerRequestFilter extends OncePerRequestFilter {
             "/ws/**",
             "/api/v1/chat/*/recent",
             "/api/v1/chat/*",
-            "/api/v1/chat/*/users/count",
+            "/api/v1/chat/*/users/count"
 
             // Batch
-            "/batch"
+//            "/batch"
     );
 
     @Override
