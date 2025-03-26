@@ -1,12 +1,15 @@
 package com.example.masterplanbbe.application.service;
 
+import com.example.masterplanbbe.application.dto.RecommendationSpecDTO;
 import com.example.masterplanbbe.domain.entity.*;
 import com.example.masterplanbbe.domain.enums.AgeGroup;
 import com.example.masterplanbbe.domain.repository.MemberRepository;
 import com.example.masterplanbbe.domain.repository.RecommendationRepository;
+import com.example.masterplanbbe.domain.repository.RecommendationRepositoryCustom;
+import com.example.masterplanbbe.infrastructure.repository.RecommendationRepositoryAdapter;
+import com.example.masterplanbbe.presentation.response.RecommendationResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +26,11 @@ public class SortRecommendationService {
 
     private final MemberRepository memberRepository;
     private final RecommendationRepository recommendationRepository;
+    private final RecommendationRepositoryAdapter recommendationSpecRepository;
 
-    public List<Spec> findSpecRecommendations(String email) {
+    private final RecommendationRepositoryCustom recommendationRepositoryCustom;
+
+    public List<RecommendationSpecDTO> findSpecRecommendations(String email) {
         log.info("이메일: {}", email);
 
         Member member = memberRepository.findMemberWithJobRoles(email)
@@ -34,52 +40,38 @@ public class SortRecommendationService {
         List<JobRole> jobRoles = member.getMemberJobRoles().stream()
                 .map(MemberJobRole::getJobRole)
                 .toList();
-        List<Category> categories = jobRoles.stream()
+
+        List<Long> jobRoleIds = jobRoles.stream().map(JobRole::getId).toList();
+        List<Long> categoryIds = jobRoles.stream()
                 .map(JobRole::getCategory)
+                .map(Category::getId)
                 .toList();
 
-        List<Spec> recommendations = new ArrayList<>();
+        List<RecommendationSpecDTO> recommendationSpecs = new ArrayList<>();
 
-        if (!jobRoles.isEmpty()) {
-            addRecommendations(recommendations,
-                    getJobRoleRecommendations(jobRoles, ageGroup),
-                    RECOMMENDATION_COUNT);
+        // 관심 직무가 있는지 없는지?
+        if (true) {
+            // 관심 직무가 없다면 해당 연령대를 기반으로 상위 6개를 뽑아오면 됨
+            recommendationSpecs.addAll(
+                    recommendationRepositoryCustom.findByAgeGroupWithoutJobRoles(ageGroup));
+
+        } else {
+            // 일단 관심 직무를 기반으로 추천
+            if (recommendationSpecs.size() < RECOMMENDATION_COUNT) {
+
+            }
+
+            // 여전히 사이즈가 부족하다면 형제 직무를 기반으로 추천
+            if (recommendationSpecs.size() < RECOMMENDATION_COUNT) {
+
+            }
+
+            // 여전히 사이즈가 부족하다면 해당 카테고리들을 제외한 내용 기반으로 추천
+            if (!jobRoles.isEmpty()) {
+
+            }
         }
 
-        if (recommendations.size() < RECOMMENDATION_COUNT) {
-            addRecommendations(recommendations,
-                    getCategoryRecommendations(jobRoles, categories, ageGroup),
-                    RECOMMENDATION_COUNT - recommendations.size());
-        }
-
-        if (recommendations.size() < RECOMMENDATION_COUNT) {
-            addRecommendations(recommendations,
-                    getGeneralRecommendations(categories, ageGroup),
-                    RECOMMENDATION_COUNT - recommendations.size());
-        }
-
-        return recommendations;
-    }
-
-    private List<Recommendation> getJobRoleRecommendations(List<JobRole> jobRoles, AgeGroup ageGroup) {
-        return recommendationRepository.findTopByJobRolesAndAge(jobRoles, ageGroup,
-                PageRequest.of(0, RECOMMENDATION_COUNT));
-    }
-
-    private List<Recommendation> getCategoryRecommendations(List<JobRole> jobRoles, List<Category> categories, AgeGroup ageGroup) {
-        return recommendationRepository.findTopByCategoryAndAge(jobRoles, categories, ageGroup,
-                PageRequest.of(0, RECOMMENDATION_COUNT));
-    }
-
-    private List<Recommendation> getGeneralRecommendations(List<Category> categories, AgeGroup ageGroup) {
-        return recommendationRepository.findTopByAge(categories, ageGroup,
-                PageRequest.of(0, RECOMMENDATION_COUNT));
-    }
-
-    private void addRecommendations(List<Spec> recommendations, List<Recommendation> newRecommendations, int limit) {
-        int remaining = Math.min(limit, newRecommendations.size());
-        recommendations.addAll(newRecommendations.subList(0, remaining).stream()
-                .map(Recommendation::getSpec)
-                .toList());
+        return recommendationSpecs;
     }
 }
