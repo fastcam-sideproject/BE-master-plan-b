@@ -21,15 +21,6 @@ import java.util.List;
 public class RecommendationController {
 
     private final SortRecommendationService sortRecommendationService;
-    private final UpdateJobRoleService updateJobRoleService;
-
-    @PostMapping("/update-job-roles")
-    public ApiResponse<?> updateJobRoles(
-            @RequestBody RecommendationRequest request,
-            @AuthenticationPrincipal UserDetails userDetails) {
-        updateJobRoleService.updateMemberJobRoles(userDetails.getUsername(), request);
-        return ApiResponse.ok("관심 직무들이 등록됐습니다");
-    }
 
     @GetMapping
     public List<RecommendationResponseDTO> getRecommendations(
