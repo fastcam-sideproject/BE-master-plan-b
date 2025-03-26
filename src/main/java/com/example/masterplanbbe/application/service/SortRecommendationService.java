@@ -40,38 +40,41 @@ public class SortRecommendationService {
         List<JobRole> jobRoles = member.getMemberJobRoles().stream()
                 .map(MemberJobRole::getJobRole)
                 .toList();
-
-        List<Long> jobRoleIds = jobRoles.stream().map(JobRole::getId).toList();
-        List<Long> categoryIds = jobRoles.stream()
+        log.info("관심 직무들: {}", jobRoles.stream().map(JobRole::getJobRoleName).toList());
+        List<Category> categories = jobRoles.stream()
                 .map(JobRole::getCategory)
-                .map(Category::getId)
+                .distinct()
                 .toList();
+        log.info("직무들의 카테고리: {}", categories.stream().map(Category::getCategoryName).toList());
 
         List<RecommendationSpecDTO> recommendationSpecs = new ArrayList<>();
 
         // 관심 직무가 있는지 없는지?
-        if (true) {
+        if (jobRoles.isEmpty()) {
             // 관심 직무가 없다면 해당 연령대를 기반으로 상위 6개를 뽑아오면 됨
             recommendationSpecs.addAll(
                     recommendationRepositoryCustom.findByAgeGroupWithoutJobRoles(ageGroup));
-
         } else {
             // 일단 관심 직무를 기반으로 추천
-            if (recommendationSpecs.size() < RECOMMENDATION_COUNT) {
-
-            }
+            List<RecommendationSpecDTO> byAgeGroupWithJobRoles =
+                    recommendationRepositoryCustom.findByAgeGroupWithJobRoles(ageGroup, jobRoles);
+            recommendationSpecs.addAll(byAgeGroupWithJobRoles.stream().distinct().toList());
 
             // 여전히 사이즈가 부족하다면 형제 직무를 기반으로 추천
             if (recommendationSpecs.size() < RECOMMENDATION_COUNT) {
-
+                List<RecommendationSpecDTO> byAgeGroupAndNotJobRoles =
+                        recommendationRepositoryCustom.findByAgeGroupAndNotJobRoles(ageGroup, jobRoles, categories);
+                recommendationSpecs.addAll(byAgeGroupAndNotJobRoles.stream().distinct().toList());
             }
 
             // 여전히 사이즈가 부족하다면 해당 카테고리들을 제외한 내용 기반으로 추천
-            if (!jobRoles.isEmpty()) {
-
+            if (recommendationSpecs.size() < RECOMMENDATION_COUNT) {
+                List<RecommendationSpecDTO> byAgeGroupAndNotCategories =
+                        recommendationRepositoryCustom.findByAgeGroupAndNotCategories(ageGroup, categories);
+                recommendationSpecs.addAll(byAgeGroupAndNotCategories.stream().distinct().toList());
             }
         }
 
-        return recommendationSpecs;
+        return recommendationSpecs.subList(0, 6);
     }
 }

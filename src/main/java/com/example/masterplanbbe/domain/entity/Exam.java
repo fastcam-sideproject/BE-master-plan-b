@@ -21,13 +21,13 @@ public class Exam extends FullAuditEntity {
     @Column(nullable = false)
     private Integer participantCount;
 
-    @Column
+    @Column(name = "apply_start_date")
     private LocalDate applyStartDate;
 
-    @Column
+    @Column(name = "apply_end_date")
     private LocalDate applyEndDate;
 
-    @Column
+    @Column(name = "exam_start_date")
     private LocalDate examStartDate;
 
     public Exam(ExamDetail examDetail,
