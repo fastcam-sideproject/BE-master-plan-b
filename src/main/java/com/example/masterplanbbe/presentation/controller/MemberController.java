@@ -1,14 +1,15 @@
 package com.example.masterplanbbe.presentation.controller;
 
+import com.example.masterplanbbe.application.service.UpdateJobRoleService;
+import com.example.masterplanbbe.presentation.request.*;
 import com.example.masterplanbbe.presentation.response.ApiResponse;
-import com.example.masterplanbbe.presentation.request.MemberEmailSendDTO;
-import com.example.masterplanbbe.presentation.request.MemberVerificationDTO;
 import com.example.masterplanbbe.domain.service.MemberService;
-import com.example.masterplanbbe.presentation.request.MemberCreateRequestDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Member controller api", description = "회원 API")
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
+    private final UpdateJobRoleService updateJobRoleService;
 
     @Operation(summary = "이메일 중복 확인 및 인증번호 발송")
     @PostMapping("/send-verification-code")
@@ -38,6 +40,25 @@ public class MemberController {
     public ApiResponse<?> create(@Valid @RequestBody MemberCreateRequestDTO request) {
         memberService.createMember(request);
         return ApiResponse.ok("회원가입이 완료됐습니다.");
+    }
+
+    @Operation(summary = "연령대 업데이트")
+    @PostMapping("/update-age")
+    public ApiResponse<?> updateAge(
+            @RequestBody AgeUpdateRequest request,
+            @AuthenticationPrincipal UserDetails userDetails
+    ) {
+        memberService.updateMemberAge(userDetails.getUsername(), request);
+        return ApiResponse.ok("생년월일이 등록됐습니다");
+    }
+
+    @Operation(summary = "관심 직무 업데이트")
+    @PostMapping("/update-job-roles")
+    public ApiResponse<?> updateJobRoles(
+            @RequestBody RecommendationRequest request,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        updateJobRoleService.updateMemberJobRoles(userDetails.getUsername(), request);
+        return ApiResponse.ok("관심 직무들이 등록됐습니다");
     }
 
     @GetMapping("/test")

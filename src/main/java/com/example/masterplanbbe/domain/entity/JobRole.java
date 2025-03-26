@@ -24,7 +24,7 @@ public class JobRole extends FullAuditEntity {
     private Category category;
 
     @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<JobSpec> jobSpecs = new HashSet<>();
+    private Set<JobRoleSpec> jobRoleSpecs = new HashSet<>();
 
     @OneToMany(mappedBy = "jobRole", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<MemberJobRole> memberJobRoles = new HashSet<>();

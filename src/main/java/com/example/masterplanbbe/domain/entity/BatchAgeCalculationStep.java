@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "recommendations")
+@Table(name = "batch_age_calculation_steps")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Recommendation {
+public class BatchAgeCalculationStep {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,21 +21,12 @@ public class Recommendation {
     @Column(name = "age_group", nullable = false)
     private AgeGroup ageGroup;
 
-    @Column(name = "score", nullable = false)
-    private Double score;
-
+    // 스펙 ID가 아니라 시험을 참조해야 되려나? 시험을 중심으로 인기있는 걸 추천하니까
+    // 연산은 시험을 기준으로 좌르륵 전부 다 하고, 추천 데이터 적재는 스펙으로?
     @ManyToOne
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
 
-    @ManyToOne
-    @JoinColumn(name = "job_role_id", nullable = false)
-    private JobRole jobRole;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    private Category category;
-
-    @Column(name = "rank_main")
-    private Integer rankMain;
+    @Column(name = "score", nullable = false)
+    private Double score;
 }

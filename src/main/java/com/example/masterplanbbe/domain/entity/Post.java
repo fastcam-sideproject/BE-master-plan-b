@@ -15,16 +15,20 @@ import java.util.List;
 @AllArgsConstructor
 public class Post extends FullAuditEntity {
 
+    @ManyToOne
+    @JoinColumn(nullable = false, name = "exam_id")
+    private Exam exam;
+
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "like_count")
     private Integer likeCount = 0;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "view_count")
     private Integer viewCount = 0;
 
     @ManyToOne

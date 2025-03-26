@@ -7,11 +7,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "job_specs")
+@Table(name = "job_role_specs")
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class JobSpec {
+public class JobRoleSpec {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +23,4 @@ public class JobSpec {
     @ManyToOne
     @JoinColumn(name = "spec_id", nullable = false)
     private Spec spec;
-
-    public JobSpec(JobRole jobRole, Spec spec) {
-        this.jobRole = jobRole;
-        this.spec = spec;
-    }
 }

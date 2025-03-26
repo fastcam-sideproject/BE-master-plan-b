@@ -9,7 +9,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -43,7 +45,7 @@ public class Member extends FullAuditEntity {
     private MemberRoleEnum role;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<MemberJobRole> memberJobRoles = new HashSet<>();
+    private List<MemberJobRole> memberJobRoles = new ArrayList<>();
 
     // Custom Member Create
     public Member(MemberCreateRequestDTO request, String password, MemberRoleEnum role) {
@@ -78,5 +80,10 @@ public class Member extends FullAuditEntity {
     // remove interest job role
     public void removeJobRole(JobRole jobRole) {
         memberJobRoles.removeIf(mjr -> mjr.getJobRole().equals(jobRole));
+    }
+
+    // 연령대 업데이트
+    public void updateAge(LocalDate localDate) {
+        this.birthdate = localDate;
     }
 }

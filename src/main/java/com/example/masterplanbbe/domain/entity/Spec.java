@@ -23,25 +23,25 @@ public class Spec extends FullAuditEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private String issuingOrganization;
 
     @Enumerated(EnumType.STRING)
     private SpecCategory specCategory; // 삭제 예정 필드(연관된 서비스 코드들 삭제 요망)
 
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<JobSpec> jobSpecs = new HashSet<>();
+    private Set<JobRoleSpec> jobRoleSpecs = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private CertificationType certificationType;
 
-    @Column(nullable = false)
+    @Column(name = "participant_count")
     private Integer participantCount;
 
     @OneToMany(mappedBy = "spec", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDetail> examDetails;
 
-    @JoinColumn(name = "lastest_exam")
+    @JoinColumn(name = "latest_exam")
     @OneToOne(fetch = FetchType.LAZY)
     private Exam latestExam;
 
