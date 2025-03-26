@@ -57,7 +57,7 @@ public class RedisConfig {
                 .clientOptions(clientoptions)
                 .commandTimeout(Duration.ofMinutes(1))
                 .shutdownTimeout(Duration.ZERO)
-//                .useSsl() // 꼭 오픈하시고 dev에 올려주세요!
+                .useSsl() // 꼭 오픈하시고 dev에 올려주세요!
                 .build();
 
         return new LettuceConnectionFactory(redisConfiguration, lettuceClientConfiguration);
