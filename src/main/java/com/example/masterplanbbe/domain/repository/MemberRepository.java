@@ -27,13 +27,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m JOIN FETCH m.memberJobRoles")
     List<Member> findAllWithJobRoles();
 
-    @Query("""
-        SELECT DISTINCT m
-        FROM Member m
-        LEFT JOIN FETCH m.memberJobRoles mjr
-        LEFT JOIN FETCH mjr.jobRole jr
-        LEFT JOIN FETCH jr.category
-        WHERE m.email = :email
-    """)
-    Optional<Member> findByEmailWithJobRoles(String email);
+    @Query("SELECT DISTINCT m FROM Member m " +
+            "LEFT JOIN FETCH m.memberJobRoles mjr " +
+            "LEFT JOIN FETCH mjr.jobRole jr " +
+            "LEFT JOIN FETCH jr.category " +
+            "WHERE m.email = :memberEmail")
+    Optional<Member> findMemberWithJobRoles(@Param("memberEmail") String memberEmail);
 }
