@@ -29,8 +29,9 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
 @SpringBootTest
-@Transactional(transactionManager = "dataTransactionManager")
+//@Transactional(transactionManager = "dataTransactionManager")
 class ChatMessageRepositoryImplTest {
 
     @Autowired
