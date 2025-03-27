@@ -31,13 +31,17 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: "Backend_Test_Fail_Alarm"
-          DISCORD_EMBEDS: |
-            **⚠️ 테스트 실패! ⚠️**
-            테스트가 실패하여 배포 브랜치 병합이 중단되었습니다. 🔴
-            - **Repository**: ${{ github.repository }}
-            - **Commit**: ${{ github.sha }}
-            - **Author**: ${{ github.actor }}
-            - [🔗 Commit Link](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+          DISCORD_EMBEDS: '[{
+            "title": "⚠️ 테스트 실패! ⚠️",
+            "description": "테스트가 실패하여 배포 브랜치 병합이 중단되었습니다. 🔴",
+            "color": 16711680,
+            "fields": [
+              { "name": "Repository", "value": "${{ github.repository }}", "inline": true },
+              { "name": "Commit", "value": "${{ github.sha }}", "inline": true },
+              { "name": "Author", "value": "${{ github.actor }}", "inline": true },
+              { "name": "🔗 Commit Link", "value": "[클릭하기](https://github.com/${{ github.repository }}/commit/${{ github.sha }})", "inline": false }
+            ]
+          }]'
 
   build:
     needs: test
