@@ -1,6 +1,10 @@
 name: CICD
 
 on:
+  workflow_run:
+    workflows: ["Test"]
+    types:
+      - completed
   push:
     branches: [ "dev" ]
 
@@ -8,39 +12,7 @@ permissions:
   contents: read
   
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Run Tests
-        run: |
-          echo ${{ secrets.APPLICATION }} | base64 --decode > ./src/main/resources/application.yml
-          cat ./src/main/resources/application.yml
-          chmod +x ./gradlew
-          ./gradlew test
-
-      - name: Send Discord Alert on Failure
-        if: failure()
-        uses: Ilshidur/action-discord@master
-        env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: "Backend_Test_Fail_Alarm"
-          DISCORD_EMBEDS: |
-            **⚠️ 테스트 실패! ⚠️**
-            테스트가 실패하여 배포 브랜치 병합이 중단되었습니다. 🔴
-            - **Repository**: ${{ github.repository }}
-            - **Commit**: ${{ github.sha }}
-            - **Author**: ${{ github.actor }}
-            - [🔗 Commit Link](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
-
   build:
-    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -55,7 +27,7 @@ jobs:
           echo ${{ secrets.APPLICATION }} | base64 --decode > ./src/main/resources/application.yml
           cat ./src/main/resources/application.yml
           chmod +x ./gradlew
-          ./gradlew clean build -x test
+          ./gradlew clean build
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
