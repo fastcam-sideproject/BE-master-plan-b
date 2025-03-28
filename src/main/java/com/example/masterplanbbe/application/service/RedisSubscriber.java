@@ -1,6 +1,7 @@
 package com.example.masterplanbbe.application.service;
 
 import com.example.masterplanbbe.application.dto.ChatRedisDto;
+import com.example.masterplanbbe.infrastructure.exception.chat.ChatRedisSubscribeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,8 @@ public class RedisSubscriber implements MessageListener {
             ChatRedisDto chatRedisDto = objectMapper.readValue(msgBody, ChatRedisDto.class);
             messagingTemplate.convertAndSend("/sub/chat/" + chatRedisDto.specId(), chatRedisDto);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("Redis 메시지 수신 및 처리 실패: {}", e.getMessage(), e);
+            throw new ChatRedisSubscribeException(); // 구독 실패 시 커스텀 예외 던짐
         }
     }
 }
