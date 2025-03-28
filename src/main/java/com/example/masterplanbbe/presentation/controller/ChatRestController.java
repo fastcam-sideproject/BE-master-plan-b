@@ -6,8 +6,7 @@ import com.example.masterplanbbe.infrastructure.security.jwt.JwtService;
 import com.example.masterplanbbe.presentation.response.ChatResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,8 +27,8 @@ public class ChatRestController {
 
     @Operation(summary = "Redis에서 최신 채팅 메시지 가져오기")
     @GetMapping("/{specId}/recent")
-    public ResponseEntity<List<ChatResponse>> getRecentChatsFromRedis(@PathVariable("specId") Long specId,
-                                                                      @RequestParam(name = "size", defaultValue = "50") int size) {
+    public ResponseEntity<List<ChatResponse>> getRecentChatsFromRedis(@PathVariable("specId") @NotNull @Positive Long specId,
+                                                                      @RequestParam(name = "size", defaultValue = "50") @Min(1) @Max(100) int size) {
         List<ChatResponse> recentMessages = chatService.getRecentChatsFromRedis(specId, size);
         return ResponseEntity.ok(recentMessages);
     }
@@ -37,8 +36,8 @@ public class ChatRestController {
 
     @Operation(summary = "MySQL에서 채팅 메시지 가져오기")
     @GetMapping("/{specId}")
-    public ResponseEntity<Slice<ChatResponse>> getChatsFromMySQL(@PathVariable("specId") Long specId,
-                                                                 @RequestParam(name = "lastChatId") Long lastChatId,
+    public ResponseEntity<Slice<ChatResponse>> getChatsFromMySQL(@PathVariable("specId") @NotNull @Positive Long specId,
+                                                                 @RequestParam(name = "lastChatId") @NotNull @Positive Long lastChatId,
                                                                  @RequestParam(defaultValue = "50") @Min(1) @Max(100) int size) {
         Pageable pageable = PageRequest.of(0, size);
         Slice<ChatResponse> chatMessages = chatService.getChatMessage(lastChatId, specId, pageable);
@@ -47,10 +46,10 @@ public class ChatRestController {
 
     @Operation(summary = "채팅 메시지 삭제하기")
     @DeleteMapping("/{specId}/{chatId}")
-    public ResponseEntity<String> deleteChat(@PathVariable("specId") Long specId,
-                                             @PathVariable("chatId") Long chatId,
-                                             @RequestParam(name = "memberId") Long memberId,
-                                             @RequestHeader("Authorization") String token) {
+    public ResponseEntity<String> deleteChat(@PathVariable("specId") @NotNull @Positive Long specId,
+                                             @PathVariable("chatId") @NotNull @Positive Long chatId,
+                                             @RequestParam(name = "memberId") @NotNull @Positive Long memberId,
+                                             @RequestHeader("Authorization") @NotBlank String token) {
         MemberRoleEnum role = jwtService.getRoleFromAccessToken(token);
         boolean deleted = chatService.deleteChat(specId, chatId, memberId, role);
         if (!deleted) {
@@ -61,7 +60,7 @@ public class ChatRestController {
 
     @Operation(summary = "채팅방 사용자 수 조회")
     @GetMapping("/{specId}/users/count")
-    public ResponseEntity<Long> getUserCount(@PathVariable("specId") Long specId) {
+    public ResponseEntity<Long> getUserCount(@PathVariable("specId") @NotNull @Positive Long specId) {
         Long chatRoomMemberCount = chatService.getChatRoomMemberCount(specId);
         return ResponseEntity.ok(chatRoomMemberCount);
     }

@@ -18,6 +18,11 @@ import java.util.Map;
 @Priority(Integer.MAX_VALUE)
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    @ExceptionHandler(BaseException.class)
+    public ErrorResponse<?> handleBaseException(BaseException e) {
+        return ErrorResponse.of(e.getErrorCode());
+    }
+
     @ExceptionHandler(GlobalException.NotFoundException.class)
     public ErrorResponse<?> handleNotFoundException(GlobalException.NotFoundException e) {
         return ErrorResponse.of(e.getErrorCode());

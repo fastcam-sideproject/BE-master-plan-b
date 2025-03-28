@@ -67,7 +67,29 @@ public enum ErrorCode {
     NOT_FOUND_REVIEW(400,"SR001" ,"리뷰를 찾을 수 없습니다." ),
     NOT_DELETE_REVIEW(400,"SR002" ,"리뷰를 삭제할 수 없습니다." ),
     ALREADY_CREATE_REVIEW(400,"SR003" ,"이미 리뷰를 작성하였습니다." ),
-    NOT_MODIFIED_REVIEW(400, "SR004","리뷰를 수정 할 수 없습니다." );
+    NOT_MODIFIED_REVIEW(400, "SR004","리뷰를 수정 할 수 없습니다." ),
+
+    // Chat
+    CHAT_LOAD_FAIL(500, "CH001", "채팅 로딩 중 오류가 발생했습니다."),
+    CHAT_SAVE_FAIL(500, "CH002", "채팅 저장 중 오류가 발생했습니다."),
+    CHAT_QUERY_FAIL(500, "CH003", "채팅 메시지 조회 중 오류가 발생했습니다."),
+    CHAT_INVALID_QUERY_PARAMETER(400, "CH004", "채팅 메시지 조회 요청의 파라미터가 잘못되었습니다."),
+    CHAT_DELETE_INVALID_REQUEST(400, "CH005", "채팅 삭제 요청이 유효하지 않습니다."),
+    CHAT_DELETE_FORBIDDEN(403, "CH006", "채팅 삭제 권한이 없습니다."),
+    CHAT_NOT_FOUND(404, "CH007", "삭제할 채팅 메시지를 찾을 수 없습니다."),
+    CHAT_DELETE_FAILED(500, "CH008", "채팅 메시지 삭제에 실패했습니다."),
+    CHAT_ROOM_INVALID_REQUEST(400, "CH009", "채팅방 요청 파라미터가 유효하지 않습니다."),
+    CHAT_ROOM_OPERATION_FAILED(500, "CH010", "채팅방 처리 중 오류가 발생했습니다."),
+    CHAT_REDIS_OPERATION_FAILED(500, "CH011", "채팅 Redis 처리 중 오류가 발생했습니다."),
+    CHAT_REDIS_INVALID_KEY(400, "CH012", "유효하지 않은 채팅 Redis 키입니다."),
+    CHAT_REDIS_PUBLISH_FAIL(500, "CH013", "Redis 메시지 발행 중 오류가 발생했습니다."),
+    CHAT_REDIS_SUBSCRIBE_FAIL(500, "CH014", "Redis 메시지 수신 처리 중 오류가 발생했습니다."),
+    CHAT_BATCH_SAVE_FAIL(500, "CH015", "채팅 배치 저장 실패"),
+    CHAT_BATCH_SQL_ERROR(500, "CH016", "SQL 오류가 발생했습니다."),
+    CHAT_BATCH_DATA_FORMAT_ERROR(400, "CH017", "데이터 형식 오류가 발생했습니다."),
+    CHAT_MESSAGE_QUERY_FAIL(500, "CH021", "채팅 메시지 쿼리 실행 중 오류가 발생했습니다."),
+    CHAT_MESSAGE_REPO_FAIL(500, "CH018", "채팅 메시지 레포지토리 오류가 발생했습니다."),
+    CHAT_MESSAGE_INVALID_INPUT(400, "CH020", "잘못된 채팅 메시지 입력입니다.");
 
     private final Integer status;
     private final String code;

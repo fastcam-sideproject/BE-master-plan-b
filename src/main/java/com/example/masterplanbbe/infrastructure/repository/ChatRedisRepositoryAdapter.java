@@ -2,6 +2,8 @@ package com.example.masterplanbbe.infrastructure.repository;
 
 import com.example.masterplanbbe.application.dto.ChatRedisDto;
 import com.example.masterplanbbe.domain.repository.ChatRedisRepositoryPort;
+import com.example.masterplanbbe.infrastructure.exception.chat.ChatRedisOperationException;
+import com.example.masterplanbbe.infrastructure.exception.chat.InvalidChatRedisKeyException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,12 @@ import java.util.Set;
 @Repository
 public class ChatRedisRepositoryAdapter implements ChatRedisRepositoryPort {
     private final RedisTemplate<String, Object> redisTemplate;
-    private final RedisTemplate<String, String> stringRedisTemplate;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public ChatRedisRepositoryAdapter(@Qualifier("chatPubSubTemplate") RedisTemplate<String, Object> redisTemplate,
-                                      @Qualifier("authTemplate") RedisTemplate<String, String> stringRedisTemplate,
                                       @Qualifier("chatObjectMapper") ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
-        this.stringRedisTemplate = stringRedisTemplate;
         this.objectMapper = objectMapper;
     }
 
@@ -32,8 +31,16 @@ public class ChatRedisRepositoryAdapter implements ChatRedisRepositoryPort {
      * 채팅 메시지를 Redis에 저장
      */
     public void saveMessage(Long specId, ChatRedisDto chatRedisDto) {
-        String key = "spec:" + specId;
-        redisTemplate.opsForList().leftPush(key, chatRedisDto);
+        if (specId == null || chatRedisDto == null) {
+            throw new InvalidChatRedisKeyException();
+        }
+        try {
+            String key = "spec:" + specId;
+            redisTemplate.opsForList().leftPush(key, chatRedisDto);
+        } catch (Exception e) {
+            log.error("Redis 메시지 저장 실패: {}", e.getMessage(), e);
+            throw new ChatRedisOperationException();
+        }
     }
 
     /**
@@ -49,11 +56,22 @@ public class ChatRedisRepositoryAdapter implements ChatRedisRepositoryPort {
      * 특정 범위의 채팅 메시지를 조회
      */
     public List<ChatRedisDto> getMessagesInRange(Long specId, int start, int end) {
-        String key = "spec:" + specId;
-        List<Object> rawMessages = redisTemplate.opsForList().range(key, start, end);
+        if (specId == null || start < 0 || end < start) {
+            throw new InvalidChatRedisKeyException();
+        }
+        try {
+            String key = "spec:" + specId;
+            List<Object> rawMessages = redisTemplate.opsForList().range(key, start, end);
 
-        return rawMessages != null ? rawMessages.stream()
-                .map(obj -> objectMapper.convertValue(obj, ChatRedisDto.class)).toList() : List.of();
+            return rawMessages != null
+                    ? rawMessages.stream()
+                    .map(obj -> objectMapper.convertValue(obj, ChatRedisDto.class))
+                    .toList()
+                    : List.of();
+        } catch (Exception e) {
+            log.error("Redis 메시지 조회 실패: {}", e.getMessage(), e);
+            throw new ChatRedisOperationException();
+        }
     }
 
     /**
@@ -76,32 +94,63 @@ public class ChatRedisRepositoryAdapter implements ChatRedisRepositoryPort {
      * 특정 채팅 메시지를 삭제
      */
     public Long deleteMessage(Long specId, ChatRedisDto chatRedisDto) {
-        String key = "spec:" + specId;
-        //TTL 설정 만료에 따라 직렬화된 객체 형태의 차이로 삭제가 안될수도 있으니 개선 필요
-        return redisTemplate.opsForList().remove(key, 1, chatRedisDto);
+        if (specId == null || chatRedisDto == null) {
+            throw new InvalidChatRedisKeyException();
+        }
+        try {
+            String key = "spec:" + specId;
+            return redisTemplate.opsForList().remove(key, 1, chatRedisDto);
+        } catch (Exception e) {
+            log.error("Redis 메시지 삭제 실패: {}", e.getMessage(), e);
+            throw new ChatRedisOperationException();
+        }
     }
 
     /**
      * 사용자가 채팅방에 입장하면 Redis Set에 추가
      */
     public void addUserToChatRoom(Long specId, Long memberId) {
-        String key = "spec_users:" + specId;
-        redisTemplate.opsForSet().add(key, memberId);
+        if (specId == null || memberId == null) {
+            throw new InvalidChatRedisKeyException();
+        }
+        try {
+            String key = "spec_users:" + specId;
+            redisTemplate.opsForSet().add(key, memberId);
+        } catch (Exception e) {
+            log.error("채팅방 입장 Redis 오류: {}", e.getMessage(), e);
+            throw new ChatRedisOperationException();
+        }
     }
 
     /**
      * 사용자가 채팅방에서 나가면 Redis Set에서 제거
      */
     public void removeUserFromChatRoom(Long specId, Long memberId) {
-        String key = "spec_users:" + specId;
-        redisTemplate.opsForSet().remove(key, memberId);
+        if (specId == null || memberId == null) {
+            throw new InvalidChatRedisKeyException();
+        }
+        try {
+            String key = "spec_users:" + specId;
+            redisTemplate.opsForSet().remove(key, memberId);
+        } catch (Exception e) {
+            log.error("채팅방 퇴장 Redis 오류: {}", e.getMessage(), e);
+            throw new ChatRedisOperationException();
+        }
     }
 
     /**
      * 특정 채팅방(specId)의 현재 접속자 수 조회
      */
     public Long getChatRoomUserCount(Long specId) {
-        String key = "spec_users:" + specId;
-        return redisTemplate.opsForSet().size(key);
+        if (specId == null) {
+            throw new InvalidChatRedisKeyException();
+        }
+        try {
+            String key = "spec_users:" + specId;
+            return redisTemplate.opsForSet().size(key);
+        } catch (Exception e) {
+            log.error("채팅방 접속자 수 조회 실패: {}", e.getMessage(), e);
+            throw new ChatRedisOperationException();
+        }
     }
 }
