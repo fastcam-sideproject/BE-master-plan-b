@@ -2,6 +2,7 @@ package com.example.masterplanbbe.infrastructure.util;
 
 import com.example.masterplanbbe.presentation.response.JmcdApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -13,17 +14,27 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.util.List;
 
-@RequiredArgsConstructor
 public class JmcdApiUtil {
+    private final WebClient.Builder webClientBuilder;
+    private final String serviceKey;
 
-    private WebClient.Builder webClientBuilder;
+    private final String jmcdApiUrl = "http://openapi.q-net.or.kr/api/service/rest/InquiryListNationalQualifcationSVC/getList";
+
+    public JmcdApiUtil(WebClient.Builder webClientBuilder, @Value("${jmcd.serviceKey}") String serviceKey) {
+        this.webClientBuilder = webClientBuilder;
+        this.serviceKey = serviceKey;
+    }
 
     public List<JmcdApiResponse.Item> fetchAndParseItems() throws ParserConfigurationException, SAXException, IOException {
+        StringBuilder urlBuilder = new StringBuilder(jmcdApiUrl);
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey", "UTF-8") + serviceKey);
+
         Flux<DataBuffer> flux = webClientBuilder.build()
                 .get()
-                .uri("http://localhost:8080/jmcd")
+                .uri(urlBuilder.toString())
                 .retrieve()
                 .bodyToFlux(DataBuffer.class);
 

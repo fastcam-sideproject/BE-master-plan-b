@@ -32,7 +32,7 @@ public class JmcdItemHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) {
         switch (qName) {
             case "jmcd" -> jmcd = Integer.parseInt(content.toString());
-            case "specName" -> specName = content.toString();
+            case "jmfldnm" -> specName = content.toString();
             case "item" -> items.add(new JmcdApiResponse.Item(jmcd, specName));
         }
     }
