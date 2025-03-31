@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.infrastructure.security.handler;
 
+import com.example.masterplanbbe.infrastructure.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.presentation.response.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +39,8 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
             errorMessage = "내부 시스템 문제로 로그인할 수 없습니다. 관리자에게 문의하세요.";
         } else if (exception instanceof UsernameNotFoundException) {
             errorMessage = "존재하지 않는 계정입니다.";
+        } else if (exception instanceof CustomAuthenticationException) {
+            errorMessage = "이미 가입한 이메일로는 로그인할 수 없습니다";
         } else {
             errorMessage = "알 수 없는 오류입니다.";
         }
