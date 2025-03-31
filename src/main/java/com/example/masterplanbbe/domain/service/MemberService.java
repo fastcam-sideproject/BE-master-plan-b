@@ -105,6 +105,11 @@ public class MemberService {
      * @param request 회원가입 DTO
      */
     public void createMember(MemberCreateRequestDTO request) {
+        // 중복 이메일 검증
+        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new DuplicateUserException(ErrorCode.DUPLICATE_USER_EMAIL);
+        }
+
 //        MemberRoleEnum role = null;
         MemberRoleEnum role = MemberRoleEnum.USER;
 

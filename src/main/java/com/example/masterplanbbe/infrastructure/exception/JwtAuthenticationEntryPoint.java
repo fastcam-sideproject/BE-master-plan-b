@@ -32,8 +32,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
     private void sendResponseMsg(HttpServletResponse response, Object responseBody) throws IOException {
+        response.reset();
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json;charset=UTF-8");
+
         try (PrintWriter writer = response.getWriter()) {
             writer.print(new ObjectMapper().writeValueAsString(responseBody));
             writer.flush();
