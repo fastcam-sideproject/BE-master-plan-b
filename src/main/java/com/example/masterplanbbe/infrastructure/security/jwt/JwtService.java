@@ -42,6 +42,11 @@ public class JwtService {
         this.blacklistTokenTemplate = blacklistTokenTemplate;
     }
 
+    // 증복 로그인 방지(이미 해당 이메일 명의로 리프레시 토큰을 보유하고 있는지)
+    public boolean isUserAlreadyLogin(String email) {
+        return Boolean.TRUE.equals(authTemplate.hasKey(REDIS_AUTH_KEY + email));
+    }
+
     /**
      * 1. 엑세스 토큰 검증
      * 1-1. 유효하면 그대로 통과

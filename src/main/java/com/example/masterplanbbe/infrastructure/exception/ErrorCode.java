@@ -28,11 +28,12 @@ public enum ErrorCode {
     // Auth
     DUPLICATED_PHONE_NUMBER(409, "A001", "이미 등록된 전화번호입니다."),
     UNAUTHORIZED_ACCESS(HttpServletResponse.SC_UNAUTHORIZED, "A002", "로그인 후 접속해주세요."),
-    LOGIN_FAIL(401, "A003", "아이디 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요."),
+    LOGIN_FAIL(401, "A003", "로그인에 실패하였습니다."),
     FORBIDDEN_ACCESS(HttpServletResponse.SC_FORBIDDEN, "A004", "접근 권한이 부족합니다."),
     LOGOUT_EXCEPTION(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "A005", "비정상적인 로그아웃! 관리자에게 문의하세요."),
     WRONG_TOKEN_ISSUE(HttpServletResponse.SC_UNAUTHORIZED, "A006", "비정상적인 인증! 잠시 후에 다시 시도해주세요."),
     TOKEN_HIJACKING_ISSUE(HttpServletResponse.SC_UNAUTHORIZED, "A007", "블랙리스트 토큰 감지! 토큰 탈취 가능성 존재!"),
+    USER_ALREADY_LOGIN(HttpServletResponse.SC_BAD_REQUEST, "A008", "이미 로그인 된 사용자입니다"),
 
     // Oauth
     SOCIAL_EMAIL_LOAD_FAIL(400, "O001", "소셜 로그인에서 이메일을 불러올 수 없습니다."),

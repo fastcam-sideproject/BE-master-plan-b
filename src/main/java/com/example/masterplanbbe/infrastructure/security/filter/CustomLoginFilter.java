@@ -1,5 +1,6 @@
 package com.example.masterplanbbe.infrastructure.security.filter;
 
+import com.example.masterplanbbe.infrastructure.exception.CustomAuthenticationException;
 import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.presentation.response.ApiResponse;
 import com.example.masterplanbbe.presentation.response.ErrorResponse;
@@ -50,6 +51,9 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         try {
             LoginDTO requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
 
+            if (jwtService.isUserAlreadyLogin(requestDto.email()))
+                throw new CustomAuthenticationException(ErrorCode.USER_ALREADY_LOGIN, "이미 로그인한 사용자입니다");
+
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             requestDto.email(),
@@ -89,6 +93,8 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
             errorMessage = "내부 시스템 문제로 로그인할 수 없습니다. 관리자에게 문의하세요.";
         } else if (exception instanceof UsernameNotFoundException) {
             errorMessage = "존재하지 않는 계정입니다.";
+        } else if (exception instanceof CustomAuthenticationException) {
+            errorMessage = "이미 로그인한 사용자입니다.";
         } else {
             errorMessage = "알 수 없는 오류입니다.";
         }
