@@ -1,5 +1,7 @@
 package com.example.masterplanbbe.infrastructure.security.service;
 
+import com.example.masterplanbbe.infrastructure.exception.CustomAuthenticationException;
+import com.example.masterplanbbe.infrastructure.exception.ErrorCode;
 import com.example.masterplanbbe.infrastructure.security.dto.KakaoResponse;
 import com.example.masterplanbbe.infrastructure.security.dto.NaverResponse;
 import com.example.masterplanbbe.infrastructure.security.dto.OAuth2Response;
@@ -62,7 +64,8 @@ public class OAuth2UserServiceImpl extends DefaultOAuth2UserService {
             Member member = memberOptional.get();
 
             // OAuth 2.0 로그인과 커스텀 로그인 중복 방지
-            if (!member.getIsOAuth2()) throw new IllegalArgumentException("이미 커스텀 가입되어 있는 계정");
+            if (!member.getIsOAuth2())
+                throw new CustomAuthenticationException(ErrorCode.DUPLICATE_USER_EMAIL, "이미 가입한 이메일로는 로그인할 수 없습니다");
 
             userDetails = new UserDetailsImpl(member, oauth2User.getAttributes());
         } else {
