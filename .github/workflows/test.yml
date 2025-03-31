@@ -21,7 +21,7 @@ jobs:
       - name: Run Tests
         run: |
           echo ${{ secrets.APPLICATION }} | base64 --decode > ./src/main/resources/application.yml
-          cat ./src/main/resources/application.yml
+#          cat ./src/main/resources/application.yml
           chmod +x ./gradlew
           ./gradlew test
 
