@@ -12,13 +12,13 @@ public class JmcdItemHandler extends DefaultHandler {
     private StringBuilder content = new StringBuilder();
 
     private Integer jmcd;
-    private String specName;
+    private String name;
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) {
         if (qName.equals("item")) {
             jmcd = null;
-            specName = null;
+            name = null;
         }
         content.setLength(0);
     }
@@ -32,8 +32,8 @@ public class JmcdItemHandler extends DefaultHandler {
     public void endElement(String uri, String localName, String qName) {
         switch (qName) {
             case "jmcd" -> jmcd = Integer.parseInt(content.toString());
-            case "jmfldnm" -> specName = content.toString();
-            case "item" -> items.add(new JmcdApiResponse.Item(jmcd, specName));
+            case "jmfldnm" -> name = content.toString();
+            case "item" -> items.add(new JmcdApiResponse.Item(jmcd, name));
         }
     }
 

@@ -1,7 +1,6 @@
 package com.example.masterplanbbe.infrastructure.util;
 
 import com.example.masterplanbbe.presentation.response.JmcdApiResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
