@@ -1,4 +1,4 @@
-package com.example.masterplanbbe.domain.infrastructure.util;
+package com.example.masterplanbbe.infrastructure.repository.util;
 
 import com.example.masterplanbbe.infrastructure.util.JmcdApiUtil;
 import com.example.masterplanbbe.presentation.response.JmcdApiResponse;
