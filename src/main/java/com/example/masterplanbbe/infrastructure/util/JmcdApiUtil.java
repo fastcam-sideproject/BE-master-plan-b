@@ -4,6 +4,7 @@ import com.example.masterplanbbe.presentation.response.JmcdApiResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.xml.sax.SAXException;
 import reactor.core.publisher.Flux;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.util.List;
 
+@Component
 public class JmcdApiUtil {
     private final WebClient.Builder webClientBuilder;
     private final String serviceKey;
