@@ -16,7 +16,7 @@ public class SpecJmcdScheduler {
     private final SpecJmcdBatchRepository specJmcdBatchRepository;
     private final JmcdApiUtil jmcdApiUtil;
 
-    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 0 3 * * *", zone = "Asia/Seoul")
     public void updateSpecJmcd() throws ParserConfigurationException, IOException, SAXException {
         specJmcdBatchRepository.batchUpsert(jmcdApiUtil.fetchAndParseItems());
     }
