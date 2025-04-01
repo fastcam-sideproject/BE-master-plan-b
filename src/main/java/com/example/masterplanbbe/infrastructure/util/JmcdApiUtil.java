@@ -38,11 +38,11 @@ public class JmcdApiUtil {
                 .bodyToFlux(DataBuffer.class);
 
         InputStream xmlInputStream = DataBufferUtils.join(flux)
-                .map(dataBuffer -> {
+                .<InputStream>handle((dataBuffer, sink) -> {
                     try {
-                        return dataBuffer.asInputStream(true);
+                        sink.next(dataBuffer.asInputStream(true));
                     } catch (Exception e){
-                        throw new RuntimeException("failed to convert DataBuffer to InputStream", e);
+                        sink.error(new RuntimeException("failed to convert DataBuffer to InputStream", e));
                     }
                 })
                 .block();
